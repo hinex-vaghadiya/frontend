@@ -1,0 +1,151 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* TOP BAR */
+.top-bar {
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 8px 0;
+    position: relative;
+}
+
+.marquee {
+    display: inline-flex;
+    gap: 50px;
+    width: max-content;
+    animation: scroll 18s linear infinite;
+}
+
+
+/* Pause animation on hover */
+.top-bar:hover .marquee {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+
+.marquee span {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo-text {
+    font-size: 26px;
+    font-weight: bold;
+    color: #0a5c3a;
+}
+
+.logo-sub {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #555;
+}
+
+.menu a {
+    margin: 0 12px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.menu a i {
+    margin-right: 5px;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icons i {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* USER DROPDOWN */
+.user-menu {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 150px;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.dropdown a {
+    padding: 12px;
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown a:hover {
+    background: #f2f2f2;
+}
+
+/* HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 80px 40px;
+    background: linear-gradient(120deg, #1f6f4a, #a4d4b4);
+    color: #fff;
+}
+
+.hero-text {
+    max-width: 600px;
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.hero-text p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.hero-product .product-box {
+    width: 300px;
+    height: 350px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

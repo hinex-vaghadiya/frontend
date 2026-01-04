@@ -1,0 +1,87 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://127.0.0.1:8000/login/">Login</a><br>
+    <a href="http://127.0.0.1:8000/register/">Register</a>
+    
+</body>
+</html> -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HERBGLOW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+
+<!-- TOP INFO BAR -->
+<div class="top-bar">
+    <div class="marquee">
+        <span>Free shipping all over India above ₹500</span>
+        <span>⭐ 4.8 Stars across 20k reviews</span>
+        <span>Free shipping all over India above ₹500</span>
+        <span>⭐ 4.8 Stars across 20k reviews</span>
+    </div>
+</div>
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">
+        <span class="logo-text">HERBGLOW</span>
+        <span class="logo-sub">Too Natural</span>
+    </div>
+
+    <nav class="menu">
+        <a href="#"><i class="fa-solid fa-store"></i> Shop All</a>
+        <a href="#"><i class="fa-solid fa-shield-heart"></i> Immunity</a>
+        <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
+        <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
+        <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
+    </nav>
+
+    <div class="icons">
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <div class="user-menu">
+            <i class="fa-regular fa-user" id="userIcon"></i>
+            <div class="dropdown" id="dropdownMenu">
+                <a href="http://127.0.0.1:8000/login/">Login</a>
+                <a href="http://127.0.0.1:8000/register/">Register</a>
+            </div>
+        </div>
+
+        <i class="fa-solid fa-cart-shopping"></i>
+    </div>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Loved & Trusted by<br>10 Thousand+ Indians</h1>
+        <p>
+            Delivering 100% natural, science-backed products
+            formulated by top doctors for a healthier life.
+        </p>
+    </div>
+
+    <div class="hero-product">
+        <div class="product-box">Product Image</div>
+    </div>
+</section>
+
+<script src="{% static 'js/script.js'%}"></script>
+</body>
+</html>
