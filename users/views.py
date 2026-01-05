@@ -104,6 +104,8 @@ def profile(request):                          # profile html page
             if response.status_code==200:
                 profile_data={}
                 profile_data.update({"email":data['email']})
+                profile_data.update({"username":data['username']})
+                profile_data.update({"name":data['name']})
                 profile_data.update({"role":data['role']})
                 profile_data.update({"address":data['address']})
                 profile_data.update({"mobile_number":data['mobile_number']})
@@ -123,8 +125,10 @@ def profile(request):                          # profile html page
                 )
             return resp
 
-        except:
-            pass
+        except requests.exceptions.RequestException as e:
+            messages.error(request, str(e))
+            return redirect('/')
+    # return redirect('/profile')
 
 def verify_login(request):                      #to verify user credentials and setting cookies.
     if request.method=='POST':
@@ -204,9 +208,39 @@ def verify_register(request):        #to verify register
             messages.error(request,f"{str(e)}",extra_tags='register')
             return redirect('/')
 
-
-    
-
+def profile_update(request):            #to update the profile of the user.
+    if request.method=='POST':
+        print(f'in-post')
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        name=request.POST.get('name')
+        mobile_number=request.POST.get('mobile_number')
+        address=request.POST.get('address')
+        headers={
+            "Authorization":f"Bearer {access_token}"
+        }
+        url=base_url+'account'
+        try:
+            response=requests.put(url=url,headers=headers,json={
+                "name":name,
+                "mobile_number":mobile_number,
+                "address":address
+            })
+            data=response.json()
+            
+            if response.status_code==200:
+                messages.success(request,f"Succesfully update")
+            else:
+                messages.error(request,"Failed to update the profile")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"{str(e)}")
+        return redirect('/profile')
+    # return redirect('/profile')
+            
              
 
             
