@@ -1,19 +1,82 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>My Account | HERBGLOW</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
 <body>
-    <h1>Profile</h1>
-    <ul>
-        <li>Username: {{profile.email}}</li>
-        <li>Address: {{profile.address}}</li>
-        <li>mobile_number: {{profile.mobile_number}}</li>
-        <li>profile_pic: {{profile.profile_pic}}</li>
-    </ul>
 
-    <a href="http://127.0.0.1:8000/logout/">Log Out</a>
+<!-- TOP BAR (same as index) -->
+<div class="top-bar">
+    <div class="marquee">
+        <span>Free shipping all over India above ₹500</span>
+        <span>⭐ 4.8 Stars across 20k reviews</span>
+    </div>
+</div>
+
+{% include "navbar.html" %}
+
+<section class="account-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="account-sidebar">
+        <ul>
+            <li class="active">
+                <i class="fa-solid fa-table-columns"></i>
+                Dashboard
+            </li>
+            <li>
+                <i class="fa-solid fa-box"></i>
+                Order History
+            </li>
+            <!-- <li>
+                <i class="fa-solid fa-location-dot"></i>
+                Addresses
+            </li> -->
+            <li class="logout">
+                <a href="{% url 'logout' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="account-content">
+        <h2>Account Details</h2>
+
+        <div class="account-card">
+            <div class="row">
+                <span>Name</span>
+                <span>{{ profile.name|default:"—" }}</span>
+            </div>
+
+            <div class="row">
+                <span>Email</span>
+                <span>{{ profile.email }}</span>
+            </div>
+
+            <div class="row">
+                <span>Mobile</span>
+                <span>{{ profile.mobile_number|default:"—" }}</span>
+            </div>
+
+            <div class="row">
+                <span>Address</span>
+                <span>{{ profile.address|default:"—" }}</span>
+            </div>
+            
+        </div>
+    </main>
+
+</section>
+
 </body>
 </html>

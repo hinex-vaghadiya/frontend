@@ -1,0 +1,71 @@
+.account-wrapper {
+    max-width: 1200px;
+    margin: 40px auto;
+    display: flex;
+    gap: 30px;
+}
+
+/* SIDEBAR */
+.account-sidebar {
+    width: 260px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.account-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.account-sidebar li {
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.account-sidebar li.active {
+    background: #e6f2ec;
+    color: #1b7a57;
+}
+
+.account-sidebar li.logout a {
+    color: #c0392b;
+    text-decoration: none;
+}
+
+/* CONTENT */
+.account-content {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+}
+
+.account-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.account-card .row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    padding: 14px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.account-card .row:last-child {
+    border-bottom: none;
+}
+
+.account-card span:first-child {
+    font-weight: 600;
+    color: #555;
+}

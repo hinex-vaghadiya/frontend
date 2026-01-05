@@ -7,10 +7,40 @@ from django.contrib import messages
 base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
 
+def get_access_token(request):      #to get access token for the user from cookie.
+    return request.COOKIES.get('access_token')
 
+def refresh_access_token(request):         #refresh access token ....
+    refresh_token=request.COOKIES.get('refresh_token')
+    if not refresh_token:
+        return None
+    url=base_url+'refresh/'
+    try:
+        response=requests.post(url,data={
+            "refresh":refresh_token
+        })
+        if response.status_code==200:
+            data=response.json()
+            return data.get('access')
+        else:
+            return None
+    except request.exceptions.RequestException:
+        return None
+    
 def index(request):
     if request.method=='GET':
-        return render(request,'index.html')  #index html page 
+        is_authenticate = False
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if new_token:
+                is_authenticate = True
+            else:
+                is_authenticate = False
+        else:
+            is_authenticate=True
+
+        return render(request,'index.html',{"is_authenticated":is_authenticate})  #index html page 
 
 def home(request):
     return render(request,'home.html')    #home html page
@@ -50,28 +80,8 @@ def set_cookie(request,data,redirect_url):    #to set cookies(access_tokn,refres
     )
     return resp
 
-def get_access_token(request):      #to get access token for the user from cookie.
-    return request.COOKIES.get('access_token')
-
-def refresh_access_token(request):         #refresh access token ....
-    refresh_token=request.COOKIES.get('refresh_token')
-    if not refresh_token:
-        return None
-    url=base_url+'refresh/'
-    try:
-        response=requests.post(url,data={
-            "refresh":refresh_token
-        })
-        if response.status_code==200:
-            data=response.json()
-            return data.get('access')
-        else:
-            return None
-    except request.exceptions.RequestException:
-        return None
-    
 def if_not_new_token(request):     #if_not_new_token
-    resp= redirect('/login')
+    resp= redirect('/')
     for key in request.COOKIES.keys():
         resp.delete_cookie(key)
     return resp
@@ -131,16 +141,16 @@ def verify_login(request):                      #to verify user credentials and 
 
             if "access_token" in data and "refresh_token" in data:
                 #prepared json response
-                redirect_url='home'
+                redirect_url='/'
                 resp=set_cookie(request,data,redirect_url)
                 return resp
             else:
                 # Invalid credentials → redirect back to login page
-                messages.error(request,f"Invalid credentials")
-                return redirect('/login')
+                messages.error(request,f"Invalid credentials", extra_tags='login')
+                return redirect('/')
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"{str(e)}")
-            return redirect('/login')
+            messages.error(request,f"{str(e)}", extra_tags='login')
+            return redirect('/')
                    
 def logout(request):                 #to logout the user.
     if request.method=='GET':
@@ -181,17 +191,18 @@ def verify_register(request):        #to verify register
             })
 
             if response.status_code==201:
-                return redirect('/login')
+                messages.error(request,"Registration is complete you can now login",extra_tags='goto_success')
+                return redirect('/?auth=login')
             else:
                 errors=response.json()
                 for message in errors.values():
-                    messages.error(request,f"{message}")
-                return redirect('/register')
+                    messages.error(request,f"{message}",extra_tags='register')
+                return redirect('/')
 
 
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"{str(e)}")
-            return redirect('/register')
+            messages.error(request,f"{str(e)}",extra_tags='register')
+            return redirect('/')
 
 
     

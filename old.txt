@@ -1,0 +1,40 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://127.0.0.1:8000/login/">Login</a><br>
+    <a href="http://127.0.0.1:8000/register/">Register</a>
+    
+</body>
+</html> -->
+
+
+
+
+
+
+profile.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    <ul>
+        <li>Username: {{profile.email}}</li>
+        <li>Address: {{profile.address}}</li>
+        <li>mobile_number: {{profile.mobile_number}}</li>
+        <li>profile_pic: {{profile.profile_pic}}</li>
+    </ul>
+
+    <a href="http://127.0.0.1:8000/logout/">Log Out</a>
+</body>
+</html>

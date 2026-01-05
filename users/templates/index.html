@@ -1,16 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <a href="http://127.0.0.1:8000/login/">Login</a><br>
-    <a href="http://127.0.0.1:8000/register/">Register</a>
-    
-</body>
-</html> -->
 {% load static %}
 
 <!DOCTYPE html>
@@ -56,11 +43,14 @@
         <i class="fa-solid fa-magnifying-glass"></i>
 
         <div class="user-menu">
+            {% if is_authenticated %}
+                <a href="{% url 'profile' %}">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+            {% else %}
             <i class="fa-regular fa-user" id="userIcon"></i>
-            <div class="dropdown" id="dropdownMenu">
-                <a href="http://127.0.0.1:8000/login/">Login</a>
-                <a href="http://127.0.0.1:8000/register/">Register</a>
-            </div>
+            {% endif %}
+
         </div>
 
         <i class="fa-solid fa-cart-shopping"></i>
@@ -81,6 +71,27 @@
         <div class="product-box">Product Image</div>
     </div>
 </section>
+
+<!-- AUTH DRAWER -->
+<!-- AUTH OVERLAY -->
+<div class="auth-overlay" id="authOverlay"></div>
+
+<!-- AUTH DRAWER -->
+<div class="auth-drawer" id="authDrawer">
+    <span class="close-btn" id="closeAuth">&times;</span>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+         {% include "login.html" %}
+    </div>
+        
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none;">
+        {% include "register.html" %}       
+    </div>
+</div>
+
+
 
 <script src="{% static 'js/script.js'%}"></script>
 </body>

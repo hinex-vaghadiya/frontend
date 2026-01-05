@@ -1,12 +1,19 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
-    <h1>Registration</h1>
+<body> -->
+    <h2>Registration</h2>
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'register' in message.extra_tags %}
+                <p class="auth-message {{ message.tags }}">{{ message }}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     <form action="http://127.0.0.1:8000/verify_register/" method="post">
         {% csrf_token %}
         Username:-<input type="text" name="username"><br>
@@ -14,10 +21,7 @@
         Password:-<input type="password" name="password"><br>
         <input type="submit" value="Sign-up">
     </form>
-     {%if messages %}
-        {%for message in messages%}
-            <p style="color:red">{{message}}</p>
-        {%endfor%}
-    {% endif %}
-</body>
-</html>
+<p class="switch">
+    Already have an account?
+    <a href="#" id="openLogin">Login here</a>
+</p>

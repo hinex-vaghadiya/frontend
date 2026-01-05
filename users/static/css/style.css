@@ -94,27 +94,8 @@
     position: relative;
 }
 
-.dropdown {
-    position: absolute;
-    top: 30px;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    width: 150px;
-    display: none;
-    flex-direction: column;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-}
 
-.dropdown a {
-    padding: 12px;
-    text-decoration: none;
-    color: #333;
-}
 
-.dropdown a:hover {
-    background: #f2f2f2;
-}
 
 /* HERO */
 .hero {
@@ -149,3 +130,133 @@
     align-items: center;
     justify-content: center;
 }
+
+/* =========================
+   AUTH DRAWER (LOGIN / REGISTER)
+========================= */
+
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+    z-index: 99;
+}
+
+.auth-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.auth-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 380px;
+    height: 100%;
+    background: #fff;
+    padding: 30px;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+    transition: 0.4s ease;
+    z-index: 100;
+}
+
+.auth-drawer.active {
+    right: 0;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+/* Forms */
+.auth-drawer h2 {
+    margin-bottom: 20px;
+    color: #0a5c3a;
+}
+
+.auth-drawer input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.auth-drawer button {
+    width: 100%;
+    padding: 12px;
+    background: #0a5c3a;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.auth-drawer button:hover {
+    background: #084c30;
+}
+
+.switch {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.switch a {
+    color: #0a5c3a;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Django messages */
+.auth-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.auth-message.error {
+    background: #ffe6e6;
+    color: #b30000;
+}
+
+.auth-message.success {
+    background: #e6ffe6;
+    color: #006600;
+}
+
+/* Style submit buttons in auth drawer */
+.auth-drawer input[type="submit"] {
+    background: #0a5c3a;  /* Optional: green background */
+    color: #fff;          /* White text by default */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect: white background, green text */
+.auth-drawer input[type="submit"]:hover {
+    background: #fff;     /* White background */
+    color: #0a5c3a;       /* Text turns green */
+    border: 2px solid #0a5c3a; /* Optional: green border */
+}
+
+.goto_success{   /* the success message after the succesful registrtaion..*/
+    /* background-color: ; */
+    color:#0a5c3a;
+}
+
