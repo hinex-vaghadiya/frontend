@@ -17,7 +17,7 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    <form action="http://127.0.0.1:8000/verify_login/" method="post">
+    <form action="/verify_login/" method="post">
         {% csrf_token %}
         Username:- <input type="text" name="username"><br>
         Password:-<input type="password" name="password"><br>
