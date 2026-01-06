@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>HERBGLOW</title>
@@ -11,88 +12,112 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
 </head>
+
 <body>
 
-<!-- TOP INFO BAR -->
-<div class="top-bar">
-    <div class="marquee">
-        <span>Free shipping all over India above ₹500</span>
-        <span>⭐ 4.8 Stars across 20k reviews</span>
-        <span>Free shipping all over India above ₹500</span>
-        <span>⭐ 4.8 Stars across 20k reviews</span>
-    </div>
-</div>
-
-
-<!-- NAVBAR -->
-<header class="navbar">
-    <div class="logo">
-        <span class="logo-text">HERBGLOW</span>
-        <span class="logo-sub">Too Natural</span>
+    <!-- TOP INFO BAR -->
+    <div class="top-bar">
+        <div class="marquee">
+            <span>Free shipping all over India above ₹500</span>
+            <span>⭐ 4.8 Stars across 20k reviews</span>
+            <span>Free shipping all over India above ₹500</span>
+            <span>⭐ 4.8 Stars across 20k reviews</span>
+        </div>
     </div>
 
-    <nav class="menu">
-        <a href="#"><i class="fa-solid fa-store"></i> Shop All</a>
-        <a href="#"><i class="fa-solid fa-shield-heart"></i> Immunity</a>
-        <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
-        <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
-        <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
-    </nav>
 
-    <div class="icons">
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-text">HERBGLOW</span>
+            <span class="logo-sub">Too Natural</span>
+        </div>
 
-        <div class="user-menu">
-            {% if is_authenticated %}
+        <nav class="menu">
+            <a href="#"><i class="fa-solid fa-store"></i> Shop All</a>
+            <a href="#"><i class="fa-solid fa-shield-heart"></i> Immunity</a>
+            <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
+            <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
+            <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
+        </nav>
+
+        <div class="icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <div class="user-menu">
+                {% if is_authenticated %}
                 <a href="{% url 'profile' %}">
                     <i class="fa-regular fa-user"></i>
                 </a>
-            {% else %}
-            <i class="fa-regular fa-user" id="userIcon"></i>
-            {% endif %}
+                {% else %}
+                <i class="fa-regular fa-user" id="userIcon"></i>
+                {% endif %}
 
+            </div>
+
+            <i class="fa-solid fa-cart-shopping"></i>
         </div>
+    </header>
 
-        <i class="fa-solid fa-cart-shopping"></i>
-    </div>
-</header>
+    <!-- HERO SECTION -->
+    <!-- HERO SECTION -->
+    <section class="hero">
 
-<!-- HERO SECTION -->
-<section class="hero">
-    <div class="hero-text">
+        <!-- <div class="hero-text">
         <h1>Loved & Trusted by<br>10 Thousand+ Indians</h1>
         <p>
             Delivering 100% natural, science-backed products
             formulated by top doctors for a healthier life.
         </p>
+    </div> -->
+
+        <div class="hero-product">
+
+            <button class="slider-btn prev" id="prevSlide">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div class="hero-slide ">
+                <img src="{% static 'images/hero1.png' %}" alt="Hero image 1">
+            </div>
+
+            <div class="hero-slide active">
+                <img src="{% static 'images/hero2.png' %}" alt="Hero image 2">
+            </div>
+
+            <div class="hero-slide">
+                <img src="{% static 'images/hero3.png' %}" alt="Hero image 3">
+            </div>
+
+            <button class="slider-btn next" id="nextSlide">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+        </div>
+    </section>
+
+
+    <!-- AUTH DRAWER -->
+    <!-- AUTH OVERLAY -->
+    <div class="auth-overlay" id="authOverlay"></div>
+
+    <!-- AUTH DRAWER -->
+    <div class="auth-drawer" id="authDrawer">
+        <span class="close-btn" id="closeAuth">&times;</span>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            {% include "login.html" %}
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="registerForm" style="display:none;">
+            {% include "register.html" %}
+        </div>
     </div>
 
-    <div class="hero-product">
-        <div class="product-box">Product Image</div>
-    </div>
-</section>
-
-<!-- AUTH DRAWER -->
-<!-- AUTH OVERLAY -->
-<div class="auth-overlay" id="authOverlay"></div>
-
-<!-- AUTH DRAWER -->
-<div class="auth-drawer" id="authDrawer">
-    <span class="close-btn" id="closeAuth">&times;</span>
-
-    <!-- LOGIN FORM -->
-    <div id="loginForm">
-         {% include "login.html" %}
-    </div>
-        
-    <!-- REGISTER FORM -->
-    <div id="registerForm" style="display:none;">
-        {% include "register.html" %}       
-    </div>
-</div>
 
 
-
-<script src="{% static 'js/script.js'%}"></script>
+    <script src="{% static 'js/script.js'%}"></script>
 </body>
+
 </html>

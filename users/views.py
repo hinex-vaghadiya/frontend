@@ -7,6 +7,7 @@ from django.contrib import messages
 base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
 
+# User Module----------------
 def get_access_token(request):      #to get access token for the user from cookie.
     return request.COOKIES.get('access_token')
 
@@ -242,5 +243,5 @@ def profile_update(request):            #to update the profile of the user.
     # return redirect('/profile')
             
              
-
+#User Module------------------
             

@@ -22,27 +22,20 @@
     animation: scroll 18s linear infinite;
 }
 
-
 /* Pause animation on hover */
 .top-bar:hover .marquee {
     animation-play-state: paused;
 }
 
 @keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
-
 
 .marquee span {
     font-size: 14px;
     letter-spacing: 0.5px;
 }
-
 
 /* NAVBAR */
 .navbar {
@@ -96,19 +89,29 @@
 
 
 
+/* =========================
+   HERO SECTION (SLIDER)
+========================= */
 
-/* HERO */
+/* =========================
+   HERO SECTION (SLIDER)
+========================= */
+
 .hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 80px 40px;
-    background: linear-gradient(120deg, #1f6f4a, #a4d4b4);
+    position: relative;
+    width: 100%;
+    height: 90vh;              /* Responsive height */
+    min-height: 520px;
+    overflow: hidden;
     color: #fff;
 }
 
+/* OPTIONAL TEXT (if enabled later) */
 .hero-text {
-    max-width: 600px;
+    position: relative;
+    z-index: 5;
+    max-width: 520px;
+    padding: 80px 40px;
 }
 
 .hero-text h1 {
@@ -121,15 +124,78 @@
     line-height: 1.6;
 }
 
-.hero-product .product-box {
-    width: 300px;
-    height: 350px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* IMAGE / SLIDER CONTAINER */
+.hero-product {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
 }
+
+/* SLIDE */
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* ACTIVE SLIDE */
+.hero-slide.active {
+    opacity: 1;
+}
+
+/* HERO IMAGE (IMG INSTEAD OF BACKGROUND) */
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* 🔥 FIXES IMAGE RATIO */
+    object-position: center;
+    display: block;
+}
+
+/* GRADIENT OVERLAY */
+.hero-slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Ensure image stays below overlay */
+.hero-slide img {
+    position: relative;
+    z-index: 0;
+}
+
+/* SLIDER BUTTONS */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0a5c3a;
+    border: none;
+    color: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s ease;
+}
+
+.slider-btn:hover {
+    background: #023d25;
+}
+
+.slider-btn.prev {
+    left: 20px;
+}
+
+.slider-btn.next {
+    right: 20px;
+}
+
+
 
 /* =========================
    AUTH DRAWER (LOGIN / REGISTER)
@@ -238,8 +304,8 @@
 
 /* Style submit buttons in auth drawer */
 .auth-drawer input[type="submit"] {
-    background: #0a5c3a;  /* Optional: green background */
-    color: #fff;          /* White text by default */
+    background: #0a5c3a;
+    color: #fff;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -248,15 +314,12 @@
     transition: all 0.3s ease;
 }
 
-/* Hover effect: white background, green text */
 .auth-drawer input[type="submit"]:hover {
-    background: #fff;     /* White background */
-    color: #0a5c3a;       /* Text turns green */
-    border: 2px solid #0a5c3a; /* Optional: green border */
+    background: #fff;
+    color: #0a5c3a;
+    border: 2px solid #0a5c3a;
 }
 
-.goto_success{   /* the success message after the succesful registrtaion..*/
-    /* background-color: ; */
-    color:#0a5c3a;
+.goto_success {
+    color: #0a5c3a;
 }
-

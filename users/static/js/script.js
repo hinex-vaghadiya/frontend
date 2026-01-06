@@ -1,3 +1,7 @@
+/* =========================
+   AUTH DRAWER LOGIC (UNCHANGED)
+========================= */
+
 const userIcon = document.getElementById("userIcon");
 const authDrawer = document.getElementById("authDrawer");
 const authOverlay = document.getElementById("authOverlay");
@@ -11,12 +15,12 @@ const openLogin = document.getElementById("openLogin");
 
 /* Open drawer on user icon click */
 if (userIcon) {
-userIcon.addEventListener("click", () => {
-    authDrawer.classList.add("active");
-    authOverlay.classList.add("active");
-    loginForm.style.display = "block";
-    registerForm.style.display = "none";
-});
+    userIcon.addEventListener("click", () => {
+        authDrawer.classList.add("active");
+        authOverlay.classList.add("active");
+        loginForm.style.display = "block";
+        registerForm.style.display = "none";
+    });
 }
 
 /* Close drawer */
@@ -25,34 +29,36 @@ function closeDrawer() {
     authOverlay.classList.remove("active");
 }
 
-closeAuth.addEventListener("click", closeDrawer);
-authOverlay.addEventListener("click", closeDrawer);
+if (closeAuth) closeAuth.addEventListener("click", closeDrawer);
+if (authOverlay) authOverlay.addEventListener("click", closeDrawer);
 
 /* Switch to Register */
-openRegister.addEventListener("click", (e) => {
-    e.preventDefault();
-    loginForm.style.display = "none";
-    registerForm.style.display = "block";
-});
+if (openRegister) {
+    openRegister.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginForm.style.display = "none";
+        registerForm.style.display = "block";
+    });
+}
 
 /* Switch to Login */
-openLogin.addEventListener("click", (e) => {
-    e.preventDefault();
-    registerForm.style.display = "none";
-    loginForm.style.display = "block";
-});
-
+if (openLogin) {
+    openLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        registerForm.style.display = "none";
+        loginForm.style.display = "block";
+    });
+}
 
 /* =========================
    AUTO OPEN LOGIN/REGISTER ON ERROR
 ========================= */
-document.addEventListener("DOMContentLoaded", function() {
-    // open login after registration..
+
+document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const auth = params.get("auth");
 
     if (auth === "login") {
-        // Auto open login drawer
         authDrawer.classList.add("active");
         authOverlay.classList.add("active");
         loginForm.style.display = "block";
@@ -60,12 +66,10 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
 
-    // Check if there are any messages inside the login drawer
     const loginMessages = document.querySelectorAll("#loginForm .auth-message");
     const registerMessages = document.querySelectorAll("#registerForm .auth-message");
 
     if (loginMessages.length > 0) {
-        // Open login drawer automatically
         authDrawer.classList.add("active");
         authOverlay.classList.add("active");
         loginForm.style.display = "block";
@@ -73,10 +77,83 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     if (registerMessages.length > 0) {
-        // Open register drawer automatically
         authDrawer.classList.add("active");
         authOverlay.classList.add("active");
         loginForm.style.display = "none";
         registerForm.style.display = "block";
     }
+});
+
+
+/* =========================
+   EDIT PROFILE TOGGLE (NEW)
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const editBtn = document.getElementById("editProfileBtn");
+    const profileForm = document.getElementById("profileForm");
+
+    if (!editBtn || !profileForm) return;
+
+    // Ensure form is hidden initially
+    profileForm.style.display = "none";
+
+    editBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const isHidden =
+            profileForm.style.display === "none" ||
+            profileForm.style.display === "";
+
+        if (isHidden) {
+            profileForm.style.display = "block";
+            editBtn.textContent = "CANCEL";
+            editBtn.classList.add("cancel");
+        } else {
+            profileForm.style.display = "none";
+            editBtn.textContent = "EDIT";
+            editBtn.classList.remove("cancel");
+        }
+    });
+});
+
+
+
+/* =========================
+   HERO IMAGE SLIDER (NEW)
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = document.querySelectorAll(".hero-slide");
+    const prevBtn = document.getElementById("prevSlide");
+    const nextBtn = document.getElementById("nextSlide");
+
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[index].classList.add("active");
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        });
+    }
+
+    // Auto slide like Spiru
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        showSlide(currentIndex);
+    }, 5000);
 });
