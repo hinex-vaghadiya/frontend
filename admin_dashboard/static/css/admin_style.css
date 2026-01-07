@@ -1,0 +1,276 @@
+/* =========================
+   GLOBAL RESET & DEFAULTS
+   ========================= */
+
+/* Reset margin & padding for all elements
+   and use border-box for predictable sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif; /* Default font */
+}
+
+/* Page background color */
+body {
+  background: #f4f6f8;
+}
+
+/* =========================
+   MAIN LAYOUT CONTAINER
+   ========================= */
+
+/* Grid layout:
+   Sidebar | Main Content | Right Profile Panel */
+.container {
+  display: grid;
+  grid-template-columns: 240px 1fr 260px;
+  height: 100vh; /* Full screen height */
+}
+
+/* =========================
+   SIDEBAR STYLES
+   ========================= */
+
+/* Sidebar container */
+.sidebar {
+  background: #fff;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+/* Logo text styling */
+.logo {
+  color: #1bbf72; /* Brand green */
+  margin-bottom: 20px;
+}
+
+/* Sidebar navigation links */
+.sidebar nav a {
+  display: block;
+  padding: 10px;
+  color: #444;
+  text-decoration: none;
+  border-radius: 6px;
+
+  /* Smooth animation when hovering */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for ALL sidebar links */
+.sidebar nav a:hover {
+  background-color: #1bbf72; /* Green on hover */
+  color: #ffffff;
+}
+
+/* Active menu item (current page) */
+.sidebar nav a.active {
+  background: #1bbf72;
+  color: #ffffff;
+}
+
+/* Section titles inside sidebar (Main Menu, Product, Admin) */
+.menu-title {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* =========================
+   MAIN CONTENT AREA
+   ========================= */
+
+/* Main content wrapper */
+.main {
+  padding: 20px;
+  overflow-y: auto; /* Scroll if content is long */
+}
+
+/* Top bar (page title + search box) */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Search input styling */
+.topbar input {
+  padding: 8px 12px;
+  width: 280px;
+}
+
+/* =========================
+   STATS CARDS SECTION
+   ========================= */
+
+/* Grid layout for stats cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+/* Individual stat card */
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Green text for growth percentage */
+.green {
+  color: #1bbf72;
+}
+
+/* =========================
+   CHART SECTION
+   ========================= */
+
+/* Chart container */
+.chart {
+  background: #fff;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Placeholder area for chart */
+.chart-placeholder {
+  height: 180px;
+  background: #eef2f5;
+  border-radius: 8px;
+
+  /* Center text horizontally & vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #999;
+}
+
+/* =========================
+   TABLE SECTION
+   ========================= */
+
+/* Table container */
+.table-section {
+  background: #fff;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Table base styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+/* Table headers & cells */
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Status colors in table */
+.active {
+  color: green;
+}
+
+.inactive {
+  color: red;
+}
+
+.vip {
+  color: orange;
+}
+
+/* =========================
+   RIGHT PROFILE PANEL
+   ========================= */
+
+/* Profile sidebar container */
+.profile {
+  background: #fff;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+  text-align: center;
+}
+
+/* Profile image wrapper for perfect circle */
+.profile .img-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden; /* Ensures image stays circular */
+  margin: 0 auto 10px; /* Center horizontally + spacing */
+}
+
+/* Profile image inside wrapper */
+.profile .img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Fill container without distortion */
+  display: block;     /* Remove bottom whitespace */
+}
+
+/* Profile info (phone, address) */
+.profile-info {
+  margin-top: 20px;
+  text-align: left;
+}
+
+/* =========================
+   OPTIONAL ADMIN IMAGE CLASS (for legacy use)
+   ========================= */
+.admin_profile {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* makes it round */
+  object-fit: cover;  /* crops and scales image to cover container */
+  display: block;     /* ensures no extra space below image */
+}
+
+
+
+
+/* For success message  or error messages */
+.messages {
+  margin-bottom: 15px;
+}
+
+.alert {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Success message */
+.alert.success {
+  background: #e6f7ee;
+  color: #1bbf72;
+  border: 1px solid #1bbf72;
+}
+
+/* Error message */
+.alert.error {
+  background: #fdecea;
+  color: #d93025;
+  border: 1px solid #d93025;
+}
+
+/* Warning message */
+.alert.warning {
+  background: #fff4e5;
+  color: #e67e22;
+  border: 1px solid #e67e22;
+}
+
+/* Info message */
+.alert.info {
+  background: #eef5ff;
+  color: #1a73e8;
+  border: 1px solid #1a73e8;
+}

@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css'%}">
+</head>
+<body>
+
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">Herbglow</h2>
+
+    <nav>
+      <p class="menu-title">Main Menu</p>
+      <a href="/admin/" class="active">Dashboard</a>
+      <a href="#">Order Management</a>
+      <a href="#" >Customers</a>
+      <a href="#">Coupon Code</a>
+      <a href="#">Categories</a>
+      <a href="#">Transaction</a>
+      <a href="#">Brand</a>
+
+      <p class="menu-title">Product</p>
+      <a href="/admin/add-category">Add category</a>
+      <a href="#">Add Products</a>
+      <a href="#">Product List</a>
+      <a href="#">Product Reviews</a>
+
+      <p class="menu-title">Admin</p>
+      <a href="#">Admin Role</a>
+      <a href="#">Control Authority</a>
+      <a href="/admin/logout">Logout</a>
+    </nav>
+  </aside>
+
+  
+  <div class="card">
+    <div class="messages">
+      {% if messages %}
+          {% for message in messages %}
+              <p class="alert {{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+      {% endif %}
+  </div>
+    <h3>Edit Category</h3>
+    <form action="#" method="post">
+        {% csrf_token %}
+        <input type="text" name="category_name" value="{{ category.category_name }}" required>
+        <br><br>
+        <button class="btn-green" type="submit">Update Category</button>
+        <a href="{% url 'add_category' %}" class="btn-red">Cancel</a>
+    </form>
+</div>

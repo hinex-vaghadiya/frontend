@@ -38,3 +38,56 @@ profile.html
     <a href="http://127.0.0.1:8000/logout/">Log Out</a>
 </body>
 </html>
+
+
+
+
+the ideal for the products 
+
+
+
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                
+                {% if product.discount_percent %}
+                <span class="badge-discount">{{ product.discount_percent }}% OFF</span>
+                {% endif %}
+
+                <div class="card-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+
+                <div class="card-details">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                    
+                    <div class="price-row">
+                        {% if product.old_price %}
+                        <span class="old-price">Rs. {{ product.old_price }}</span>
+                        {% endif %}
+                        <span class="new-price">Rs. {{ product.price }}</span>
+                    </div>
+
+                    <div class="rating-row">
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="review-count">199 Reviews</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                    <button class="btn-buy">BUY NOW</button>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>

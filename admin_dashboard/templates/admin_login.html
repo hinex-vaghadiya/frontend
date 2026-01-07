@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Herbglow</title>
+  <link rel="stylesheet" href="{% static 'css/admin_login.css' %}">
+</head>
+<body>
+  <div class="login-container">
+    <!-- Login Card -->
+    <div class="login-card">
+      <h2 class="logo">Herbglow Admin</h2>
+      <p class="subtitle">Sign in to your account</p>
+      {% if messages %}
+        {% for message in messages %}
+            {% if 'admin_login' in message.extra_tags %}
+                <p class="auth-message {{ message.tags }}">{{ message }}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+      <form action="/admin/admin_verify_login/"  method="post">
+        {% csrf_token %}
+        <!-- Username / Email -->
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-login">Login</button>
+
+        <!-- Forgot password -->
+        <p class="forgot"><a href="#">Forgot password?</a></p>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

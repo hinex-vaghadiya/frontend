@@ -1,0 +1,129 @@
+/* Reset and font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f6f8; /* Same as dashboard background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Center container for login card */
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+/* Card style */
+.login-card {
+  background: #fff; /* white card */
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Logo */
+.login-card .logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1bbf72; /* Same green as dashboard */
+  margin-bottom: 10px;
+}
+
+/* Subtitle under logo */
+.login-card .subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Input groups */
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+/* Focus on input */
+.input-group input:focus {
+  outline: none;
+  border-color: #1bbf72; /* green focus */
+  box-shadow: 0 0 5px rgba(27, 191, 114, 0.3);
+}
+
+/* Login button */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: #1bbf72;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-login:hover {
+  background: #17a562; /* Slightly darker green on hover */
+}
+
+/* Forgot password link */
+.forgot {
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.forgot a {
+  color: #1bbf72;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.forgot a:hover {
+  color: #17a562;
+}
+
+
+
+/* auth mesages */
+
+.auth-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.auth-message.error {
+    background: #ffe6e6;
+    color: #b30000;
+}
+
+.auth-message.success {
+    background: #e6ffe6;
+    color: #006600;
+}

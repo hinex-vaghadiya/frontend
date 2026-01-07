@@ -4,7 +4,7 @@ import requests
 from rest_framework.response import Response
 from django.contrib import messages
 
-base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
+user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
 
 # User Module----------------
@@ -15,7 +15,7 @@ def refresh_access_token(request):         #refresh access token ....
     refresh_token=request.COOKIES.get('refresh_token')
     if not refresh_token:
         return None
-    url=base_url+'refresh/'
+    url=user_base_url+'refresh/'
     try:
         response=requests.post(url,data={
             "refresh":refresh_token
@@ -98,7 +98,7 @@ def profile(request):                          # profile html page
         headers={
             "Authorization":f"Bearer {access_token}"
         }
-        url=base_url+'account'
+        url=user_base_url+'account'
         try:
             response=requests.get(url=url,headers=headers)
             data=response.json()
@@ -136,7 +136,7 @@ def verify_login(request):                      #to verify user credentials and 
         username=request.POST.get('username')
         password=request.POST.get('password')
         # print(f"username{username} and password {password}")
-        url=base_url+'login'
+        url=user_base_url+'login'
         try:
             response=requests.post(url=url,data={
                 "username":username,
@@ -168,7 +168,7 @@ def logout(request):                 #to logout the user.
         headers={
                 "Authorization":f"Bearer {access_token}"
         }
-        url=base_url+'logout'
+        url=user_base_url+'logout'
         try:
             response=requests.post(url=url,headers=headers)
             data=response.json()
@@ -187,7 +187,7 @@ def verify_register(request):        #to verify register
         password = request.POST.get('password')
 
         # Use JSON format for the POST request to the external API
-        url = base_url + 'register'
+        url = user_base_url + 'register'
         try:
             response = requests.post(url=url, json={
                 "username": username,
@@ -224,7 +224,7 @@ def profile_update(request):            #to update the profile of the user.
         headers={
             "Authorization":f"Bearer {access_token}"
         }
-        url=base_url+'account'
+        url=user_base_url+'account'
         try:
             response=requests.put(url=url,headers=headers,json={
                 "name":name,
@@ -244,4 +244,30 @@ def profile_update(request):            #to update the profile of the user.
             
              
 #User Module------------------
-            
+
+
+
+#products ----------------------
+
+products_base_url='https://products-k4ov.onrender.com/api/'
+def shop(request):
+    if request.method=='GET':
+        products_data=[]
+        url=products_base_url+'products'
+        try:
+            response=requests.get(url=url)
+            data=response.json()
+            if response.status_code==200:
+                products_data=data
+                print(products_data)
+                return render(request,'shop.html',{'products': products_data})
+            else:
+                messages.error(request,"products not available")
+                return render(request,'shop.html')
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"{str(e)}")
+            return render(request,'shop.html')
+
+                
+
+                

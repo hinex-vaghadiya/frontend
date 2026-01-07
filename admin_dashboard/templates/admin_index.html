@@ -1,0 +1,150 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css'%}">
+</head>
+<body>
+
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">Herbglow</h2>
+
+    <nav>
+      <p class="menu-title">Main Menu</p>
+      <a href="/admin/" class="active">Dashboard</a>
+      <a href="#">Order Management</a>
+      <a href="#" >Customers</a>
+      <a href="#">Coupon Code</a>
+      <a href="#">Categories</a>
+      <a href="#">Transaction</a>
+      <a href="#">Brand</a>
+
+      <p class="menu-title">Product</p>
+      <a href="/admin/add-category">Add category</a>
+      <a href="#">Add Products</a>
+      <a href="#">Product List</a>
+      <a href="#">Product Reviews</a>
+
+      <p class="menu-title">Admin</p>
+      <a href="#">Admin Role</a>
+      <a href="#">Control Authority</a>
+      <a href="/admin/logout">Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <h2>Customers</h2>
+      <input type="text" placeholder="Search data, users, or reports">
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="card">
+        <p>Total Customers</p>
+        <h3>11,040</h3>
+        <span class="green">+14.4%</span>
+      </div>
+      <div class="card">
+        <p>New Customers</p>
+        <h3>2,370</h3>
+        <span class="green">+20%</span>
+      </div>
+      <div class="card">
+        <p>Visitors</p>
+        <h3>250k</h3>
+        <span class="green">+20%</span>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart">
+      <h3>Customer Overview</h3>
+      <div class="chart-placeholder">Chart Area</div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-section">
+      <h3>Customer Details</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Orders</th>
+            <th>Total Spend</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#CUST001</td>
+            <td>John Doe</td>
+            <td>+123456789</td>
+            <td>25</td>
+            <td>$3,450</td>
+            <td class="active">Active</td>
+          </tr>
+          <tr>
+            <td>#CUST002</td>
+            <td>Jane Smith</td>
+            <td>+123456789</td>
+            <td>5</td>
+            <td>$250</td>
+            <td class="inactive">Inactive</td>
+          </tr>
+          <tr>
+            <td>#CUST003</td>
+            <td>Emily Davis</td>
+            <td>+123456789</td>
+            <td>30</td>
+            <td>$4,600</td>
+            <td class="vip">VIP</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Right Panel
+  <aside class="profile">
+    <img src="https://i.pravatar.cc/100" alt="">
+    <h4>John Doe</h4>
+    <p>john@example.com</p>
+
+    <div class="profile-info">
+      <p>📞 +123456789</p>
+      <p>📍 123 Main St, NY</p>
+    </div>
+  </aside>
+</div> -->
+
+<!-- Right Panel -->
+<aside class="profile">
+    <!-- Keep the image static -->
+    <img src="{{ profile.profile_pic }}" class ="admin_profile"alt="Admin Profile Picture" style="width:100px; height:100px; border-radius:50%;">
+
+  {% if profile%}
+    <!-- Dynamic profile data -->
+    <h4>{{ profile.name }}</h4>
+    <p>{{ profile.email }}</p>
+
+    <div class="profile-info">
+        <p>📞 {{ profile.mobile_number }}</p>
+    </div>
+  {% endif %}
+</aside>
+
+
+</body>
+</html>
