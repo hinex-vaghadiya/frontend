@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard</title>
+  <title>Add Product</title>
   <link rel="stylesheet" href="{% static 'css/admin_style.css'%}">
 </head>
 <body>
@@ -47,12 +47,19 @@
           {% endfor %}
       {% endif %}
   </div>
-    <h3>Edit Category</h3>
-    <form action="#" method="post">
+    <h3>Add a Product</h3>
+    <form action="/admin/add-product/" method="post">
         {% csrf_token %}
-        <input type="text" name="category_name" value="{{ category.category_name }}" required>
+        <input type="text" name="product_name" placeholder="Enter Product Name" required> <br><br>
+        <textarea name="description"  placeholder="Enter the product description"></textarea><br><br>
+        <select name="category_id" id="category_id">
+            <option value="">Select categories</option>
+            {% for category in categories %}
+            <option value="{{category.category_id}}">{{category.category_name}}</option>
+            {% endfor %}
+        </select>
         <br><br>
-        <button class="btn-green" type="submit">Update Category</button>
-        <a href="{% url 'add_category' %}" class="btn-red">Cancel</a>
+        <button class="btn-green" type="submit">Next</button>
+        <!-- <a href="{% url 'add_product' %}" class="btn-red">Cancel</a> -->
     </form>
 </div>

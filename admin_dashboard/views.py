@@ -170,7 +170,7 @@ def admin_logout(request):
         except:
             pass
 
-
+#-------all product related------------------
 products_related_base_url='https://products-k4ov.onrender.com/api/'
 
 #category related views
@@ -234,7 +234,7 @@ def edit_category(request,category_id):        # to edit category
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-category')
     
-def delete_category(request,category_id):
+def delete_category(request,category_id):       # to delete category
     delete_category_url=f"{products_related_base_url}categories/{category_id}/"
     if request.method=='GET':
         try:
@@ -245,6 +245,51 @@ def delete_category(request,category_id):
             messages.error(request,f"unable to delete : str{(e)}")
         return render(request,'add_category.html')
 
+
+#products related views
+
+def get_categories_details_for_product(request):
+    category_url=products_related_base_url+'categories/'
+    if request.method=='GET':
+        url=category_url
+        categories=[]
+        try:
+            response=requests.get(url=url)
+            response.raise_for_status()
+            categories=response.json()
+            # print(categories)
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to fetch categories data :{str(e)}")
+        except ValueError as e:
+            messages.error(request, f"Invalid response format: {str(e)}")
+        return render(request,'add_product.html',{"categories":categories})
+
+
+def add_product(request):
+    if request.method=='GET':     
+        return get_categories_details_for_product(request)
+    if request.method=='POST':
+        product_url=products_related_base_url+'products/'
+        product_name=request.POST.get('product_name')
+        description=request.POST.get('description')
+        category_id=request.POST.get('category_id')
+        is_active=True
+        if not description:
+            description=""
+        payload={
+            "product_name":product_name,
+            "description":description,
+            "is_active":is_active,
+            "category_id":int(category_id)
+        }
+        try:
+            response=requests.post(url=product_url,data=payload)
+            response.raise_for_status()
+            messages.success(request,"product added successfully")
+            return render(request,'tmp.html')
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to add product : {str(e)}")
+        return redirect('/admin/add-product/')
 
 
 
