@@ -1,0 +1,29 @@
+/* Wizard Container */
+    .wizard-steps { display: flex; gap: 10px; margin-bottom: 20px; }
+    .step { padding: 8px 16px; background: #ddd; border-radius: 5px; font-size: 14px; flex: 1; text-align: center; }
+    .step.active { background: #1bbf72; color: #fff; }
+
+    /* Step Content */
+    .step-content { display: none; }
+    .step-content.active { display: block; margin-top: 20px; }
+
+    /* Inputs */
+    .card input[type="text"], .card textarea, .card select {
+      width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ddd;
+    }
+
+    /* Buttons */
+    .btn { padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-right: 10px; }
+    .btn-green { background: #1bbf72; color: #fff; }
+    .btn-green:hover { background: #159a5a; }
+    .btn-gray { background: #6c757d; color: #fff; }
+    .btn-gray:hover { background: #5a6268; }
+
+    /* Image Preview */
+    .image-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    .image-box { position: relative; width: 120px; height: 120px; border: 2px solid #ddd; border-radius: 6px; overflow: hidden; cursor: pointer; }
+    .image-box img { width: 100%; height: 100%; object-fit: cover; }
+    .primary-badge {
+      position: absolute; top: 5px; left: 5px; background: #1bbf72; color: #fff; padding: 2px 6px; font-size: 12px; border-radius: 3px; display: none;
+    }
+    .image-box.primary .primary-badge { display: block; }

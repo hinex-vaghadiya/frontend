@@ -248,7 +248,7 @@ def delete_category(request,category_id):       # to delete category
 
 #products related views
 
-def get_categories_details_for_product(request):
+def get_categories_details_for_product(request):  # to get caregories  details for add product
     category_url=products_related_base_url+'categories/'
     if request.method=='GET':
         url=category_url
@@ -263,33 +263,114 @@ def get_categories_details_for_product(request):
         except ValueError as e:
             messages.error(request, f"Invalid response format: {str(e)}")
         return render(request,'add_product.html',{"categories":categories})
+    
 
+def get_products_details_for_variant(request):         # to get products  details for add variant
+    product_url=products_related_base_url+'products/'
+    if request.method=='GET':
+        url=product_url
+        products=[]
+        try:
+            response=requests.get(url=url)
+            response.raise_for_status()
+            products=response.json()
+            # print(categories)
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to fetch products data :{str(e)}")
+        except ValueError as e:
+            messages.error(request, f"Invalid response format: {str(e)}")
+        return render(request,'add_variant.html',{"products":products})
 
-def add_product(request):
+#no bugs regarding render and redirect...
+def add_product(request):                   # to add product
     if request.method=='GET':     
         return get_categories_details_for_product(request)
+    
     if request.method=='POST':
         product_url=products_related_base_url+'products/'
-        product_name=request.POST.get('product_name')
-        description=request.POST.get('description')
-        category_id=request.POST.get('category_id')
+        product_images_url=products_related_base_url+'product-images/'
+
         is_active=True
-        if not description:
-            description=""
+        images =request.FILES.getlist('product_images')
+        primary_index=int(request.POST.get('primary_image_index'))
         payload={
-            "product_name":product_name,
-            "description":description,
+            "product_name":request.POST.get('product_name'),
+            "description":request.POST.get('description'),
             "is_active":is_active,
-            "category_id":int(category_id)
+            "category_id":int(request.POST.get('category_id'))
         }
         try:
-            response=requests.post(url=product_url,data=payload)
-            response.raise_for_status()
-            messages.success(request,"product added successfully")
-            return render(request,'tmp.html')
+            product_response=requests.post(url=product_url,data=payload)
+            product_response.raise_for_status()
+            product_data=product_response.json()
+            product_id=int(product_data['product_id'])
+            for idx,img in enumerate(images):
+                is_primary=(idx==primary_index)
+                files = {
+                'image': (img.name, img, img.content_type)
+            }   
+                payload = {
+                'product': product_id,
+                'is_primary': is_primary  # API may expect string "true"/"false"
+            }
+                try:
+                    image_response=requests.post(url=product_images_url,files=files,data=payload)
+                    print(image_response.json())
+                    image_response.raise_for_status()
+                    print(f"Image {img.name} uploaded successfully")
+                    messages.success(request,"product added successfully")
+                except requests.exceptions.RequestException as e:
+                    messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
+            return redirect('/admin/add-product')
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"failed to add product : {str(e)}")
+            messages.error(request,f"unable to add product : {str(e)}")  
         return redirect('/admin/add-product/')
+    
+
+def add_variant(request):                   # to add variant
+    if request.method=='GET':
+        return get_products_details_for_variant(request)
+    
+    if request.method=='POST':
+        variant_url=products_related_base_url+'variants/'
+        variant_images_url=products_related_base_url+'variant-images/'
+
+        images =request.FILES.getlist('variant_images')
+        payload={
+            "product":int(request.POST.get('product_id')),
+            "name":request.POST.get('name'),
+            "price":int(request.POST.get('price')),
+            "compare_at_price":int(request.POST.get('compare_at_price')),
+            "stock":int(request.POST.get('stock')),
+        }
+        try:
+            variant_response=requests.post(url=variant_url,data=payload)
+            variant_response.raise_for_status()
+            variant_data=variant_response.json()
+            variant_id=int(variant_data['id'])
+            for img in images:
+                files = {
+                'image': (img.name, img, img.content_type)
+            }   
+                payload = {
+                'variant': variant_id # API may expect string "true"/"false"
+            }
+                try:
+                    variant_image_response=requests.post(url=variant_images_url,files=files,data=payload)
+                    print(variant_image_response.json())
+                    variant_image_response.raise_for_status()
+                    print(f"Image {img.name} uploaded successfully")
+                    messages.success(request,"product added successfully")
+                except requests.exceptions.RequestException as e:
+                    messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
+            return redirect('/admin/add-variant')
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"unable to add product : {str(e)}")  
+        return redirect('/admin/add-variant/')
+
+     
+
+
 
 
 

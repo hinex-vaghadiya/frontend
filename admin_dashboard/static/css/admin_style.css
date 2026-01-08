@@ -232,9 +232,6 @@ th, td {
   display: block;     /* ensures no extra space below image */
 }
 
-
-
-
 /* For success message  or error messages */
 .messages {
   margin-bottom: 15px;
@@ -274,3 +271,5 @@ th, td {
   color: #1a73e8;
   border: 1px solid #1a73e8;
 }
+
+

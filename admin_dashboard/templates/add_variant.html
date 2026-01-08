@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Product</title>
+  <title>Add Variant</title>
   <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
   <link rel="stylesheet" href="{% static 'css/wizard.css' %}">
 </head>
@@ -53,21 +53,23 @@
 
         <!-- Wizard Steps -->
         <div class="wizard-steps">
-          <div class="step active" data-step="1">Product details</div>
-          <div class="step" data-step="2">product images</div>
+          <div class="step active" data-step="1">Variant details</div>
+          <div class="step" data-step="2">Variant images</div>
         </div>
 
-        <form id="productWizardForm" method="post" enctype="multipart/form-data" action="/admin/add-product/">
+        <form id="productWizardForm" method="post" enctype="multipart/form-data" action="/admin/add-variant/">
           {% csrf_token %}
 
           <!-- STEP 1: Product Info -->
           <div class="step-content active" data-step="1">
-            <input type="text" name="product_name" placeholder="Product Name" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <select name="category_id" required>
-              <option value="" disabled selected>Select Category</option>
-              {% for category in categories %}
-              <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+            <input type="text" name="name" placeholder="Variant Name" required>
+            <input type="text" name="price" placeholder="Price" required>
+            <input type="text" name="compare_at_price" placeholder="compare_at_price" required>
+            <input type="text" name="stock" placeholder="stock" required>
+            <select name="product_id" required>
+              <option value="" disabled selected>Select Product</option>
+              {% for product in products %}
+              <option value="{{ product.product_id }}">{{ product.product_name }}</option>
               {% endfor %}
             </select>
 
@@ -76,9 +78,8 @@
 
           <!-- STEP 2: Product Images -->
           <div class="step-content" data-step="2">
-            <label>Upload Product Images</label>
-            <input type="file" name="product_images" id="product_images" multiple accept="image/*" required>
-            <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
+            <label>Upload variant Images</label>
+            <input type="file" name="variant_images" id="variant_images" multiple accept="image/*" required>
             <div class="image-preview" id="imagePreview"></div>
 
             <br>
@@ -89,7 +90,7 @@
       </div>
     </div>
   </div>
-  <script src="{% static 'js/wizard.js'%}"></script>
+  <script src="{% static 'js/variant_wizard.js'%}"></script>
 </body>
 
 </html>
