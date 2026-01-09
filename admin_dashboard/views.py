@@ -337,59 +337,81 @@ def add_product_and_images(request):                   # to add product and imag
                     print(image_response.json())
                     image_response.raise_for_status()
                     print(f"Image {img.name} uploaded successfully")
-                    # messages.success(request,"product added successfully")
                 except requests.exceptions.RequestException as e:
-                    # messages.error(request, )
                     return JsonResponse({"error":f"Unable to upload image {img.name}: {str(e)}"})
             return JsonResponse({"message":"success","product_id":product_id},status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as e:
-            # messages.error(request,)
             return JsonResponse({"error":f"unable to add product : {str(e)}"})  
         
+def extract_variant_indexes(request):   #to extract indexes of multiple variants or handle multiple variants
+    indexes = set()
+    for key in request.POST.keys():
+        if key.startswith("variants["):
+            idx = key.split("[")[1].split("]")[0]
+            indexes.add(idx)
+    
+    sorted_indexes = sorted(indexes, key=int)  # numeric sort
+    print("DEBUG: Extracted variant indexes:", sorted_indexes)  # debug print
+    return sorted_indexes
     
 
-def add_variant_and_images(request,product_id):                   # to add variant
-    if request.method=='POST':
-        print('i am in variant')
-        variant_url=products_related_base_url+'variants/'
-        variant_images_url=products_related_base_url+'variant-images/'
+def add_variant_and_images(request, product_id):  # to add multiple variants
+    if request.method == 'POST':
+        # print('i am in variant')
 
-        images =request.FILES.getlist('variant_images')
-        payload={
-            "product":int(product_id),
-            "name":request.POST.get('variant_name'),
-            "price":int(request.POST.get('price')),
-            "stock":0,
-            "compare_at_price":int(request.POST.get('compare_at_price')),
-        }
-        print(f"payload:{payload}")
-        print(f"images:{images}")
+        variant_url = products_related_base_url + 'variants/'
+        variant_images_url = products_related_base_url + 'variant-images/'
+
+        variant_indexes = extract_variant_indexes(request)
+        print("Variant indexes:", variant_indexes)
 
         try:
-            variant_response=requests.post(url=variant_url,data=payload)
-            variant_response.raise_for_status()
-            variant_data=variant_response.json()
-            print(variant_data)
-            variant_id=int(variant_data['id'])
-            for img in images:
-                files = {
-                'image': (img.name, img, img.content_type)
-            }   
+            for idx in variant_indexes:
                 payload = {
-                'variant': variant_id # API may expect string "true"/"false"
-            }
-                try:
-                    variant_image_response=requests.post(url=variant_images_url,files=files,data=payload)
+                    "product": int(product_id),
+                    "name": request.POST.get(f"variants[{idx}][name]"),
+                    "price": int(request.POST.get(f"variants[{idx}][price]")),
+                    "stock": 0,
+                    "compare_at_price": int(request.POST.get(f"variants[{idx}][compare_at_price]")),
+                }
+
+                print(f"Variant payload {idx}:", payload)
+
+                variant_response = requests.post(url=variant_url, data=payload)
+                variant_response.raise_for_status()
+                variant_data = variant_response.json()
+                print(variant_data)
+
+                variant_id = int(variant_data['id'])
+
+                images = request.FILES.getlist(f"variants[{idx}][images]")
+                print(f"Variant {idx} images:", images)
+
+                for img in images:
+                    files = {
+                        'image': (img.name, img, img.content_type)
+                    }
+                    image_payload = {
+                        'variant': variant_id
+                    }
+
+                    variant_image_response = requests.post(
+                        url=variant_images_url,
+                        files=files,
+                        data=image_payload
+                    )
+
                     print(variant_image_response.json())
                     variant_image_response.raise_for_status()
                     print(f"Image {img.name} uploaded successfully")
-                    messages.success(request,"Variant added successfully")
-                except requests.exceptions.RequestException as e:
-                    messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
-            return redirect('/admin/add-product')
+
+            messages.success(request, "Product with mentioned variants added successfully")
+            return redirect('/admin/product-list')
+
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"unable to add variant : {str(e)}")  
-        return redirect('/admin/add-product/')
+            messages.error(request, f"unable to add variant : {str(e)}")
+            return redirect('/admin/product-list/')
+
 
 def add_product(request):
     if request.method=='GET':     
@@ -404,8 +426,8 @@ def add_product(request):
             
         else:
             data = json.loads(resp.content.decode("utf-8"))
-            print(data["error"])
-            return resp
+            messages.error(request,data["error"])
+            return redirect('/admin/product-list')
 
 
 

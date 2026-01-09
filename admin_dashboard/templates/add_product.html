@@ -30,10 +30,10 @@
         <a href="#">Brand</a>
 
         <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Add category</a>
-      <a href="/admin/add-batch">Add Batch</a>
-      <a href="/admin/product-list">Product List</a>
-      <a href="#">Product Reviews</a>
+        <a href="/admin/add-category">Add category</a>
+        <a href="/admin/add-batch">Add Batch</a>
+        <a href="/admin/product-list">Product List</a>
+        <a href="#">Product Reviews</a>
 
         <p class="menu-title">Admin</p>
         <a href="#">Admin Role</a>
@@ -92,25 +92,23 @@
           <hr>
 
           <!-- ================= VARIANTS ================= -->
-          <!-- ================= VARIANTS ================= -->
           <h4>Variants</h4>
 
           <div id="variants-container">
 
             <!-- FIRST VARIANT (COMPULSORY, NO REMOVE BUTTON) -->
-            <div class="variant-block">
-              <input type="text" name="variant_name" placeholder="Variant Name" required>
-              <input type="text" name="price" placeholder="Price" required>
-              <input type="text" name="compare_at_price" placeholder="Compare At Price" required>
+            <div class="variant-block" data-variant-index="0">
+
+              <input type="text" name="variants[0][name]" placeholder="Variant Name" required>
+              <input type="text" name="variants[0][price]" placeholder="Price" required>
+              <input type="text" name="variants[0][compare_at_price]" placeholder="Compare At Price" required>
 
               <input type="text" value="0" readonly placeholder="Stock (auto calculated by batch)">
 
               <label>Variant Images</label>
-              <!-- Only preview, no primary selection -->
-              <input type="file" name="variant_images" multiple accept="image/*" class="variant-images-input"
+              <input type="file" name="variants[0][images]" multiple accept="image/*" class="variant-images-input"
                 data-variant-index="0" required>
 
-              <!-- Preview container -->
               <div class="image-preview variant-preview" id="variant-preview-0"></div>
 
               <hr>
@@ -121,6 +119,7 @@
           <button type="button" class="btn btn-gray" onclick="addVariant()">
             + Add Another Variant
           </button>
+
 
 
           <br><br>
