@@ -49,6 +49,13 @@
 
         <!-- Header -->
         <div class="table-header">
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <p class="alert {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
           <h3>Products</h3>
           <a href="/admin/add-product" class="btn btn-green">+ Add Product</a>
         </div>

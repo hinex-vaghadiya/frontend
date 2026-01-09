@@ -247,7 +247,7 @@ def delete_category(request,category_id):       # to delete category
             messages.success(request,"Deleted Sucessfully")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"unable to delete : str{(e)}")
-        return render(request,'add_category.html')
+        return request(request,'/admin/add-category')
 
 
 #products related views
@@ -304,6 +304,11 @@ def get_all_variants(request):         # to get all products  details for add va
 
 
 #no bugs regarding render and redirect...
+
+def product_list(request):  # to serve the product list page 
+    return get_all_products(request,'product_list.html')
+
+
 def add_product_and_images(request):                   # to add product and images
     if request.method=='POST':
         product_url=products_related_base_url+'products/'
@@ -355,7 +360,7 @@ def extract_variant_indexes(request):   #to extract indexes of multiple variants
     return sorted_indexes
     
 
-def add_variant_and_images(request, product_id):  # to add multiple variants
+def add_variant_and_images(request, product_id):  # to add variant and images
     if request.method == 'POST':
         # print('i am in variant')
 
@@ -413,7 +418,7 @@ def add_variant_and_images(request, product_id):  # to add multiple variants
             return redirect('/admin/product-list/')
 
 
-def add_product(request):
+def add_product(request):               # to add product along with its variants
     if request.method=='GET':     
         return get_all_categories(request)
     
@@ -429,11 +434,20 @@ def add_product(request):
             messages.error(request,data["error"])
             return redirect('/admin/product-list')
 
+def delete_product(request,product_id):
+    delete_product_url=f"{products_related_base_url}products/{product_id}/"
+    if request.method=='GET':
+        try:
+            response=requests.delete(url=delete_product_url)
+            response.raise_for_status()
+            messages.success(request,"product deleted successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to delete the product : {str(e)}")
+        return redirect('/admin/product-list')
 
 
 
-
-
+#batch related  views
 def add_batch(request):                     # to add batch
     if request.method=='GET':
         return get_all_variants(request)
@@ -456,8 +470,7 @@ def add_batch(request):                     # to add batch
             messages.error(request,f"Failed to add batch : {str(e)}")
         return redirect('/admin/add-batch')
 
-def product_list(request):
-    return get_all_products(request,'product_list.html')
+
 
 
 
