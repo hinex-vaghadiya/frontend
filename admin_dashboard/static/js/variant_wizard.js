@@ -17,7 +17,6 @@ function validateStep1() {
   const name = step1.querySelector('input[name="name"]').value.trim();
   const price = step1.querySelector('input[name="price"]').value.trim();
   const comparePrice = step1.querySelector('input[name="compare_at_price"]').value.trim();
-  const stock = step1.querySelector('input[name="stock"]').value.trim();
   const productId = step1.querySelector('select[name="product_id"]').value;
 
   if (!name) {
@@ -30,10 +29,6 @@ function validateStep1() {
   }
   if (!comparePrice) {
     alert("Please enter the Compare At Price");
-    return;
-  }
-  if (!stock) {
-    alert("Please enter the Stock");
     return;
   }
   if (!productId) {

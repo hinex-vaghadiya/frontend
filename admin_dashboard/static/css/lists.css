@@ -1,0 +1,162 @@
+/* ===============================
+   PRODUCT LIST MODERN TABLE CSS
+================================= */
+
+/* 1. Table Card Container */
+.table-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px 28px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  margin: 30px;
+}
+
+/* 2. Header (Title + Add Button) */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.table-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* 3. Table Wrapper (Smooth Scroll) */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* 4. Table Core */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.admin-table thead {
+  background: #f9fafb;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 16px 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 5. Table Body Rows */
+.admin-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: middle;
+  color: #374151;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #f9fbff;
+}
+
+/* 6. Product Thumbnail */
+.product-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Product Info */
+.product-info small {
+  display: block;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* 7. Status Badges */
+.status {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status.active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.status.inactive {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* 8. Action Buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-sm.edit {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.btn-sm.edit:hover {
+  background: #dbeafe;
+}
+
+.btn-sm.delete {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.btn-sm.delete:hover {
+  background: #fee2e2;
+}
+
+/* 9. Empty State */
+.empty {
+  text-align: center;
+  padding: 30px;
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+/* 10. Add Product Button */
+.btn-green {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-green:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.45);
+}

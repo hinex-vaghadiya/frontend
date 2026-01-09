@@ -1,12 +1,12 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Product</title>
+
+  <!-- OLD CSS (unchanged) -->
   <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
   <link rel="stylesheet" href="{% static 'css/wizard.css' %}">
 </head>
@@ -14,9 +14,11 @@
 <body>
 
   <div class="container">
-    <!-- Sidebar -->
+
+    <!-- ================= SIDEBAR ================= -->
     <aside class="sidebar">
       <h2 class="logo">Herbglow</h2>
+
       <nav>
         <p class="menu-title">Main Menu</p>
         <a href="/admin/" class="active">Dashboard</a>
@@ -26,12 +28,13 @@
         <a href="#">Categories</a>
         <a href="#">Transaction</a>
         <a href="#">Brand</a>
+
         <p class="menu-title">Product</p>
-        <a href="/admin/add-category">Add category</a>
-        <a href="/admin/add-product">Add Products</a>
-        <a href="/admin/add-variant">Add variant</a>
-        <a href="#">Product List</a>
-        <a href="#">Product Reviews</a>
+      <a href="/admin/add-category">Add category</a>
+      <a href="/admin/add-batch">Add Batch</a>
+      <a href="/admin/product-list">Product List</a>
+      <a href="#">Product Reviews</a>
+
         <p class="menu-title">Admin</p>
         <a href="#">Admin Role</a>
         <a href="#">Control Authority</a>
@@ -39,57 +42,102 @@
       </nav>
     </aside>
 
-    <!-- Main Content -->
-    <div class="main">
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+
+      <div class="topbar">
+        <h2>Add Product</h2>
+      </div>
+
       <div class="card">
+
+        {% if messages %}
         <div class="messages">
-          {% if messages %}
           {% for message in messages %}
           <p class="alert {{ message.tags }}">{{ message }}</p>
           {% endfor %}
-          {% endif %}
         </div>
+        {% endif %}
+
         <h3>Add Product</h3>
 
-        <!-- Wizard Steps -->
-        <div class="wizard-steps">
-          <div class="step active" data-step="1">Product details</div>
-          <div class="step" data-step="2">product images</div>
-        </div>
-
-        <form id="productWizardForm" method="post" enctype="multipart/form-data" action="/admin/add-product/">
+        <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
-          <!-- STEP 1: Product Info -->
-          <div class="step-content active" data-step="1">
-            <input type="text" name="product_name" placeholder="Product Name" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <select name="category_id" required>
-              <option value="" disabled selected>Select Category</option>
-              {% for category in categories %}
-              <option value="{{ category.category_id }}">{{ category.category_name }}</option>
-              {% endfor %}
-            </select>
+          <!-- ================= PRODUCT DETAILS ================= -->
+          <h4>Product Details</h4>
 
-            <button type="button" class="btn btn-green" onclick="validateStep1()">Next</button>
+          <input type="text" name="product_name" placeholder="Product Name" required>
+          <textarea name="description" placeholder="Description" required></textarea>
+
+          <select name="category_id" required>
+            <option value="" disabled selected>Select Category</option>
+            {% for category in categories %}
+            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+            {% endfor %}
+          </select>
+
+          <hr>
+
+          <!-- ================= PRODUCT IMAGES ================= -->
+          <h4>Product Images</h4>
+
+          <label>Upload Product Images</label>
+          <input type="file" name="product_images" id="product_images" multiple accept="image/*" required>
+
+          <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
+
+          <div class="image-preview" id="imagePreview"></div>
+
+          <hr>
+
+          <!-- ================= VARIANTS ================= -->
+          <!-- ================= VARIANTS ================= -->
+          <h4>Variants</h4>
+
+          <div id="variants-container">
+
+            <!-- FIRST VARIANT (COMPULSORY, NO REMOVE BUTTON) -->
+            <div class="variant-block">
+              <input type="text" name="variant_name[]" placeholder="Variant Name" required>
+              <input type="text" name="price[]" placeholder="Price" required>
+              <input type="text" name="compare_at_price[]" placeholder="Compare At Price" required>
+
+              <input type="text" value="0" readonly placeholder="Stock (auto calculated by batch)">
+
+              <label>Variant Images</label>
+              <!-- Only preview, no primary selection -->
+              <input type="file" name="variant_images[]" multiple accept="image/*" class="variant-images-input"
+                data-variant-index="0" required>
+
+              <!-- Preview container -->
+              <div class="image-preview variant-preview" id="variant-preview-0"></div>
+
+              <hr>
+            </div>
+
           </div>
 
-          <!-- STEP 2: Product Images -->
-          <div class="step-content" data-step="2">
-            <label>Upload Product Images</label>
-            <input type="file" name="product_images" id="product_images" multiple accept="image/*" required>
-            <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
-            <div class="image-preview" id="imagePreview"></div>
+          <button type="button" class="btn btn-gray" onclick="addVariant()">
+            + Add Another Variant
+          </button>
 
-            <br>
-            <button type="button" class="btn btn-gray" onclick="prevStep()">Back</button>
-            <button type="submit" class="btn btn-green">Submit Product</button>
-          </div>
+
+          <br><br>
+
+          <!-- ================= SUBMIT ================= -->
+          <button type="submit" class="btn btn-green">
+            Save Product
+          </button>
+
         </form>
       </div>
-    </div>
+    </main>
   </div>
-  <script src="{% static 'js/wizard.js'%}"></script>
+
+  <!-- ================= JS ================= -->
+  <script src="{% static 'js/add_product.js'%}"></script>
+
 </body>
 
 </html>

@@ -248,7 +248,7 @@ def delete_category(request,category_id):       # to delete category
 
 #products related views
 
-def get_categories_details_for_product(request):  # to get caregories  details for add product
+def get_all_categories(request):  # to get all caregories  details for add product
     category_url=products_related_base_url+'categories/'
     if request.method=='GET':
         url=category_url
@@ -265,7 +265,7 @@ def get_categories_details_for_product(request):  # to get caregories  details f
         return render(request,'add_product.html',{"categories":categories})
     
 
-def get_products_details_for_variant(request):         # to get products  details for add variant
+def get_all_products(request,destination):         # to get all products  details for add variant
     product_url=products_related_base_url+'products/'
     if request.method=='GET':
         url=product_url
@@ -279,12 +279,30 @@ def get_products_details_for_variant(request):         # to get products  detail
             messages.error(request,f"failed to fetch products data :{str(e)}")
         except ValueError as e:
             messages.error(request, f"Invalid response format: {str(e)}")
-        return render(request,'add_variant.html',{"products":products})
+        return render(request,destination,{"products":products})
+
+
+def get_all_variants(request):         # to get all products  details for add variant
+    variant_url=products_related_base_url+'variants/'
+    if request.method=='GET':
+        url=variant_url
+        variants=[]
+        try:
+            response=requests.get(url=url)
+            response.raise_for_status()
+            variants=response.json()
+            # print(categories)
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to fetch variants data :{str(e)}")
+        except ValueError as e:
+            messages.error(request, f"Invalid response format: {str(e)}")
+        return render(request,'add_batch.html',{"variants":variants})
+
 
 #no bugs regarding render and redirect...
 def add_product(request):                   # to add product
     if request.method=='GET':     
-        return get_categories_details_for_product(request)
+        return get_all_categories(request)
     
     if request.method=='POST':
         product_url=products_related_base_url+'products/'
@@ -329,7 +347,7 @@ def add_product(request):                   # to add product
 
 def add_variant(request):                   # to add variant
     if request.method=='GET':
-        return get_products_details_for_variant(request)
+        return get_all_products(request,'add_variant.html')
     
     if request.method=='POST':
         variant_url=products_related_base_url+'variants/'
@@ -341,12 +359,12 @@ def add_variant(request):                   # to add variant
             "name":request.POST.get('name'),
             "price":int(request.POST.get('price')),
             "compare_at_price":int(request.POST.get('compare_at_price')),
-            "stock":int(request.POST.get('stock')),
         }
         try:
             variant_response=requests.post(url=variant_url,data=payload)
             variant_response.raise_for_status()
             variant_data=variant_response.json()
+            print(variant_data)
             variant_id=int(variant_data['id'])
             for img in images:
                 files = {
@@ -360,15 +378,40 @@ def add_variant(request):                   # to add variant
                     print(variant_image_response.json())
                     variant_image_response.raise_for_status()
                     print(f"Image {img.name} uploaded successfully")
-                    messages.success(request,"product added successfully")
+                    messages.success(request,"Variant added successfully")
                 except requests.exceptions.RequestException as e:
                     messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
             return redirect('/admin/add-variant')
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"unable to add product : {str(e)}")  
+            messages.error(request,f"unable to add variant : {str(e)}")  
         return redirect('/admin/add-variant/')
 
-     
+
+def add_batch(request):                     # to add batch
+    if request.method=='GET':
+        return get_all_variants(request)
+    
+    if request.method=='POST':
+        batches_url=products_related_base_url+'batches/'
+        payload={
+            
+            "variant": int(request.POST.get('variant_id')),
+            "qty": int(request.POST.get('qty')),
+            "mfg_date": request.POST.get('mfg_date'),
+            "exp_date": request.POST.get('exp_date'),
+            "is_active": True
+        }
+        try:
+            batches_response=requests.post(url=batches_url,data=payload)
+            batches_response.raise_for_status()
+            messages.success(request,"Batch added successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"Failed to add batch : {str(e)}")
+        return redirect('/admin/add-batch')
+
+def product_list(request):
+    return get_all_products(request,'product_list.html')
+
 
 
 

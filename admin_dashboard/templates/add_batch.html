@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Batch</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/wizard.css' %}">
+</head>
+
+<body>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="logo">Herbglow</h2>
+      <nav>
+        <p class="menu-title">Main Menu</p>
+        <a href="/admin/" class="active">Dashboard</a>
+        <a href="#">Order Management</a>
+        <a href="#">Customers</a>
+        <a href="#">Coupon Code</a>
+        <a href="#">Categories</a>
+        <a href="#">Transaction</a>
+        <a href="#">Brand</a>
+        <p class="menu-title">Product</p>
+      <a href="/admin/add-category">Add category</a>
+      <a href="/admin/add-batch">Add Batch</a>
+      <a href="/admin/product-list">Product List</a>
+      <a href="#">Product Reviews</a>
+        <p class="menu-title">Admin</p>
+        <a href="#">Admin Role</a>
+        <a href="#">Control Authority</a>
+        <a href="/admin/logout">Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+      <div class="card">
+        <div class="messages">
+          {% if messages %}
+          {% for message in messages %}
+          <p class="alert {{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+          {% endif %}
+        </div>
+        <h3>Add Batch</h3>
+
+        <!-- Wizard Steps -->
+        <div class="wizard-steps">
+          <div class="step active" data-step="1">Batch details</div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" action="/admin/add-batch/">
+          {% csrf_token %}
+<!-- 'batch_id', 'variant', 'qty', 'mfg_date', 'exp_date','is_active','batch_code' -->
+          <!-- STEP 1: Product Info -->
+          <div class="step-content active" data-step="1">
+              <select name="variant_id" required>
+                <option value="" disabled selected>Select Variant</option>
+                {% for variant in variants %}
+                <option value="{{ variant.id }}">{{ variant.name }}</option>
+                {% endfor %}
+              </select>
+            <input type="text" name="qty" placeholder="Enter Quantity" required>
+            <input type="date" name="mfg_date" placeholder="Enter Manufacturing date" required>
+            <input type="date" name="exp_date" placeholder="Enter Expiring date" required>
+            <button type="submit" class="btn btn-green">Submit Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'js/variant_wizard.js'%}"></script>
+</body>
+
+</html>
