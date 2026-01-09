@@ -1,5 +1,5 @@
 from django.urls import path,include
-from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_variant,add_batch,product_list
+from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list
 urlpatterns = [
     path('', admin_index,name='admin_index'),
     path('login/', admin_login,name='admin_login'),

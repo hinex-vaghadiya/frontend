@@ -3,6 +3,10 @@ from django.http import JsonResponse
 import requests
 from rest_framework.response import Response
 from django.contrib import messages
+from rest_framework import status
+import json
+
+
 # Create your views here.
 
 #imports of some comman methods that are written in users.views
@@ -300,10 +304,7 @@ def get_all_variants(request):         # to get all products  details for add va
 
 
 #no bugs regarding render and redirect...
-def add_product(request):                   # to add product
-    if request.method=='GET':     
-        return get_all_categories(request)
-    
+def add_product_and_images(request):                   # to add product and images
     if request.method=='POST':
         product_url=products_related_base_url+'products/'
         product_images_url=products_related_base_url+'product-images/'
@@ -336,30 +337,34 @@ def add_product(request):                   # to add product
                     print(image_response.json())
                     image_response.raise_for_status()
                     print(f"Image {img.name} uploaded successfully")
-                    messages.success(request,"product added successfully")
+                    # messages.success(request,"product added successfully")
                 except requests.exceptions.RequestException as e:
-                    messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
-            return redirect('/admin/add-product')
+                    # messages.error(request, )
+                    return JsonResponse({"error":f"Unable to upload image {img.name}: {str(e)}"})
+            return JsonResponse({"message":"success","product_id":product_id},status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"unable to add product : {str(e)}")  
-        return redirect('/admin/add-product/')
+            # messages.error(request,)
+            return JsonResponse({"error":f"unable to add product : {str(e)}"})  
+        
     
 
-def add_variant(request):                   # to add variant
-    if request.method=='GET':
-        return get_all_products(request,'add_variant.html')
-    
+def add_variant_and_images(request,product_id):                   # to add variant
     if request.method=='POST':
+        print('i am in variant')
         variant_url=products_related_base_url+'variants/'
         variant_images_url=products_related_base_url+'variant-images/'
 
         images =request.FILES.getlist('variant_images')
         payload={
-            "product":int(request.POST.get('product_id')),
-            "name":request.POST.get('name'),
+            "product":int(product_id),
+            "name":request.POST.get('variant_name'),
             "price":int(request.POST.get('price')),
+            "stock":0,
             "compare_at_price":int(request.POST.get('compare_at_price')),
         }
+        print(f"payload:{payload}")
+        print(f"images:{images}")
+
         try:
             variant_response=requests.post(url=variant_url,data=payload)
             variant_response.raise_for_status()
@@ -381,10 +386,30 @@ def add_variant(request):                   # to add variant
                     messages.success(request,"Variant added successfully")
                 except requests.exceptions.RequestException as e:
                     messages.error(request, f"Unable to upload image {img.name}: {str(e)}")
-            return redirect('/admin/add-variant')
+            return redirect('/admin/add-product')
         except requests.exceptions.RequestException as e:
             messages.error(request,f"unable to add variant : {str(e)}")  
-        return redirect('/admin/add-variant/')
+        return redirect('/admin/add-product/')
+
+def add_product(request):
+    if request.method=='GET':     
+        return get_all_categories(request)
+    
+    if request.method=='POST':
+        resp= add_product_and_images(request)
+        if resp.status_code==200:
+            data = json.loads(resp.content.decode("utf-8"))
+            product_id=(data["product_id"])
+            return add_variant_and_images(request,product_id)
+            
+        else:
+            data = json.loads(resp.content.decode("utf-8"))
+            print(data["error"])
+            return resp
+
+
+
+
 
 
 def add_batch(request):                     # to add batch
