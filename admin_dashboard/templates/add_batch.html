@@ -6,12 +6,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Batch</title>
+  <title>Batch Management</title>
+
   <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/wizard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/lists.css' %}">
+
+  <style>
+    #batch-form-card {
+      display: none;
+      margin: 30px;
+      border-radius: 14px;
+      padding: 24px 28px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    #batch-form-card input,
+    #batch-form-card select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+  </style>
 </head>
 
 <body>
+
 
   <div class="container">
     <!-- Sidebar -->
@@ -26,56 +48,157 @@
         <a href="#">Categories</a>
         <a href="#">Transaction</a>
         <a href="#">Brand</a>
+
         <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Category List</a>
-      <a href="/admin/add-batch">Add Batch</a>
-      <a href="/admin/product-list">Product List</a>
-      <a href="#">Product Reviews</a>
+        <a href="/admin/add-category/">Category List</a>
+        <a href="#">Add Batch</a>
+        <a href="#">Product List</a>
+        <a href="#">Product Reviews</a>
+
         <p class="menu-title">Admin</p>
         <a href="#">Admin Role</a>
         <a href="#">Control Authority</a>
-        <a href="/admin/logout">Logout</a>
+        <a href="/admin/logout/">Logout</a>
       </nav>
     </aside>
 
     <!-- Main Content -->
-    <div class="main">
-      <div class="card">
-        <div class="messages">
-          {% if messages %}
-          {% for message in messages %}
-          <p class="alert {{ message.tags }}">{{ message }}</p>
-          {% endfor %}
-          {% endif %}
-        </div>
-        <h3>Add Batch</h3>
+    <main class="main">
+      <div class="topbar">
+        <h2>Batch Management</h2>
+      </div>
 
-        <!-- Wizard Steps -->
-        <div class="wizard-steps">
-          <div class="step active" data-step="1">Batch details</div>
-        </div>
+      <!-- Messages -->
+      <div class="messages">
+        {% for message in messages %}
+        <p class="alert {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
 
-        <form method="post" enctype="multipart/form-data" action="/admin/add-batch/">
+      <!-- Add / Edit Batch Form -->
+      <div class="card" id="batch-form-card">
+        <h3 id="form-title">Add Batch</h3>
+
+        <form id="batch-form" method="post" action="/admin/add-batch/">
           {% csrf_token %}
-<!-- 'batch_id', 'variant', 'qty', 'mfg_date', 'exp_date','is_active','batch_code' -->
-          <!-- STEP 1: Product Info -->
-          <div class="step-content active" data-step="1">
-              <select name="variant_id" required>
-                <option value="" disabled selected>Select Variant</option>
-                {% for variant in variants %}
-                <option value="{{ variant.id }}">{{ variant.name }}</option>
-                {% endfor %}
-              </select>
-            <input type="text" name="qty" placeholder="Enter Quantity" required>
-            <input type="date" name="mfg_date" placeholder="Enter Manufacturing date" required>
-            <input type="date" name="exp_date" placeholder="Enter Expiring date" required>
-            <button type="submit" class="btn btn-green">Submit Product</button>
-          </div>
+          <input type="hidden" name="batch_id" id="batch_id">
+
+          <select name="variant_id" id="variant_id" required>
+            <option value="">Select Variant</option>
+            {% for variant in variants %}
+            <option value="{{ variant.id }}">{{ variant.name }}</option>
+            {% endfor %}
+          </select>
+
+          <input type="number" name="qty" id="qty" placeholder="Quantity" required>
+          <input type="date" name="mfg_date" id="mfg_date" required>
+          <input type="date" name="exp_date" id="exp_date" required>
+
+          <button type="submit" class="btn-green" id="submit-btn">Save</button>
         </form>
       </div>
-    </div>
+
+      <!-- Batch List -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Batches</h3>
+          <button type="button" class="btn btn-green" id="toggle-batch-btn" onclick="toggleBatchForm()">
+            + Add Batch
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Variant</th>
+                <th>Qty</th>
+                <th>MFG Date</th>
+                <th>EXP Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for batch in batches %}
+              <tr>
+                <td>{{ batch.batch_id }}</td>
+                <td>{{ batch.variant }}</td>
+                <td>{{ batch.qty }}</td>
+                <td>{{ batch.mfg_date }}</td>
+                <td>{{ batch.exp_date }}</td>
+                <td class="actions">
+                  <button type="button" class="btn-sm edit" onclick="editBatch(
+          '{{ batch.batch_id }}',
+          '{{ batch.variant }}',
+          '{{ batch.qty }}',
+          '{{ batch.mfg_date }}',
+          '{{ batch.exp_date }}'
+        )">
+                    Edit
+                  </button>
+
+                  {% if batch.batch_id %}
+                  <a href="{% url 'delete_batch' batch.batch_id %}" class="btn-sm delete">
+                    Delete
+                  </a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="empty">No batches found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+    </main>
   </div>
-  <script src="{% static 'js/variant_wizard.js'%}"></script>
+
+ <script>
+  let formVisible = false;
+
+  function toggleBatchForm() {
+    const card = document.getElementById('batch-form-card');
+    const btn = document.getElementById('toggle-batch-btn');
+    const form = document.getElementById('batch-form');
+
+    if (formVisible) {
+      card.style.display = 'none';
+      btn.innerText = '+ Add Batch';
+      form.reset();
+      document.getElementById('batch_id').value = '';
+      form.action = '/admin/add-batch/';
+      document.getElementById('submit-btn').innerText = 'Save';
+      formVisible = false;
+    } else {
+      card.style.display = 'block';
+      btn.innerText = 'Cancel';
+      formVisible = true;
+    }
+  }
+
+  function editBatch(id, variantId, qty, mfg, exp) {
+    if (!formVisible) toggleBatchForm();
+
+    document.getElementById('batch_id').value = id;
+    document.getElementById('variant_id').value = variantId;
+    document.getElementById('qty').value = qty;
+    document.getElementById('mfg_date').value = mfg;
+    document.getElementById('exp_date').value = exp;
+
+    document.getElementById('batch-form').action =
+      `/admin/edit-batch/${id}/`;
+
+    document.getElementById('submit-btn').innerText = 'Update';
+  }
+</script>
+
+
 </body>
 
 </html>

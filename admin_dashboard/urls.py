@@ -1,5 +1,5 @@
 from django.urls import path,include
-from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list,delete_product
+from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list,delete_product,delete_batch,edit_batch
 urlpatterns = [
     path('', admin_index,name='admin_index'),
     path('login/', admin_login,name='admin_login'),
@@ -12,6 +12,8 @@ urlpatterns = [
     path('add-batch/',add_batch,name='add_batch'),
     path('product-list',product_list,name='product_list'),
     path('delete-product/<int:product_id>/',delete_product,name='delete_product'),
+    path('delete-batch/<int:batch_id>/',delete_batch,name='delete_batch'),
+    path('edit-batch/<int:batch_id>/',edit_batch,name='edit_batch'),
     
     
 ]

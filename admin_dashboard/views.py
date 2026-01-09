@@ -450,7 +450,22 @@ def delete_product(request,product_id):
 #batch related  views
 def add_batch(request):                     # to add batch
     if request.method=='GET':
-        return get_all_variants(request)
+        variant_url=products_related_base_url+'variants/'
+        batches_url=products_related_base_url+'batches/'
+        variants=[]
+        batches=[]
+        try:
+            variant_response=requests.get(url=variant_url)
+            variant_response.raise_for_status()
+            variants=variant_response.json()
+            batches_response=requests.get(url=batches_url)
+            batches_response.raise_for_status()
+            batches=batches_response.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed :{str(e)}")
+        except ValueError as e:
+            messages.error(request, f"Invalid response format: {str(e)}")
+        return render(request,'add_batch.html',{"variants":variants,"batches":batches})
     
     if request.method=='POST':
         batches_url=products_related_base_url+'batches/'
@@ -469,6 +484,42 @@ def add_batch(request):                     # to add batch
         except requests.exceptions.RequestException as e:
             messages.error(request,f"Failed to add batch : {str(e)}")
         return redirect('/admin/add-batch')
+    
+
+def delete_batch(request,batch_id):            # to delete batch
+    delete_batch_url=f"{products_related_base_url}batches/{batch_id}/"
+    if request.method=='GET':
+        try:
+            response=requests.delete(url=delete_batch_url)
+            response.raise_for_status()
+            messages.success(request," Batch Deleted Sucessfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"unable to delete : str{(e)}")
+        return redirect('/admin/add-batch')
+
+
+def edit_batch(request,batch_id):
+    edit_batch_url=f"{products_related_base_url}batches/{batch_id}/"
+    if request.method=='POST':
+        variant_id = request.POST.get('variant_id')
+        qty = request.POST.get('qty')
+        mfg_date = request.POST.get('mfg_date')
+        exp_date = request.POST.get('exp_date')
+        payload = {
+            "variant": variant_id,
+            "qty": qty,
+            "mfg_date": mfg_date,
+            "exp_date": exp_date
+        }
+        try:
+            response=requests.put(url=edit_batch_url,json=payload)
+            print(response.json())
+            response.raise_for_status()
+            messages.success(request,"Category edited successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to update category : {str(e)}")
+        return redirect('/admin/add-batch')
+
 
 
 

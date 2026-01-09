@@ -47,7 +47,7 @@
       <a href="#">Brand</a>
 
       <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Category List</a>
+      <a href="/admin/add-category/">Category List</a>
       <a href="#">Add Batch</a>
       <a href="#">Product List</a>
       <a href="#">Product Reviews</a>
@@ -55,7 +55,7 @@
       <p class="menu-title">Admin</p>
       <a href="#">Admin Role</a>
       <a href="#">Control Authority</a>
-      <a href="/admin/logout">Logout</a>
+      <a href="/admin/logout/">Logout</a>
     </nav>
   </aside>
 
@@ -77,7 +77,7 @@
     <!-- Add/Edit Category Form -->
     <div class="card" id="category-form-card">
       <h3 id="form-title">Add Category</h3>
-      <form id="category-form" method="post">
+      <form id="category-form" method="post" action="/admin/add-category/">
         {% csrf_token %}
         <input type="hidden" name="category_id" id="category_id">
         <input type="text" name="category_name" id="category_name" placeholder="Category Name" required>
@@ -123,43 +123,7 @@
   </main>
 </div>
 
-<script>
-  let formVisible = false;
-
-  function toggleCategoryForm() {
-    const formCard = document.getElementById('category-form-card');
-    const toggleBtn = document.getElementById('toggle-category-btn');
-
-    if (formVisible) {
-      // Hide form
-      formCard.style.display = 'none';
-      toggleBtn.innerText = '+ Add Category';
-      // Reset form fields
-      document.getElementById('category_name').value = '';
-      document.getElementById('category_id').value = '';
-      document.getElementById('submit-btn').innerText = 'Save';
-      formVisible = false;
-    } else {
-      // Show form
-      formCard.style.display = 'block';
-      toggleBtn.innerText = 'Cancel';
-      formVisible = true;
-    }
-  }
-
-  function editCategory(id, name) {
-    const formCard = document.getElementById('category-form-card');
-    const toggleBtn = document.getElementById('toggle-category-btn');
-
-    formCard.style.display = 'block';
-    toggleBtn.innerText = 'Cancel';
-    formVisible = true;
-
-    document.getElementById('category_name').value = name;
-    document.getElementById('category_id').value = id;
-    document.getElementById('submit-btn').innerText = 'Update';
-  }
-</script>
+<script src="{% static 'js/category_list.js'%}"></script>
 
 </body>
 </html>
