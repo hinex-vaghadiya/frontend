@@ -1,34 +1,55 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Add Category</title>
-    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Category Management</title>
+  <link rel="stylesheet" href="{% static 'css/admin_style.css'%}">
+  <link rel="stylesheet" href="{% static 'css/lists.css'%}">
+  <style>
+    /* Keep form hidden initially */
+    #category-form-card {
+      display: none;
+      margin: 30px;
+      border-radius: 14px;
+      padding: 24px 28px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+    #category-form-card input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 20px;
+    }
+    #category-form-card button {
+      margin-right: 10px;
+    }
+  </style>
 </head>
-
 <body>
 
-    <div class="container">
+<div class="container">
   <!-- Sidebar -->
   <aside class="sidebar">
     <h2 class="logo">Herbglow</h2>
-
     <nav>
       <p class="menu-title">Main Menu</p>
       <a href="/admin/" class="active">Dashboard</a>
       <a href="#">Order Management</a>
-      <a href="#" >Customers</a>
+      <a href="#">Customers</a>
       <a href="#">Coupon Code</a>
       <a href="#">Categories</a>
       <a href="#">Transaction</a>
       <a href="#">Brand</a>
 
       <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Add category</a>
-      <a href="/admin/add-batch">Add Batch</a>
-      <a href="/admin/product-list">Product List</a>
+      <a href="/admin/add-category">Category List</a>
+      <a href="#">Add Batch</a>
+      <a href="#">Product List</a>
       <a href="#">Product Reviews</a>
 
       <p class="menu-title">Admin</p>
@@ -38,66 +59,107 @@
     </nav>
   </aside>
 
-        <!-- Main -->
-        <main class="main">
-            <div class="topbar">
-                <h2>Add Category</h2>
-            </div>
-
-            <!-- Add Category -->
-            <div class="card">
-                {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                    <p class="alert {{ message.tags }}">
-                        {{ message }}
-                    </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-
-                <h3>Create Category</h3>
-
-                <form action="/admin/add-category/" method="post">
-                    {% csrf_token %}
-                    <input type="text" name="category_name" placeholder="Category name" required>
-                    <br><br>
-                    <button class="btn-green">Add Category</button>
-                </form>
-            </div>
-
-            <!-- Category List -->
-            <div class="card" style="margin-top:20px;">
-                <h3>Available Categories</h3>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Category Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for category in categories %}
-                        <tr>
-                            <td>{{ category.category_id }}</td>
-                            <td>{{ category.category_name }}</td>
-                            <td><a href="/admin/edit-category/{{category.category_id}}/">Edit</a></td>
-                            <td><a href="/admin/delete-category/{{category.category_id}}/">Delete</a></td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="2">No categories found</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-        </main>
+  <!-- Main Content -->
+  <main class="main">
+    <div class="topbar">
+      <h2>Category Management</h2>
     </div>
 
-</body>
+    <!-- Messages -->
+    <div class="messages">
+      {% if messages %}
+          {% for message in messages %}
+              <p class="alert {{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+      {% endif %}
+    </div>
 
+    <!-- Add/Edit Category Form -->
+    <div class="card" id="category-form-card">
+      <h3 id="form-title">Add Category</h3>
+      <form id="category-form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="category_id" id="category_id">
+        <input type="text" name="category_name" id="category_name" placeholder="Category Name" required>
+        <br>
+        <button class="btn-green" type="submit" id="submit-btn">Save</button>
+      </form>
+    </div>
+
+    <!-- Category List Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Categories</h3>
+        <button class="btn btn-green" id="toggle-category-btn" onclick="toggleCategoryForm()">+ Add Category</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+            <tr>
+              <td>{{ category.category_id }}</td>
+              <td>{{ category.category_name }}</td>
+              <td class="actions">
+                <button class="btn-sm edit" onclick="editCategory('{{ category.category_id }}', '{{ category.category_name }}')">Edit</button>
+                <a href="{% url 'delete_category' category.category_id %}" class="btn-sm delete">Delete</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="empty">No categories found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  let formVisible = false;
+
+  function toggleCategoryForm() {
+    const formCard = document.getElementById('category-form-card');
+    const toggleBtn = document.getElementById('toggle-category-btn');
+
+    if (formVisible) {
+      // Hide form
+      formCard.style.display = 'none';
+      toggleBtn.innerText = '+ Add Category';
+      // Reset form fields
+      document.getElementById('category_name').value = '';
+      document.getElementById('category_id').value = '';
+      document.getElementById('submit-btn').innerText = 'Save';
+      formVisible = false;
+    } else {
+      // Show form
+      formCard.style.display = 'block';
+      toggleBtn.innerText = 'Cancel';
+      formVisible = true;
+    }
+  }
+
+  function editCategory(id, name) {
+    const formCard = document.getElementById('category-form-card');
+    const toggleBtn = document.getElementById('toggle-category-btn');
+
+    formCard.style.display = 'block';
+    toggleBtn.innerText = 'Cancel';
+    formVisible = true;
+
+    document.getElementById('category_name').value = name;
+    document.getElementById('category_id').value = id;
+    document.getElementById('submit-btn').innerText = 'Update';
+  }
+</script>
+
+</body>
 </html>

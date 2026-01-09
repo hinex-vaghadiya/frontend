@@ -247,7 +247,7 @@ def delete_category(request,category_id):       # to delete category
             messages.success(request,"Deleted Sucessfully")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"unable to delete : str{(e)}")
-        return request(request,'/admin/add-category')
+        return redirect('/admin/add-category')
 
 
 #products related views
