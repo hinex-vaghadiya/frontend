@@ -434,6 +434,10 @@ def add_product(request):               # to add product along with its variants
             messages.error(request,data["error"])
             return redirect('/admin/product-list')
 
+def edit_product(request,product_id):
+    return render(request,'edit_product.html')
+
+
 def delete_product(request,product_id):
     delete_product_url=f"{products_related_base_url}products/{product_id}/"
     if request.method=='GET':
@@ -519,7 +523,6 @@ def edit_batch(request,batch_id):                   # to edit batch
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-batch')
-
 
 
 

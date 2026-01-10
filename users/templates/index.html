@@ -25,7 +25,6 @@
         </div>
     </div>
 
-
     <!-- NAVBAR -->
     <header class="navbar">
         <div class="logo">
@@ -52,7 +51,6 @@
                 {% else %}
                 <i class="fa-regular fa-user" id="userIcon"></i>
                 {% endif %}
-
             </div>
 
             <i class="fa-solid fa-cart-shopping"></i>
@@ -60,23 +58,14 @@
     </header>
 
     <!-- HERO SECTION -->
-    <!-- HERO SECTION -->
     <section class="hero">
-
-        <!-- <div class="hero-text">
-        <h1>Loved & Trusted by<br>10 Thousand+ Indians</h1>
-        <p>
-            Delivering 100% natural, science-backed products
-            formulated by top doctors for a healthier life.
-        </p>
-    </div> -->
-
         <div class="hero-product">
 
             <button class="slider-btn prev" id="prevSlide">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <div class="hero-slide ">
+
+            <div class="hero-slide">
                 <img src="{% static 'images/hero1.png' %}" alt="Hero image 1">
             </div>
 
@@ -95,8 +84,82 @@
         </div>
     </section>
 
+    <!-- BESTSELLERS SECTION -->
+    <section class="bestsellers">
+        <h2 class="section-title">Bestsellers</h2>
 
-    <!-- AUTH DRAWER -->
+        <div class="bestseller-slider-wrapper">
+
+            <!-- Previous Button -->
+            <button class="bestseller-nav prev" id="bestPrev">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Slider -->
+            <div class="bestseller-slider">
+                <div class="bestseller-track">
+                    {% for product in products|slice:":8" %}
+                    {% with variant=product.variants|first %}
+                    <div class="product-card">
+
+                        {% if variant.compare_at_price %}
+                        <span class="discount">{{ variant.discount_percent }}% OFF</span>
+                        {% endif %}
+
+                        <!-- Product Image Wrapper -->
+                        <div class="product-image-wrapper">
+                            {% comment %} Primary Image {% endcomment %}
+                            {% if product.images %}
+                                {% for img in product.images %}
+                                    {% if img.is_primary %}
+                                        <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}" alt="{{ product.product_name }}">
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% for img in product.images %}
+                                    {% if not img.is_primary %}
+                                        <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}" alt="{{ product.product_name }}">
+                                    {% endif %}
+                                {% endfor %}
+                            {% elif variant.images %}
+                                <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}" alt="{{ product.product_name }}">
+                                {% if variant.images|length > 1 %}
+                                    <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}" alt="{{ product.product_name }}">
+                                {% endif %}
+                            {% else %}
+                                <img class="primary" src="{% static 'images/placeholder.png' %}" alt="{{ product.product_name }}">
+                            {% endif %}
+                        </div>
+
+                        <h3>{{ product.product_name }}</h3>
+
+                        <p class="price">
+                            {% if variant.compare_at_price %}
+                            <span class="old">Rs. {{ variant.compare_at_price }}</span>
+                            {% endif %}
+                            <span class="new">Rs. {{ variant.price }}</span>
+                        </p>
+
+                        <div class="product-actions">
+                            <button class="cart-btn">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+                            <button class="buy-btn">BUY NOW</button>
+                        </div>
+                    </div>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Next Button -->
+            <button class="bestseller-nav next" id="bestNext">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+        </div>
+    </section>
+
     <!-- AUTH OVERLAY -->
     <div class="auth-overlay" id="authOverlay"></div>
 
@@ -114,8 +177,6 @@
             {% include "register.html" %}
         </div>
     </div>
-
-
 
     <script src="{% static 'js/script.js'%}"></script>
 </body>

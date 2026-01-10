@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import requests
 from rest_framework.response import Response
 from django.contrib import messages
-
+from admin_dashboard.views import products_related_base_url
 user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
 
@@ -27,21 +27,69 @@ def refresh_access_token(request):         #refresh access token ....
             return None
     except request.exceptions.RequestException:
         return None
-    
-def index(request):
-    if request.method=='GET':
-        is_authenticate = False
-        access_token=get_access_token(request)
-        if not access_token:
-            new_token=refresh_access_token(request)
-            if new_token:
-                is_authenticate = True
-            else:
-                is_authenticate = False
-        else:
-            is_authenticate=True
 
-        return render(request,'index.html',{"is_authenticated":is_authenticate})  #index html page 
+def get_all_product_images(request):
+    image_url = products_related_base_url + 'product-images/'  # new API endpoint
+    images = []
+    if request.method == 'GET':
+        try:
+            response = requests.get(url=image_url)
+            response.raise_for_status()
+            images = response.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch product images: {str(e)}")
+        except ValueError as e:
+            messages.error(request, f"Invalid response format for images: {str(e)}")
+    return images
+
+def index(request):
+    is_authenticated = False
+    access_token = get_access_token(request)
+    if not access_token:
+        new_token = refresh_access_token(request)
+        if new_token:
+            is_authenticated = True
+        else:
+            is_authenticated = False
+    else:
+        is_authenticated = True
+
+    # Fetch all products
+    product_url = products_related_base_url + 'products/'
+    products = []
+    try:
+        response = requests.get(url=product_url)
+        response.raise_for_status()
+        products = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Failed to fetch products: {str(e)}")
+    except ValueError as e:
+        messages.error(request, f"Invalid response format for products: {str(e)}")
+
+    # Fetch all variants
+    variant_url = products_related_base_url + 'variants/'
+    variants = []
+    try:
+        response = requests.get(url=variant_url)
+        response.raise_for_status()
+        variants = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Failed to fetch variants: {str(e)}")
+    except ValueError as e:
+        messages.error(request, f"Invalid response format for variants: {str(e)}")
+
+    # Fetch all product images
+    images = get_all_product_images(request)
+
+    # Combine all info in context
+    context = {
+        "is_authenticated": is_authenticated,
+        "products": products,
+        "variants": variants,
+        "images": images
+    }
+
+    return render(request, 'index.html', context)  #index html page 
 
 def home(request):
     return render(request,'home.html')    #home html page

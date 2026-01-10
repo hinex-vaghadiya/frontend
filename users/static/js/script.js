@@ -157,3 +157,53 @@ document.addEventListener("DOMContentLoaded", function () {
         showSlide(currentIndex);
     }, 5000);
 });
+
+
+
+
+/* =========================
+   BESTSELLER SLIDER (CLEAN LOOP)
+========================= */
+
+const track = document.querySelector(".bestseller-track");
+const prevBtn = document.getElementById("bestPrev");
+const nextBtn = document.getElementById("bestNext");
+
+const items = document.querySelectorAll(".bestseller-track .product-card");
+const itemsPerView = 4;
+const totalSlides = Math.ceil(items.length / itemsPerView);
+
+let currentIndex = 0;
+
+function updateSlider() {
+    const slider = document.querySelector(".bestseller-slider");
+    const slideWidth = slider.offsetWidth;
+
+    track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+}
+
+// NEXT (LOOP)
+nextBtn.addEventListener("click", () => {
+    currentIndex++;
+    if (currentIndex >= totalSlides) {
+        currentIndex = 0;
+    }
+    updateSlider();
+});
+
+// PREV (LOOP)
+prevBtn.addEventListener("click", () => {
+    currentIndex--;
+    if (currentIndex < 0) {
+        currentIndex = totalSlides - 1;
+    }
+    updateSlider();
+});
+
+// Resize safety
+window.addEventListener("resize", updateSlider);
+
+// Init
+updateSlider();
+
+
