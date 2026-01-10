@@ -15,7 +15,7 @@ admin_base_url='https://admin-9opv.onrender.com/api/admin/'
 #admin releated views
 
 def admin_refresh_access_token(request):         # admin refresh access token ....
-    refresh_token=request.COOKIES.get('refresh_token')
+    refresh_token=request.COOKIES.get('admin_refresh_token')
     if not refresh_token:
         return None
     url=admin_base_url+'refresh/'
@@ -32,7 +32,7 @@ def admin_refresh_access_token(request):         # admin refresh access token ..
         return None
 
 def admin_get_access_token(request):      # admin to get access token for the user from cookie.
-    return request.COOKIES.get('access_token')
+    return request.COOKIES.get('admin_access_token')
 
 def admin_if_not_new_token(request):     # admin if_not_new_token
     resp= redirect('/admin/login?token=expired')
@@ -70,7 +70,7 @@ def admin_profile(request):                          # profile html page
                 access_token_expiry = 20 * 60  # 20 minutes in seconds
                     #setting cookies
                 resp.set_cookie(
-                        "access_token",
+                        "admin_access_token",
                         access_token,
                         max_age=access_token_expiry,
                         httponly=True,
@@ -100,7 +100,7 @@ def admin_set_cookie(request,data,redirect_url):    #to set admin cookies(access
     resp=redirect(redirect_url)
     #setting cookies
     resp.set_cookie(
-        "access_token",
+        "admin_access_token",
         data['access_token'],
         max_age=20 * 60,# 20 minutes in seconds
         httponly=True,
@@ -108,7 +108,7 @@ def admin_set_cookie(request,data,redirect_url):    #to set admin cookies(access
         samesite='lax'
     )
     resp.set_cookie(
-        "refresh_token",
+        "admin_refresh_token",
         data['refresh_token'],
         max_age= 7 * 24 * 60 * 60,
         httponly=True,
@@ -498,7 +498,7 @@ def delete_batch(request,batch_id):            # to delete batch
         return redirect('/admin/add-batch')
 
 
-def edit_batch(request,batch_id):
+def edit_batch(request,batch_id):                   # to edit batch
     edit_batch_url=f"{products_related_base_url}batches/{batch_id}/"
     if request.method=='POST':
         variant_id = request.POST.get('variant_id')
