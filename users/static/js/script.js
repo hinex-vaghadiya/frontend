@@ -294,3 +294,32 @@ document.getElementById('prevVideo').addEventListener('click', e => {
     modalVideo.src = cards[idx].getAttribute('data-video');
     modalVideo.play();
 });
+
+
+
+
+// WHY CHOOSE - DYNAMIC CONTENT & IMAGE
+const accordionButtons = document.querySelectorAll(".accordion-btn");
+const whyImage = document.getElementById("whyImage");
+const whyText = document.getElementById("whyText");
+
+accordionButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+        // Remove active from all
+        document.querySelectorAll(".accordion-item").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        // Activate current
+        btn.parentElement.classList.add("active");
+
+        // Update image & text
+        const newImage = btn.getAttribute("data-image");
+        const newText = btn.getAttribute("data-text");
+
+        whyImage.src = newImage;
+        whyText.textContent = newText;
+    });
+});
+
