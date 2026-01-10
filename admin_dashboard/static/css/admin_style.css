@@ -24,7 +24,7 @@ body {
    Sidebar | Main Content | Right Profile Panel */
 .container {
   display: grid;
-  grid-template-columns: 240px 1fr 260px;
+  grid-template-columns: 300px 1fr ;
   height: 100vh; /* Full screen height */
 }
 
