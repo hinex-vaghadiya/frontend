@@ -110,24 +110,29 @@
                         <div class="product-image-wrapper">
                             {% comment %} Primary Image {% endcomment %}
                             {% if product.images %}
-                                {% for img in product.images %}
-                                    {% if img.is_primary %}
-                                        <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}" alt="{{ product.product_name }}">
-                                    {% endif %}
-                                {% endfor %}
-                                
-                                {% for img in product.images %}
-                                    {% if not img.is_primary %}
-                                        <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}" alt="{{ product.product_name }}">
-                                    {% endif %}
-                                {% endfor %}
+                            {% for img in product.images %}
+                            {% if img.is_primary %}
+                            <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                                alt="{{ product.product_name }}">
+                            {% endif %}
+                            {% endfor %}
+
+                            {% for img in product.images %}
+                            {% if not img.is_primary %}
+                            <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                                alt="{{ product.product_name }}">
+                            {% endif %}
+                            {% endfor %}
                             {% elif variant.images %}
-                                <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}" alt="{{ product.product_name }}">
-                                {% if variant.images|length > 1 %}
-                                    <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}" alt="{{ product.product_name }}">
-                                {% endif %}
+                            <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}"
+                                alt="{{ product.product_name }}">
+                            {% if variant.images|length > 1 %}
+                            <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}"
+                                alt="{{ product.product_name }}">
+                            {% endif %}
                             {% else %}
-                                <img class="primary" src="{% static 'images/placeholder.png' %}" alt="{{ product.product_name }}">
+                            <img class="primary" src="{% static 'images/placeholder.png' %}"
+                                alt="{{ product.product_name }}">
                             {% endif %}
                         </div>
 
@@ -159,6 +164,38 @@
 
         </div>
     </section>
+
+    <!-- COMMUNITY VIDEOS SECTION -->
+    <section class="community-section">
+        <h2 class="section-title">Hear From Our Community</h2>
+
+        <div class="community-videos">
+            {% for i in "123456" %}
+            <div class="video-card" data-video="{% static 'videos/video' %}{{ forloop.counter }}.mp4">
+                <video muted loop playsinline preload="metadata" disablepictureinpicture
+                    controlslist="nodownload noplaybackrate">
+                    <source src="{% static 'videos/video' %}{{ forloop.counter }}.mp4" type="video/mp4">
+                </video>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- VIDEO POPUP -->
+    <div class="video-modal" id="videoModal">
+        <span class="close-modal">&times;</span>
+
+        <!-- Previous arrow -->
+        <span class="nav-arrow left" id="prevVideo">&#10094;</span>
+        <!-- Next arrow -->
+        <span class="nav-arrow right" id="nextVideo">&#10095;</span>
+
+        <video id="modalVideo" controls autoplay disablepictureinpicture controlslist="nodownload noplaybackrate">
+        </video>
+    </div>
+
+
+
 
     <!-- AUTH OVERLAY -->
     <div class="auth-overlay" id="authOverlay"></div>

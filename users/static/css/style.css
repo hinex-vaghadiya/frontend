@@ -581,3 +581,84 @@ body {
     padding-top: 92px; /* top-bar + navbar combined height */
 }
 
+
+
+
+/* community section */
+.community-section {
+    padding: 50px 20px;
+    background: #fff;
+}
+
+.community-videos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.video-card {
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    background: #000;
+}
+
+.video-card video {
+    width: 100%;
+    height: 380px; /* increased from 320px */
+    object-fit: cover;
+}
+
+/* MODAL */
+.video-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.video-modal video {
+    width: 90%;
+    max-width: 400px;
+    border-radius: 12px;
+}
+
+/* Close button */
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 32px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Modal navigation arrows */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    z-index: 10000;
+}
+
+.nav-arrow.left {
+    left: 20px;
+}
+
+.nav-arrow.right {
+    right: 20px;
+}
+
+.nav-arrow:hover {
+    opacity: 0.7;
+}
+
