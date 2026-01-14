@@ -236,7 +236,7 @@
             <div class="why-accordion">
 
                 <div class="accordion-item active">
-                    <button class="accordion-btn" data-image="{% static 'images/why1.jpg' %}"
+                    <button class="accordion-btn" data-image="{% static 'images/hero1.png' %}"
                         data-text="HerbGlow brings you pure Ayurvedic solutions designed to naturally boost energy, immunity and overall wellness.">
                         Why HerbGlow?
                         <span class="icon">›</span>
@@ -244,7 +244,7 @@
                 </div>
 
                 <div class="accordion-item">
-                    <button class="accordion-btn" data-image="{% static 'images/why2.jpg' %}"
+                    <button class="accordion-btn" data-image="{% static 'images/hero2.png' %}"
                         data-text="We offer high-quality herbal supplements, crafted to fill nutritional gaps and support a balanced lifestyle.">
                         What do we offer?
                         <span class="icon">›</span>
@@ -252,7 +252,7 @@
                 </div>
 
                 <div class="accordion-item">
-                    <button class="accordion-btn" data-image="{% static 'images/why3.jpg' %}"
+                    <button class="accordion-btn" data-image="{% static 'images/hero1.png' %}"
                         data-text="HerbGlow was founded with a promise of purity, honesty and authentic Ayurveda for every household.">
                         Our Beginning & Promise
                         <span class="icon">›</span>
@@ -260,7 +260,7 @@
                 </div>
 
                 <div class="accordion-item">
-                    <button class="accordion-btn" data-image="{% static 'images/why4.jpg' %}"
+                    <button class="accordion-btn" data-image="{% static 'images/hero2.png' %}"
                         data-text="Every product we create is focused on long-term health, safety and visible results you can trust.">
                         Our Promise to Your Health
                         <span class="icon">›</span>
@@ -300,7 +300,7 @@
                 <div class="flip-card-inner">
                     <!-- Front -->
                     <div class="flip-card-front">
-                        <img src="/static/images/card1.jpg" alt="Health Support">
+                        <img src="/static/images/hero1.png" alt="Health Support">
                         <h4>Daily Health Support</h4>
                         <p>Simple nutrition boost</p>
                     </div>
@@ -371,30 +371,98 @@
     </section>
 
 
+    <!-- WHAT OUR CLIENTS SAY -->
+    <section class="client-reviews">
+        <h2 class="section-title">What Our Clients</h2>
 
+        <div class="reviews-wrapper">
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="{% static 'images/user1.jpg' %}" alt="User">
+                    <div>
+                        <h4>chetna rupaparao41</h4>
+                        <span>May 2, 2025</span>
+                    </div>
+                </div>
 
+                <div class="stars">★★★★★</div>
+                <p>Nice natural hair oil and shampoo.</p>
+            </div>
 
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="{% static 'images/user2.jpg' %}" alt="User">
+                    <div>
+                        <h4>Jayesh Savaliya</h4>
+                        <span>May 2, 2025</span>
+                    </div>
+                </div>
 
+                <div class="stars">★★★★★</div>
+                <p>
+                    It’s really good product. I used its hair shampoo and oil.
+                    Its effect gradually to stop my hair loss.
+                    Must recommend this product.
+                </p>
+            </div>
 
-    <!-- AUTH OVERLAY -->
-    <div class="auth-overlay" id="authOverlay"></div>
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="{% static 'images/user3.jpg' %}" alt="User">
+                    <div>
+                        <h4>Hari Virani</h4>
+                        <span>May 2, 2025</span>
+                    </div>
+                </div>
 
-    <!-- AUTH DRAWER -->
-    <div class="auth-drawer" id="authDrawer">
-        <span class="close-btn" id="closeAuth">&times;</span>
-
-        <!-- LOGIN FORM -->
-        <div id="loginForm">
-            {% include "login.html" %}
+                <div class="stars">★★★★★</div>
+            </div>
         </div>
+    </section>
 
-        <!-- REGISTER FORM -->
-        <div id="registerForm" style="display:none;">
-            {% include "register.html" %}
+
+    <!-- MARKETPLACE LOGOS -->
+    <section class="marketplace-section">
+        <div class="marketplace-logos">
+            <img src="{% static 'images/tata1mg.png' %}" alt="Tata 1mg">
+            <img src="{% static 'images/meesho.png' %}" alt="Meesho">
+            <img src="{% static 'images/amazon.png' %}" alt="Amazon">
+            <img src="{% static 'images/flipkart.png' %}" alt="Flipkart">
         </div>
-    </div>
+    </section>
 
-    <script src="{% static 'js/script.js'%}"></script>
-</body>
+    <!-- NEWSLETTER -->
+    <section class="newsletter-section">
+        <h2>Stay Up to Date with All News <br> and Exclusive Offers</h2>
 
-</html>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Your email address" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+
+            <div class="footer-brand">
+                <h3>HERBGLOW</h3>
+                <p>Too Natural for Life</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Who We Are</h4>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Blog</a>
+                <a href="#">FAQs</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Best Seller</h4>
+                <a href="#">Spirulina Capsule</a>
+                <a href="#">Shilajit Resin</a>
+                <a href="#">Moringa Powder</a>
+                <a href="#">Hair Oil</a>
+            </div>
