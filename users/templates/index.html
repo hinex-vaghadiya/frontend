@@ -466,3 +466,32 @@
                 <a href="#">Moringa Powder</a>
                 <a href="#">Hair Oil</a>
             </div>
+
+
+
+
+
+
+
+    <!-- AUTH OVERLAY -->
+    <div class="auth-overlay" id="authOverlay"></div>
+
+    <!-- AUTH DRAWER -->
+    <div class="auth-drawer" id="authDrawer">
+        <span class="close-btn" id="closeAuth">&times;</span>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            {% include "login.html" %}
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="registerForm" style="display:none;">
+            {% include "register.html" %}
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+
+</html>

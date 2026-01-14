@@ -66,27 +66,10 @@ def index(request):
     except ValueError as e:
         messages.error(request, f"Invalid response format for products: {str(e)}")
 
-    # Fetch all variants
-    variant_url = products_related_base_url + 'variants/'
-    variants = []
-    try:
-        response = requests.get(url=variant_url)
-        response.raise_for_status()
-        variants = response.json()
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"Failed to fetch variants: {str(e)}")
-    except ValueError as e:
-        messages.error(request, f"Invalid response format for variants: {str(e)}")
-
-    # Fetch all product images
-    images = get_all_product_images(request)
-
     # Combine all info in context
     context = {
         "is_authenticated": is_authenticated,
         "products": products,
-        "variants": variants,
-        "images": images
     }
 
     return render(request, 'index.html', context)  #index html page 
