@@ -10,8 +10,6 @@ body {
   color: #222;
 }
 
-
-
 /* PRODUCT LAYOUT */
 .product-container {
   display: flex;
@@ -23,14 +21,22 @@ body {
 .product-images {
   display: flex;
   gap: 60px;
-  width: 60%;
+  width: 65%; /* increased width for main image */
 }
 
 .main-image {
-    flex: 1;
-    width: 80%;
-    height: 90%;
+  flex: 1;
+  width: 100%;
+  height: 90%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .thumbs {
@@ -43,13 +49,12 @@ body {
   width: 80px;
   border: 1px solid #ddd;
   cursor: pointer;
+  border-radius: 6px;
 }
 
-.main-image img {
-  width:inherit;
-  height: inherit;
+.thumbs img:hover {
+  border-color: #0b6b3a;
 }
-
 
 /* PRODUCT INFO */
 .product-info {
@@ -95,17 +100,36 @@ body {
   margin: 15px 0;
 }
 
-.benefits {
-  list-style: none;
-  margin: 20px 0;
-}
-
-.benefits li {
-  margin-bottom: 8px;
-}
-
 .weight {
   margin-bottom: 20px;
+}
+
+/* VARIANTS SECTION */
+.variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.variant-btn {
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  background: #f9f9f9;
+  transition: all 0.2s ease;
+}
+
+.variant-btn:hover {
+  border-color: #0b6b3a;
+}
+
+.variant-btn.active {
+  border-color: #0b6b3a;
+  background: #0b6b3a;
+  color: white;
 }
 
 /* PURCHASE BOX (Amazon style) */
@@ -123,6 +147,8 @@ body {
 
 /* Quantity styling */
 .quantity {
+  display: flex;
+  align-items: center;
   border: 1px solid #ccc;
   border-radius: 30px;
   padding: 6px 14px;
@@ -141,12 +167,26 @@ body {
   flex: 1;
   border-radius: 30px;
   font-weight: 600;
+  background: #0b6b3a;
+  color: #fff;
+  transition: 0.2s;
+}
+
+.add-cart:hover {
+  opacity: 0.9;
 }
 
 /* Buy now button */
 .buy-now {
   border-radius: 30px;
   font-weight: 600;
+  background: #333;
+  color: #fff;
+  transition: 0.2s;
+}
+
+.buy-now:hover {
+  opacity: 0.9;
 }
 
 /* WhatsApp button */
@@ -157,12 +197,13 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  background: #25d366;
+  color: white;
 }
 
 .whatsapp-btn i {
   font-size: 18px;
 }
-
 
 /* BUTTONS */
 .btn {
@@ -174,18 +215,62 @@ body {
   font-size: 16px;
 }
 
-.primary {
-  background: #0b6b3a;
-  color: #fff;
+
+/* AMAZON STYLE VARIANTS */
+.amazon-variants {
+  margin-top: 25px;
 }
 
-.secondary {
-  background: #333;
-  color: #fff;
+.variant-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.whatsapp {
-  background: #25d366;
-  color: white;
+.variant-card {
+  width: 90px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s ease;
+  background: #fff;
+}
+
+.variant-card img {
+  width: 100%;
+  height: 60px;
+  object-fit: contain;
+}
+
+.variant-meta {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.variant-price {
+  font-weight: 600;
+  color: #0b6b3a;
+  display: block;
+}
+
+.variant-off {
+  background: #1a8f4d;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.variant-card:hover {
+  border-color: #0b6b3a;
+}
+
+.variant-card.active {
+  border-color: #0b6b3a;
+  box-shadow: 0 0 0 2px rgba(11, 107, 58, 0.15);
 }
 

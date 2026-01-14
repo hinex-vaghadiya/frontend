@@ -12,6 +12,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
     <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
+    <style>
+        /* Added minimal CSS for variants buttons */
+        .variants {
+            margin-top: 20px;
+        }
+
+        .variant-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .variant-btn {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .variant-btn:hover {
+            background: #0b6b3a;
+            color: white;
+            border-color: #0b6b3a;
+        }
+
+        .variant-btn.active {
+            background: #0b6b3a;
+            color: white;
+            border-color: #0b6b3a;
+        }
+
+        .variant-btn .badge {
+            margin-left: 8px;
+            font-size: 10px;
+            padding: 2px 6px;
+            background: #1a8f4d;
+            color: white;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,15 +106,16 @@
         <!-- LEFT: IMAGE GALLERY -->
         <section class="product-images">
 
-            <div class="thumbs">
-                {% for img in product.images %}
+            <div class="thumbs" id="thumbsContainer">
+                {% for img in product.variants.0.images %}
                 <img src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
                     data-image="https://res.cloudinary.com/diipo18tm/{{ img.image }}" class="thumb-image">
                 {% endfor %}
             </div>
 
             <div class="main-image">
-                <img id="mainProductImage" src="https://res.cloudinary.com/diipo18tm/{{ product.images.0.image }}"
+                <img id="mainProductImage"
+                    src="https://res.cloudinary.com/diipo18tm/{{ product.variants.0.images.0.image }}"
                     alt="{{ product.product_name }}">
             </div>
 
@@ -80,18 +124,20 @@
         <!-- RIGHT: PRODUCT INFO -->
         <section class="product-info">
 
-
-
             <h1>{{ product.product_name }}</h1>
             <p class="subtitle">{{ product.description }}</p>
 
-            <div class="price">
+            <div class="price" id="priceContainer">
                 {% if product.variants.0.compare_at_price %}
-                <span class="old-price">₹{{ product.variants.0.compare_at_price }}</span>
+                <span class="old-price" id="compareAtPrice">₹{{ product.variants.0.compare_at_price }}</span>
+                {% else %}
+                <span class="old-price" id="compareAtPrice" style="display:none;"></span>
                 {% endif %}
-                <span class="new-price">₹{{ product.variants.0.price }}</span>
+                <span class="new-price" id="price">₹{{ product.variants.0.price }}</span>
                 {% if product.variants.0.discount_percent %}
-                <span class="badge">{{ product.variants.0.discount_percent }}% OFF</span>
+                <span class="badge" id="discountBadge">{{ product.variants.0.discount_percent }}% OFF</span>
+                {% else %}
+                <span class="badge" id="discountBadge" style="display:none;"></span>
                 {% endif %}
             </div>
 
@@ -106,7 +152,7 @@
                 <li>🛡 Supports Overall Wellness</li>
             </ul> -->
 
-            <p class="weight">
+            <p class="weight" id="stockInfo">
                 Stock Available: <strong>{{ product.variants.0.stock }}</strong>
             </p>
 
@@ -129,6 +175,29 @@
                     Buy Now With WhatsApp
                 </button>
 
+            </div>
+
+            <!-- AMAZON STYLE VARIANTS -->
+            <div class="variants amazon-variants">
+                <h3>Variants</h3>
+
+                <div class="variant-cards">
+                    {% for variant in product.variants %}
+                    <div class="variant-card {% if forloop.first %}active{% endif %}"
+                        data-variant='{{ variant|safe|escapejs }}'>
+
+                        <div class="variant-meta">
+                            <span class="variant-name">{{ variant.name }}</span>
+                            <span class="variant-price">₹{{ variant.price }}</span>
+                            <span class="variant-price">₹{{ variant.compare_at_price }}</span>
+
+                            {% if variant.discount_percent %}
+                            <span class="variant-off">{{ variant.discount_percent }}% OFF</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
 
 
@@ -161,7 +230,25 @@
         </div>
     </footer>
 
-    <!-- THUMB → MAIN IMAGE SCRIPT -->
+    <!-- AUTH OVERLAY -->
+    <div class="auth-overlay" id="authOverlay"></div>
+
+    <!-- AUTH DRAWER -->
+    <div class="auth-drawer" id="authDrawer">
+        <span class="close-btn" id="closeAuth">&times;</span>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            {% include "login.html" %}
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="registerForm" style="display:none;">
+            {% include "register.html" %}
+        </div>
+    </div>
+
+    <!-- THUMB → MAIN IMAGE & VARIANT SWITCH SCRIPT -->
     <script src="{% static 'js/script.js'%}"></script>
     <script src="{% static 'js/product-detail.js'%}"></script>
 
