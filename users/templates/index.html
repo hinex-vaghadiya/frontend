@@ -107,7 +107,7 @@
                         {% endif %}
 
                         <!-- Product Image Wrapper -->
-                        <a href="{% url 'product-detail' product.product_id %}" class="product-link">
+                        <a href="{% url 'product-detail' product.slug %}" class="product-link">
                             <div class="product-image-wrapper">
                                 {% comment %} Primary Image {% endcomment %}
                                 {% if product.images %}

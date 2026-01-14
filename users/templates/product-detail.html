@@ -1,11 +1,170 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <title>{{ product.product_name }} | HERBGLOW</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
 </head>
+
 <body>
-    <h4>{{product.product_id}}</h4>
+
+    <!-- TOP INFO BAR -->
+    <div class="top-bar">
+        <div class="marquee">
+            <span>Free shipping all over India above ₹500</span>
+            <span>⭐ 4.8 Stars across 20k reviews</span>
+            <span>Free shipping all over India above ₹500</span>
+            <span>⭐ 4.8 Stars across 20k reviews</span>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-text">HERBGLOW</span>
+            <span class="logo-sub">Too Natural</span>
+        </div>
+
+        <nav class="menu">
+            <a href="{% url 'shop' %}"><i class="fa-solid fa-store"></i> Shop All</a>
+            <a href="#"><i class="fa-solid fa-shield-heart"></i> Immunity</a>
+            <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
+            <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
+            <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
+        </nav>
+
+        <div class="icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <div class="user-menu">
+                {% if is_authenticated %}
+                <a href="{% url 'profile' %}">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+                {% else %}
+                <i class="fa-regular fa-user" id="userIcon"></i>
+                {% endif %}
+            </div>
+
+            <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+    </header>
+
+    <main class="product-container">
+
+        <!-- LEFT: IMAGE GALLERY -->
+        <section class="product-images">
+
+            <div class="thumbs">
+                {% for img in product.images %}
+                <img src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                    data-image="https://res.cloudinary.com/diipo18tm/{{ img.image }}" class="thumb-image">
+                {% endfor %}
+            </div>
+
+            <div class="main-image">
+                <img id="mainProductImage" src="https://res.cloudinary.com/diipo18tm/{{ product.images.0.image }}"
+                    alt="{{ product.product_name }}">
+            </div>
+
+        </section>
+
+        <!-- RIGHT: PRODUCT INFO -->
+        <section class="product-info">
+
+
+
+            <h1>{{ product.product_name }}</h1>
+            <p class="subtitle">{{ product.description }}</p>
+
+            <div class="price">
+                {% if product.variants.0.compare_at_price %}
+                <span class="old-price">₹{{ product.variants.0.compare_at_price }}</span>
+                {% endif %}
+                <span class="new-price">₹{{ product.variants.0.price }}</span>
+                {% if product.variants.0.discount_percent %}
+                <span class="badge">{{ product.variants.0.discount_percent }}% OFF</span>
+                {% endif %}
+            </div>
+
+            <div class="rating">
+                ⭐ 4.8 <span>(Verified reviews)</span>
+            </div>
+
+            <!-- <ul class="benefits">
+                <li>⚡ Enhances Energy & Stamina</li>
+                <li>🧠 Improves Focus & Mental Clarity</li>
+                <li>💪 Boosts Strength & Power</li>
+                <li>🛡 Supports Overall Wellness</li>
+            </ul> -->
+
+            <p class="weight">
+                Stock Available: <strong>{{ product.variants.0.stock }}</strong>
+            </p>
+
+            <div class="purchase-box">
+
+                <div class="qty-cart-row">
+                    <div class="quantity">
+                        <button>-</button>
+                        <span>1</span>
+                        <button>+</button>
+                    </div>
+
+                    <button class="btn primary add-cart">ADD TO CART</button>
+                </div>
+
+                <button class="btn secondary buy-now">BUY IT NOW</button>
+
+                <button class="btn whatsapp whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    Buy Now With WhatsApp
+                </button>
+
+            </div>
+
+
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>HERBGLOW</h3>
+                <p>Too Natural for Life</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Who We Are</h4>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Blog</a>
+                <a href="#">FAQs</a>
+            </div>
+
+            <div class="footer-links">
+                <h4>Best Seller</h4>
+                <a href="#">Spirulina Capsule</a>
+                <a href="#">Shilajit Resin</a>
+                <a href="#">Moringa Powder</a>
+                <a href="#">Hair Oil</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- THUMB → MAIN IMAGE SCRIPT -->
+    <script src="{% static 'js/script.js'%}"></script>
+    <script src="{% static 'js/product-detail.js'%}"></script>
+
 </body>
+
 </html>

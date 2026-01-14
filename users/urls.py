@@ -11,6 +11,6 @@ urlpatterns = [
     path('verify_register/',verify_register,name='verify_register'),
     path('profile-update/',profile_update,name="profile-update"),
     path('shop/',shop,name='shop'),
-    path('/product-detail/<int:product_id>',product_detail,name='product-detail')
+    path('/product-detail/<slug:slug>',product_detail,name='product-detail')
     
 ]

@@ -300,8 +300,8 @@ def shop(request):
             return render(request,'shop.html')
 
 
-def product_detail(request,product_id):
-    product_detail_url=products_base_url+f"products/{product_id}"
+def product_detail(request,slug):
+    product_detail_url=products_base_url+f"products/{slug}"
     product=[]
     try:
         response=requests.post(url=product_detail_url)
