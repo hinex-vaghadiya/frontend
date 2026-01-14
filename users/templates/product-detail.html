@@ -107,7 +107,7 @@
         <section class="product-images">
 
             <div class="thumbs" id="thumbsContainer">
-                {% for img in product.variants.0.images %}
+                {% for img in product.images %}
                 <img src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
                     data-image="https://res.cloudinary.com/diipo18tm/{{ img.image }}" class="thumb-image">
                 {% endfor %}

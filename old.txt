@@ -1,96 +1,28 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <a href="http://127.0.0.1:8000/login/">Login</a><br>
-    <a href="http://127.0.0.1:8000/register/">Register</a>
-    
-</body>
-</html> -->
+ document.addEventListener("DOMContentLoaded", function () {
+            const mainImage = document.getElementById("mainProductImage");
+            const thumbs = document.querySelectorAll(".thumb-image");
 
+            thumbs.forEach(thumb => {
+                thumb.addEventListener("click", () => {
+                    mainImage.src = thumb.dataset.image;
+                });
+            });
+        });
 
+ document.addEventListener("DOMContentLoaded", function () {
+    const qtySpan = document.querySelector(".quantity span");
+    const btnMinus = document.querySelector(".quantity button:first-child");
+    const btnPlus = document.querySelector(".quantity button:last-child");
 
+    btnPlus.addEventListener("click", () => {
+      let currentQty = parseInt(qtySpan.textContent);
+      qtySpan.textContent = currentQty + 1;
+    });
 
-
-
-profile.html
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Profile</h1>
-    <ul>
-        <li>Username: {{profile.email}}</li>
-        <li>Address: {{profile.address}}</li>
-        <li>mobile_number: {{profile.mobile_number}}</li>
-        <li>profile_pic: {{profile.profile_pic}}</li>
-    </ul>
-
-    <a href="http://127.0.0.1:8000/logout/">Log Out</a>
-</body>
-</html>
-
-
-
-
-the ideal for the products 
-
-
-
-        <div class="product-grid">
-            {% for product in products %}
-            <div class="product-card">
-                
-                {% if product.discount_percent %}
-                <span class="badge-discount">{{ product.discount_percent }}% OFF</span>
-                {% endif %}
-
-                <div class="card-image">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                </div>
-
-                <div class="card-details">
-                    <h3 class="product-title">{{ product.name }}</h3>
-                    
-                    <div class="price-row">
-                        {% if product.old_price %}
-                        <span class="old-price">Rs. {{ product.old_price }}</span>
-                        {% endif %}
-                        <span class="new-price">Rs. {{ product.price }}</span>
-                    </div>
-
-                    <div class="rating-row">
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <span class="review-count">199 Reviews</span>
-                    </div>
-                </div>
-
-                <div class="card-actions">
-                    <button class="btn-cart">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </button>
-                    <button class="btn-buy">BUY NOW</button>
-                </div>
-
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-        <script src="{% static 'js/script.js'%}"></script>
+    btnMinus.addEventListener("click", () => {
+      let currentQty = parseInt(qtySpan.textContent);
+      if (currentQty > 1) {
+        qtySpan.textContent = currentQty - 1;
+      }
+    });
+  });
