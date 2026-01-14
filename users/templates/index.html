@@ -107,34 +107,36 @@
                         {% endif %}
 
                         <!-- Product Image Wrapper -->
-                        <div class="product-image-wrapper">
-                            {% comment %} Primary Image {% endcomment %}
-                            {% if product.images %}
-                            {% for img in product.images %}
-                            {% if img.is_primary %}
-                            <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
-                                alt="{{ product.product_name }}">
-                            {% endif %}
-                            {% endfor %}
+                        <a href="{% url 'product-detail' product.product_id %}" class="product-link">
+                            <div class="product-image-wrapper">
+                                {% comment %} Primary Image {% endcomment %}
+                                {% if product.images %}
+                                {% for img in product.images %}
+                                {% if img.is_primary %}
+                                <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                                    alt="{{ product.product_name }}">
+                                {% endif %}
+                                {% endfor %}
 
-                            {% for img in product.images %}
-                            {% if not img.is_primary %}
-                            <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
-                                alt="{{ product.product_name }}">
-                            {% endif %}
-                            {% endfor %}
-                            {% elif variant.images %}
-                            <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}"
-                                alt="{{ product.product_name }}">
-                            {% if variant.images|length > 1 %}
-                            <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}"
-                                alt="{{ product.product_name }}">
-                            {% endif %}
-                            {% else %}
-                            <img class="primary" src="{% static 'images/placeholder.png' %}"
-                                alt="{{ product.product_name }}">
-                            {% endif %}
-                        </div>
+                                {% for img in product.images %}
+                                {% if not img.is_primary %}
+                                <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                                    alt="{{ product.product_name }}">
+                                {% endif %}
+                                {% endfor %}
+                                {% elif variant.images %}
+                                <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}"
+                                    alt="{{ product.product_name }}">
+                                {% if variant.images|length > 1 %}
+                                <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}"
+                                    alt="{{ product.product_name }}">
+                                {% endif %}
+                                {% else %}
+                                <img class="primary" src="{% static 'images/placeholder.png' %}"
+                                    alt="{{ product.product_name }}">
+                                {% endif %}
+                            </div>
+                        </a>
 
                         <h3>{{ product.product_name }}</h3>
 

@@ -107,8 +107,8 @@
               <td>{{ category.category_id }}</td>
               <td>{{ category.category_name }}</td>
               <td class="actions">
-                <button class="btn-sm edit" onclick="editCategory('{{ category.category_id }}', '{{ category.category_name }}')">Edit</button>
-                <a href="{% url 'delete_category' category.category_id %}" class="btn-sm delete">Delete</a>
+                <button class="btn-sm edit" onclick="editCategory('{{ category.slug }}', '{{ category.category_name }}')">Edit</button>
+                <a href="{% url 'delete_category' category.slug %}" class="btn-sm delete">Delete</a>
               </td>
             </tr>
             {% empty %}

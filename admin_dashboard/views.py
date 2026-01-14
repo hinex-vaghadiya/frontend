@@ -213,8 +213,8 @@ def add_category(request):                 #to add categories and get categories
         return redirect('/admin/add-category')
     
 
-def edit_category(request,category_id):        # to edit category
-    edit_category_url=f"{products_related_base_url}categories/{category_id}/"
+def edit_category(request,slug):        # to edit category
+    edit_category_url=f"{products_related_base_url}categories/{slug}/"
     if request.method=='GET':
         category_data={}
         try:
@@ -238,8 +238,8 @@ def edit_category(request,category_id):        # to edit category
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-category')
     
-def delete_category(request,category_id):       # to delete category
-    delete_category_url=f"{products_related_base_url}categories/{category_id}/"
+def delete_category(request,slug):       # to delete category
+    delete_category_url=f"{products_related_base_url}categories/{slug}/"
     if request.method=='GET':
         try:
             response=requests.delete(url=delete_category_url)
@@ -434,12 +434,12 @@ def add_product(request):               # to add product along with its variants
             messages.error(request,data["error"])
             return redirect('/admin/product-list')
 
-def edit_product(request,product_id):
+def edit_product(request,slug):
     return render(request,'edit_product.html')
 
 
-def delete_product(request,product_id):
-    delete_product_url=f"{products_related_base_url}products/{product_id}/"
+def delete_product(request,slug):
+    delete_product_url=f"{products_related_base_url}products/{slug}/"
     if request.method=='GET':
         try:
             response=requests.delete(url=delete_product_url)

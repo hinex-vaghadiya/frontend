@@ -6,15 +6,15 @@ urlpatterns = [
     path('logout/', admin_logout,name='admin_logout'),
     path('admin_verify_login/', admin_verify_login,name='admin_verify_login'),
     path('add-category/',add_category,name='add_category'),
-    path('edit-category/<int:category_id>/',edit_category,name='edit_category'),
-    path('delete-category/<int:category_id>/',delete_category,name='delete_category'),
+    path('edit-category/<slug:slug>/',edit_category,name='edit_category'),
+    path('delete-category/<slug:slug>/',delete_category,name='delete_category'),
     path('add-product/',add_product,name='add_product'),
     path('add-batch/',add_batch,name='add_batch'),
     path('product-list',product_list,name='product_list'),
-    path('delete-product/<int:product_id>/',delete_product,name='delete_product'),
+    path('delete-product/<slug:slug>/',delete_product,name='delete_product'),
     path('delete-batch/<int:batch_id>/',delete_batch,name='delete_batch'),
     path('edit-batch/<int:batch_id>/',edit_batch,name='edit_batch'),
-    path('edit-product/<int:product_id>/',edit_product,name='edit_product'),
+    path('edit-product/<slug:slug>/',edit_product,name='edit_product'),
     
     
 ]

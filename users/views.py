@@ -299,6 +299,17 @@ def shop(request):
             messages.error(request,f"{str(e)}")
             return render(request,'shop.html')
 
-                
+
+def product_detail(request,product_id):
+    product_detail_url=products_base_url+f"products/{product_id}"
+    product=[]
+    try:
+        response=requests.post(url=product_detail_url)
+        response.raise_for_status()
+        product=response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request,f"failed to fetch product detail : {str(e)}")
+    return render(request,'product-detail.html',{"product":product})
+
 
                 
