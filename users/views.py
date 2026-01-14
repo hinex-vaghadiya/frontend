@@ -312,4 +312,39 @@ def product_detail(request,slug):
     return render(request,'product-detail.html',{"product":product})
 
 
+def category_wise_products(request, slug):
+    products_detail_url = products_base_url + "products/"
+    products = []
+
+    try:
+        # ✅ MUST BE GET
+        response = requests.get(products_detail_url)
+        response.raise_for_status()
+
+        all_products = response.json()
+
+        # ✅ Filter by category slug
+        products = [
+            product for product in all_products
+            if product.get("category", {}).get("slug") == slug
+        ]
+
+        print("CATEGORY SLUG:", slug)
+        # print("FILTERED PRODUCTS:", products)
+
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"failed to fetch product detail : {str(e)}")
+
+    return render(
+        request,
+        "category-wise-products.html",
+        {
+            "products": products,
+            "category_name": slug
+        }
+    )
+
+
+
+
                 
