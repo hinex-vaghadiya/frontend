@@ -183,8 +183,17 @@
 
                 <div class="variant-cards">
                     {% for variant in product.variants %}
-                    <div class="variant-card {% if forloop.first %}active{% endif %}"
-                        data-variant='{{ variant|safe|escapejs }}'>
+                    <div class="variant-card {% if forloop.first %}active{% endif %}" data-variant='{
+                        "price": "{{ variant.price }}",
+                        "compare_at_price": "{{ variant.compare_at_price|default:"" }}",
+                        "discount_percent": "{{ variant.discount_percent|default:"" }}",
+                        "stock": "{{ variant.stock }}",
+                        "images": [
+                            {% for img in variant.images %}
+                            { "image": "{{ img.image }}" }{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        ]
+                    }'>
 
                         <div class="variant-meta">
                             <span class="variant-name">{{ variant.name }}</span>
