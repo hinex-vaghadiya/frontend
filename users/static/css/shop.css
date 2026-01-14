@@ -36,8 +36,7 @@
 /* --- PRODUCT GRID --- */
 .product-grid {
     display: grid;
-    /* Responsive Grid: Cards will be at least 250px wide */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
 }
 
@@ -62,7 +61,7 @@
     position: absolute;
     top: 12px;
     left: 12px;
-    background-color: #009e60; /* The exact green from your image */
+    background-color: #009e60;
     color: white;
     font-size: 12px;
     font-weight: bold;
@@ -71,28 +70,45 @@
     z-index: 10;
 }
 
-/* Image Area */
-.card-image {
-    height: 250px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff;
+/* --- IMAGE AREA WITH HOVER EFFECT --- */
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px; /* Fixed height for large visibility */
+    overflow: hidden;
 }
 
-.card-image img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    transition: transform 0.3s ease;
+.product-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Fill the wrapper nicely */
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    display: block;
 }
 
-.product-card:hover .card-image img {
-    transform: scale(1.05); /* Slight zoom on hover */
+/* Hover image initially hidden */
+.product-image-wrapper img.hover {
+    opacity: 0;
 }
 
-/* Product Info */
+/* Hover effect: show hover image and hide primary */
+.product-card:hover .product-image-wrapper img.hover {
+    opacity: 1;
+}
+
+.product-card:hover .product-image-wrapper img.primary {
+    opacity: 0;
+}
+
+/* Slight zoom on hover */
+.product-card:hover .product-image-wrapper img {
+    transform: scale(1.05);
+}
+
+/* --- PRODUCT INFO --- */
 .card-details {
     padding: 15px;
     text-align: left;
@@ -105,7 +121,7 @@
     text-transform: uppercase;
     margin-bottom: 8px;
     line-height: 1.4;
-    height: 40px; /* Force 2 lines max */
+    height: 40px;
     overflow: hidden;
 }
 
@@ -126,7 +142,7 @@
     font-size: 16px;
 }
 
-/* Ratings */
+/* --- RATINGS --- */
 .rating-row {
     display: flex;
     align-items: center;
@@ -135,7 +151,7 @@
 }
 
 .stars {
-    color: #ffc107; /* Yellow */
+    color: #ffc107;
     margin-right: 5px;
 }
 
@@ -144,7 +160,7 @@
     font-size: 12px;
 }
 
-/* Buttons */
+/* --- BUTTONS --- */
 .card-actions {
     display: flex;
     gap: 10px;
@@ -169,7 +185,7 @@
 }
 
 .btn-buy {
-    flex-grow: 1; /* Takes remaining width */
+    flex-grow: 1;
     height: 40px;
     background-color: #009e60;
     color: white;
