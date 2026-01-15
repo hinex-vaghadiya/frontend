@@ -94,21 +94,17 @@
             {% endfor %}
         </div>
 
-        <div class="auth-overlay" id="authOverlay"></div>
+     <!-- NEWSLETTER -->
+    
+    {% include "newsletter.html" %}
+    
+    <!-- FOOTER -->
 
-        <div class="auth-drawer" id="authDrawer">
-            <span class="close-btn" id="closeAuth">&times;</span>
+    {% include "footer.html" %}
 
-            <div id="loginForm">
-                {% include "login.html" %}
-            </div>
+    <!-- AUTH OVERLAY -->
 
-            <div id="registerForm" style="display:none;">
-                {% include "register.html" %}
-            </div>
-        </div>
-
-    </div>
+    {% include "auth_overlay.html" %}
 
     <script src="{% static 'js/script.js'%}"></script>
 </body>

@@ -1,0 +1,17 @@
+<!-- AUTH OVERLAY -->
+    <div class="auth-overlay" id="authOverlay"></div>
+
+    <!-- AUTH DRAWER -->
+    <div class="auth-drawer" id="authDrawer">
+        <span class="close-btn" id="closeAuth">&times;</span>
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            {% include "login.html" %}
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="registerForm" style="display:none;">
+            {% include "register.html" %}
+        </div>
+    </div>

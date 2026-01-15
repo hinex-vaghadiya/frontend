@@ -398,64 +398,16 @@
     </section>
 
     <!-- NEWSLETTER -->
-    <section class="newsletter-section">
-        <h2>Stay Up to Date with All News <br> and Exclusive Offers</h2>
-
-        <form class="newsletter-form">
-            <input type="email" placeholder="Your email address" required>
-            <button type="submit">Subscribe</button>
-        </form>
-    </section>
-
+    
+    {% include "newsletter.html" %}
 
     <!-- FOOTER -->
-    <footer class="site-footer">
-        <div class="footer-container">
 
-            <div class="footer-brand">
-                <h3>HERBGLOW</h3>
-                <p>Too Natural for Life</p>
-            </div>
-
-            <div class="footer-links">
-                <h4>Who We Are</h4>
-                <a href="#">About Us</a>
-                <a href="#">Contact Us</a>
-                <a href="#">Blog</a>
-                <a href="#">FAQs</a>
-            </div>
-
-            <div class="footer-links">
-                <h4>Best Seller</h4>
-                <a href="#">Spirulina Capsule</a>
-                <a href="#">Shilajit Resin</a>
-                <a href="#">Moringa Powder</a>
-                <a href="#">Hair Oil</a>
-            </div>
-
-
-
-
-
-
+    {% include "footer.html" %}
 
     <!-- AUTH OVERLAY -->
-    <div class="auth-overlay" id="authOverlay"></div>
 
-    <!-- AUTH DRAWER -->
-    <div class="auth-drawer" id="authDrawer">
-        <span class="close-btn" id="closeAuth">&times;</span>
-
-        <!-- LOGIN FORM -->
-        <div id="loginForm">
-            {% include "login.html" %}
-        </div>
-
-        <!-- REGISTER FORM -->
-        <div id="registerForm" style="display:none;">
-            {% include "register.html" %}
-        </div>
-    </div>
+    {% include "auth_overlay.html" %}
 
     <script src="{% static 'js/script.js'%}"></script>
 </body>
