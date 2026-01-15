@@ -3,6 +3,8 @@ from django.http import JsonResponse
 import requests
 from rest_framework.response import Response
 from django.contrib import messages
+from rest_framework import status
+import json
 from admin_dashboard.views import products_related_base_url
 user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
@@ -42,7 +44,7 @@ def get_all_product_images(request):
             messages.error(request, f"Invalid response format for images: {str(e)}")
     return images
 
-def index(request):
+def check_is_authentictated(request):
     is_authenticated = False
     access_token = get_access_token(request)
     if not access_token:
@@ -52,8 +54,17 @@ def index(request):
         else:
             is_authenticated = False
     else:
-        is_authenticated = True
+        is_authenticated = True   
+    return JsonResponse({"message":"success","is_authenticated":is_authenticated},status=status.HTTP_200_OK)
 
+
+def index(request):
+    resp= check_is_authentictated(request)
+    if resp.status_code==200:
+        data = json.loads(resp.content.decode("utf-8"))
+        is_authenticated=(data["is_authenticated"])
+    else:
+        is_authenticated=False
     # Fetch all products
     product_url = products_related_base_url + 'products/'
     products = []
@@ -283,24 +294,30 @@ def profile_update(request):            #to update the profile of the user.
 products_base_url='https://products-k4ov.onrender.com/api/'
 def shop(request):
     if request.method=='GET':
-        products_data=[]
+        resp=check_is_authentictated(request)
+        if resp.status_code==200:
+            data=json.loads(resp.content.decode("utf-8"))
+            is_authenticated=(data["is_authenticated"])
+        else:
+            is_authenticated=False
+        products=[]
         url=products_base_url+'products'
         try:
             response=requests.get(url=url)
-            data=response.json()
-            if response.status_code==200:
-                products_data=data
-                print(products_data)
-                return render(request,'shop.html',{'products': products_data})
-            else:
-                messages.error(request,"products not available")
-                return render(request,'shop.html')
+            response.raise_for_status()
+            products=response.json()
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"{str(e)}")
-            return render(request,'shop.html')
+            messages.error(request,f"failed to fetch {str(e)}")
+        return render(request,'shop.html',{"products":products,"is_authenticated": is_authenticated})
 
 
 def product_detail(request,slug):
+    resp=check_is_authentictated(request)
+    if resp.status_code==200:
+        data=json.loads(resp.content.decode("utf-8"))
+        is_authenticated=(data["is_authenticated"])
+    else:
+        is_authenticated=False
     product_detail_url=products_base_url+f"products/{slug}"
     product=[]
     try:
@@ -309,10 +326,16 @@ def product_detail(request,slug):
         product=response.json()
     except requests.exceptions.RequestException as e:
         messages.error(request,f"failed to fetch product detail : {str(e)}")
-    return render(request,'product-detail.html',{"product":product})
+    return render(request,'product-detail.html',{"product":product,"is_authenticated": is_authenticated})
 
 
 def category_wise_products(request, slug):
+    resp=check_is_authentictated(request)
+    if resp.status_code==200:
+        data=json.loads(resp.content.decode("utf-8"))
+        is_authenticated=(data["is_authenticated"])
+    else:
+        is_authenticated=False
     products_detail_url = products_base_url + "products/"
     products = []
 
@@ -335,14 +358,7 @@ def category_wise_products(request, slug):
     except requests.exceptions.RequestException as e:
         messages.error(request, f"failed to fetch product detail : {str(e)}")
 
-    return render(
-        request,
-        "category-wise-products.html",
-        {
-            "products": products,
-            "category_name": slug
-        }
-    )
+    return render(request,"shop.html",{"products": products,"category_name": slug,"is_authenticated": is_authenticated,})
 
 
 

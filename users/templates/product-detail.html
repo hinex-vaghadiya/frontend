@@ -60,46 +60,10 @@
 <body>
 
     <!-- TOP INFO BAR -->
-    <div class="top-bar">
-        <div class="marquee">
-            <span>Free shipping all over India above ₹500</span>
-            <span>⭐ 4.8 Stars across 20k reviews</span>
-            <span>Free shipping all over India above ₹500</span>
-            <span>⭐ 4.8 Stars across 20k reviews</span>
-        </div>
-    </div>
+    {% include "topbar.html" %}
 
     <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-text">HERBGLOW</span>
-            <span class="logo-sub">Too Natural</span>
-        </div>
-
-        <nav class="menu">
-            <a href="{% url 'shop' %}"><i class="fa-solid fa-store"></i> Shop All</a>
-            <a href="{% url 'category-products' 'soap' %}"><i class="fa-solid fa-shield-heart"></i> Soap</a>
-            <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
-            <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
-            <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
-        </nav>
-
-        <div class="icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <div class="user-menu">
-                {% if is_authenticated %}
-                <a href="{% url 'profile' %}">
-                    <i class="fa-regular fa-user"></i>
-                </a>
-                {% else %}
-                <i class="fa-regular fa-user" id="userIcon"></i>
-                {% endif %}
-            </div>
-
-            <i class="fa-solid fa-cart-shopping"></i>
-        </div>
-    </header>
+    {% include "navbar.html" %}
 
     <main class="product-container">
 
