@@ -1286,7 +1286,6 @@ body {
 
 /* PRODUCT INFO */
 .product-info {
-    display: flex;
     gap: 15px;
     align-items: center;
 }
