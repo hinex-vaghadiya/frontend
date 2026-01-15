@@ -323,5 +323,32 @@ accordionButtons.forEach(btn => {
     });
 });
 
+// cart overlay
 
+document.addEventListener("DOMContentLoaded", function () {
+    const cartDrawer = document.getElementById("cartDrawer");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const closeCart = document.getElementById("closeCart");
 
+    // ONLY cart button
+    const cartButtons = document.querySelectorAll(".cart-btn");
+
+    cartButtons.forEach(btn => {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();   // IMPORTANT
+            cartDrawer.classList.add("active");
+            cartOverlay.classList.add("active");
+        });
+    });
+
+    closeCart.addEventListener("click", () => {
+        cartDrawer.classList.remove("active");
+        cartOverlay.classList.remove("active");
+    });
+
+    cartOverlay.addEventListener("click", () => {
+        cartDrawer.classList.remove("active");
+        cartOverlay.classList.remove("active");
+    });
+});
