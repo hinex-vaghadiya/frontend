@@ -89,10 +89,12 @@
                                 {% endif %}
                                 {% endfor %}
                                 {% elif variant.images %}
-                                <img class="primary" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}"
+                                <img class="primary"
+                                    src="https://res.cloudinary.com/diipo18tm/{{ variant.images.0.image }}"
                                     alt="{{ product.product_name }}">
                                 {% if variant.images|length > 1 %}
-                                <img class="hover" src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}"
+                                <img class="hover"
+                                    src="https://res.cloudinary.com/diipo18tm/{{ variant.images.1.image }}"
                                     alt="{{ product.product_name }}">
                                 {% endif %}
                                 {% else %}
@@ -112,9 +114,15 @@
                         </p>
 
                         <div class="product-actions">
-                            <button class="cart-btn">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </button>
+                            <form method="post" action="/add-to-cart/">
+                                {% csrf_token %}
+                                <input type="hidden" name="variant_id" value="{{ variant.id }}">
+                                <input type="hidden" name="product_slug" value="{{ product.slug }}">
+                                <button type="submit" class="cart-btn">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </button>
+                            </form>
+
                             <button class="buy-btn">BUY NOW</button>
                         </div>
                     </div>
@@ -398,7 +406,7 @@
     </section>
 
     <!-- NEWSLETTER -->
-    
+
     {% include "newsletter.html" %}
 
     <!-- FOOTER -->
@@ -408,8 +416,8 @@
     <!-- AUTH OVERLAY -->
 
     {% include "auth_overlay.html" %}
-    {% include "cart_overlay.html" %}
 
+    
     <script src="{% static 'js/script.js'%}"></script>
 </body>
 

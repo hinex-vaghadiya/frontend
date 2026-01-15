@@ -141,11 +141,12 @@ def profile(request):                          # profile html page
             "Authorization":f"Bearer {access_token}"
         }
         url=user_base_url+'account'
+        profile_data={}
         try:
             response=requests.get(url=url,headers=headers)
             data=response.json()
             if response.status_code==200:
-                profile_data={}
+                
                 profile_data.update({"email":data['email']})
                 profile_data.update({"username":data['username']})
                 profile_data.update({"name":data['name']})
@@ -359,6 +360,50 @@ def category_wise_products(request, slug):
         messages.error(request, f"failed to fetch product detail : {str(e)}")
 
     return render(request,"shop.html",{"products": products,"category_name": slug,"is_authenticated": is_authenticated,})
+
+cart_url="http://127.0.0.1:8002/api/cart/"
+
+def add_to_cart(request):
+    if request.method=='POST':
+        print('in post')
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        print(access_token)
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+        url=f"{cart_url}add/"
+        try:
+            print('in try')
+            response=requests.post(url=url,headers=headers,json={"variant_id": request.POST.get("variant_id"),"product_slug": request.POST.get("product_slug"),"quantity": 1,})
+            response.raise_for_status()
+            print(f"response{response.json()}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to add to cart : {str(e)}")
+        return redirect('/')
+    
+
+def get_cart_details(request):
+    if request.method=='GET':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        cart_data=[]
+        try:
+            cart_resp=requests.get(url=cart_url,headers={"Authorization": f"Bearer {access_token}"})
+            print(cart_resp.json())
+            cart_resp.raise_for_status()
+            cart_data = cart_resp.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to add to cart : {str(e)}")
+        return render(request,"cart.html",{"cart": cart_data}) 
 
 
 

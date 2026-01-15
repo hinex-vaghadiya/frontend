@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+
+<body>
+    <!-- TOP INFO BAR -->
+    {% include "topbar.html" %}
+
+    <!-- NAVBAR -->
+    {% include "navbar.html" %}
+    <div class="cart-page">
+    <div class="cart-container">
+
+        <!-- LEFT: SHOPPING CART -->
+        <div class="cart-box">
+            <h2>Shopping Cart</h2>
+
+            {% if cart %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in cart.items %}
+                    <tr>
+                        <td class="product-info">
+                            <img src="{{ item.image_url }}" alt="{{ item.product_name }}">
+                            <div>
+                                <p class="product-name">{{ item.product_name }}</p>
+                                <p class="variant">{{ item.variant_name }}</p>
+                                <p class="sku">SKU: {{ item.sku }}</p>
+                            </div>
+                        </td>
+
+                        <td>
+                            {% if item.original_price %}
+                            <span class="old-price">₹{{ item.original_price }}</span><br>
+                            {% endif %}
+                            <span class="price">₹{{ item.price }}</span>
+                        </td>
+
+                        <td>
+                            <div class="qty-box">
+                                <button>-</button>
+                                <span>{{ item.quantity }}</span>
+                                <button>+</button>
+                            </div>
+                        </td>
+
+                        <td class="item-total">
+                            ₹{{ item.subtotal }}
+                        </td>
+
+                        <td>
+                            <button class="remove-btn">🗑</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Your cart is empty.</p>
+            {% endif %}
+        </div>
+        
+
+        <!-- RIGHT: CART TOTALS -->
+        <div class="cart-summary">
+            <h3>Cart Totals</h3>
+
+            <div class="summary-box">
+                <p>
+                    <strong>Subtotal:</strong>
+                    <span>₹{{ cart.total_amount }}</span>
+                </p>
+
+                <button class="checkout-btn">Check Out</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <!-- NEWSLETTER -->
+
+    {% include "newsletter.html" %}
+
+    <!-- FOOTER -->
+
+    {% include "footer.html" %}
+
+    <!-- AUTH OVERLAY -->
+
+    {% include "auth_overlay.html" %}
+
+
+
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+
+</html>
