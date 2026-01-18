@@ -293,7 +293,7 @@ def profile_update(request):            #to update the profile of the user.
 #products ----------------------
 
 products_base_url='https://products-k4ov.onrender.com/api/'
-def shop(request):
+def shop(request):       #to get shop all page provide all products data
     if request.method=='GET':
         resp=check_is_authentictated(request)
         if resp.status_code==200:
@@ -312,7 +312,7 @@ def shop(request):
         return render(request,'shop.html',{"products":products,"is_authenticated": is_authenticated})
 
 
-def product_detail(request,slug):
+def product_detail(request,slug):       # product deatil page using slug 
     resp=check_is_authentictated(request)
     if resp.status_code==200:
         data=json.loads(resp.content.decode("utf-8"))
@@ -330,7 +330,7 @@ def product_detail(request,slug):
     return render(request,'product-detail.html',{"product":product,"is_authenticated": is_authenticated})
 
 
-def category_wise_products(request, slug):
+def category_wise_products(request, slug):      # category wise products data
     resp=check_is_authentictated(request)
     if resp.status_code==200:
         data=json.loads(resp.content.decode("utf-8"))
@@ -363,7 +363,7 @@ def category_wise_products(request, slug):
 
 cart_url="http://127.0.0.1:8002/api/cart/"
 
-def add_to_cart(request):
+def add_to_cart(request):       # add to cart functionalities
     if request.method=='POST':
         print('in post')
         access_token=get_access_token(request)
@@ -387,7 +387,7 @@ def add_to_cart(request):
         return redirect('/')
     
 
-def get_cart_details(request):
+def get_cart_details(request):     # to get cart details
     if request.method=='GET':
         access_token=get_access_token(request)
         if not access_token:
@@ -403,9 +403,69 @@ def get_cart_details(request):
             cart_data = cart_resp.json()
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to add to cart : {str(e)}")
-        return render(request,"cart.html",{"cart": cart_data}) 
+        return render(request,"cart.html",{"cart": cart_data,'is_authenticated':True}) 
+
+
+def delete_cart_item(request):     # to delete cart item 
+    if request.method=='POST':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        item_id=int(request.POST.get('id'))
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+        cart_item_delete_url=f"{cart_url}item/{item_id}/delete/"
+        try:
+            response=requests.delete(url=cart_item_delete_url,headers=headers)
+            response.raise_for_status()
+            # print(f"update cart response : {response}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to delete cart item : {str(e)}")
+        return redirect('/cart')
+
+
+def update_cart_item(request):    # to update cart items functionalites
+    if request.method=='POST':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        item_id=int(request.POST.get('id'))
+        item_quantity=int(request.POST.get('quantity'))
+        item_operation=int(request.POST.get('operation'))
+        if item_operation==0:
+            item_quantity-=1
+        else:
+            item_quantity+=1
+        
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        }
+        if item_quantity>0:
+            payload={
+                'quantity':item_quantity
+            }
+            cart_update_url=f"{cart_url}item/{item_id}/update/"
+            try:
+                response=requests.patch(url=cart_update_url,headers=headers,json=payload)
+                response.raise_for_status()
+                # print(f"update cart response : {response}")
+            except requests.exceptions.RequestException as e:
+                messages.error(request,f"failed to update cart item : {str(e)}")
+            return redirect('/cart')
+        else:
+            return delete_cart_item(request)
 
 
 
-
-                
+                    

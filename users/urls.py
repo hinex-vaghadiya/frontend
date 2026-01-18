@@ -1,5 +1,5 @@
 from django.urls import path,include
-from users.views import home,login,index,verify_login,profile,logout,register,verify_register,profile_update,shop,product_detail,category_wise_products,add_to_cart,get_cart_details
+from users.views import home,login,index,verify_login,profile,logout,register,verify_register,profile_update,shop,product_detail,category_wise_products,add_to_cart,get_cart_details,update_cart_item,delete_cart_item
 urlpatterns = [
     path('', index,name='index'),
     path('login/',login,name='login'),
@@ -14,6 +14,8 @@ urlpatterns = [
     path('/product-detail/<slug:slug>',product_detail,name='product-detail'),
     path('category-products/<slug:slug>',category_wise_products,name='category-products'),
     path('add-to-cart/',add_to_cart,name='add-to-cart'),
-    path('cart',get_cart_details,name='cart')
+    path('cart',get_cart_details,name='cart'),
+    path('update-cart/',update_cart_item,name='update-cart'),
+    path('delete-cart/',delete_cart_item,name='delete-cart-item')
     
 ]
