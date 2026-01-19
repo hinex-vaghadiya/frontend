@@ -167,6 +167,7 @@ def profile(request):                          # profile html page
                     secure=False,
                     samesite='lax'
                 )
+            
             return resp
 
         except requests.exceptions.RequestException as e:
@@ -282,7 +283,20 @@ def profile_update(request):            #to update the profile of the user.
                 messages.error(request,"Failed to update the profile")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"{str(e)}")
-        return redirect('/profile')
+        resp= redirect('/profile')
+        access_token_expiry = 20 * 60  # 20 minutes in seconds
+                #setting cookies
+        resp.set_cookie(
+                    "access_token",
+                    access_token,
+                    max_age=access_token_expiry,
+                    httponly=True,
+                    secure=False,
+                    samesite='lax'
+                )
+            
+        return resp
+
     # return redirect('/profile')
             
              
@@ -403,7 +417,19 @@ def get_cart_details(request):     # to get cart details
             cart_data = cart_resp.json()
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to add to cart : {str(e)}")
-        return render(request,"cart.html",{"cart": cart_data,'is_authenticated':True}) 
+        print(f"cart data\n{cart_data}")
+        resp=render(request,"cart.html",{"cart": cart_data,'is_authenticated':True})
+        access_token_expiry = 20 * 60  # 20 minutes in seconds
+                #setting cookies
+        resp.set_cookie(
+                    "access_token",
+                    access_token,
+                    max_age=access_token_expiry,
+                    httponly=True,
+                    secure=False,
+                    samesite='lax'
+                )
+        return resp 
 
 
 def delete_cart_item(request):     # to delete cart item 
@@ -427,7 +453,19 @@ def delete_cart_item(request):     # to delete cart item
             # print(f"update cart response : {response}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to delete cart item : {str(e)}")
-        return redirect('/cart')
+        resp=redirect('/cart')
+        access_token_expiry = 20 * 60  # 20 minutes in seconds
+                #setting cookies
+        resp.set_cookie(
+                    "access_token",
+                    access_token,
+                    max_age=access_token_expiry,
+                    httponly=True,
+                    secure=False,
+                    samesite='lax'
+                )
+        return resp 
+
 
 
 def update_cart_item(request):    # to update cart items functionalites
@@ -464,7 +502,21 @@ def update_cart_item(request):    # to update cart items functionalites
                 messages.error(request,f"failed to update cart item : {str(e)}")
             return redirect('/cart')
         else:
-            return delete_cart_item(request)
+            resp= delete_cart_item(request)
+            access_token_expiry = 20 * 60  # 20 minutes in seconds
+                #setting cookies
+        resp.set_cookie(
+                    "access_token",
+                    access_token,
+                    max_age=access_token_expiry,
+                    httponly=True,
+                    secure=False,
+                    samesite='lax'
+                )
+        return resp 
+
+# def checkout(request):
+
 
 
 
