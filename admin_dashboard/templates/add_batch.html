@@ -34,134 +34,110 @@
 
 <body>
 
+  <!-- Nav Bar -->
+  {% include "admin_navbar.html" %}
 
-  <div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h2 class="logo">Herbglow</h2>
-      <nav>
-        <p class="menu-title">Main Menu</p>
-        <a href="/admin/">Dashboard</a>
-        <a href="#">Order Management</a>
-        <a href="#">Customers</a>
-        <a href="#">Coupon Code</a>
-        <a href="#">Categories</a>
-        <a href="#">Transaction</a>
-        <a href="#">Brand</a>
 
-        <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Category List</a>
-      <a href="/admin/product-list">Product List</a>
-      <a href="/admin/add-batch" class="active">Batch List</a>
-      <a href="#">Product Reviews</a>
+  <!-- Main Content -->
+  <main class="main">
+    <div class="topbar">
+      <h2>Batch Management</h2>
+    </div>
 
-        <p class="menu-title">Admin</p>
-        <a href="#">Admin Role</a>
-        <a href="#">Control Authority</a>
-        <a href="/admin/logout/">Logout</a>
-      </nav>
-    </aside>
+    <!-- Messages -->
+    <div class="messages">
+      {% for message in messages %}
+      <p class="alert {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
 
-    <!-- Main Content -->
-    <main class="main">
-      <div class="topbar">
-        <h2>Batch Management</h2>
+    <!-- Add / Edit Batch Form -->
+    <div class="card" id="batch-form-card">
+      <h3 id="form-title">Add Batch</h3>
+
+      <form id="batch-form" method="post" action="/admin/add-batch/">
+        {% csrf_token %}
+        <input type="hidden" name="batch_id" id="batch_id">
+
+        <select name="variant_id" id="variant_id" required>
+          <option value="">Select Variant</option>
+          {% for variant in variants %}
+          <option value="{{ variant.id }}">{{ variant.name }}</option>
+          {% endfor %}
+        </select>
+
+        <input type="number" name="qty" id="qty" placeholder="Quantity" required>
+        <input type="date" name="mfg_date" id="mfg_date" required>
+        <input type="date" name="exp_date" id="exp_date" required>
+
+        <button type="submit" class="btn-green" id="submit-btn">Save</button>
+      </form>
+    </div>
+
+    <!-- Batch List -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Batches</h3>
+        <button type="button" class="btn btn-green" id="toggle-batch-btn" onclick="toggleBatchForm()">
+          + Add Batch
+        </button>
       </div>
 
-      <!-- Messages -->
-      <div class="messages">
-        {% for message in messages %}
-        <p class="alert {{ message.tags }}">{{ message }}</p>
-        {% endfor %}
-      </div>
-
-      <!-- Add / Edit Batch Form -->
-      <div class="card" id="batch-form-card">
-        <h3 id="form-title">Add Batch</h3>
-
-        <form id="batch-form" method="post" action="/admin/add-batch/">
-          {% csrf_token %}
-          <input type="hidden" name="batch_id" id="batch_id">
-
-          <select name="variant_id" id="variant_id" required>
-            <option value="">Select Variant</option>
-            {% for variant in variants %}
-            <option value="{{ variant.id }}">{{ variant.name }}</option>
-            {% endfor %}
-          </select>
-
-          <input type="number" name="qty" id="qty" placeholder="Quantity" required>
-          <input type="date" name="mfg_date" id="mfg_date" required>
-          <input type="date" name="exp_date" id="exp_date" required>
-
-          <button type="submit" class="btn-green" id="submit-btn">Save</button>
-        </form>
-      </div>
-
-      <!-- Batch List -->
-      <div class="table-card">
-        <div class="table-header">
-          <h3>Batches</h3>
-          <button type="button" class="btn btn-green" id="toggle-batch-btn" onclick="toggleBatchForm()">
-            + Add Batch
-          </button>
-        </div>
-
-        <div class="table-wrapper">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Variant</th>
-                <th>Qty</th>
-                <th>MFG Date</th>
-                <th>EXP Date</th>
-                <th>Batch code</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for batch in batches %}
-              <tr>
-                <td>{{ batch.batch_id }}</td>
-                <td>{{ batch.variant }}</td>
-                <td>{{ batch.qty }}</td>
-                <td>{{ batch.mfg_date }}</td>
-                <td>{{ batch.exp_date }}</td>
-                <td>{{ batch.batch_code }}</td>
-                <td class="actions">
-                  <button type="button" class="btn-sm edit" onclick="editBatch(
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Variant</th>
+              <th>Qty</th>
+              <th>MFG Date</th>
+              <th>EXP Date</th>
+              <th>Batch code</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for batch in batches %}
+            <tr>
+              <td>{{ batch.batch_id }}</td>
+              <td>{{ batch.variant }}</td>
+              <td>{{ batch.qty }}</td>
+              <td>{{ batch.mfg_date }}</td>
+              <td>{{ batch.exp_date }}</td>
+              <td>{{ batch.batch_code }}</td>
+              <td class="actions">
+                <button type="button" class="btn-sm edit" onclick="editBatch(
           '{{ batch.batch_id }}',
           '{{ batch.variant }}',
           '{{ batch.qty }}',
           '{{ batch.mfg_date }}',
           '{{ batch.exp_date }}'
         )">
-                    Edit
-                  </button>
+                  Edit
+                </button>
 
-                  {% if batch.batch_id %}
-                  <a href="{% url 'delete_batch' batch.batch_id %}" class="btn-sm delete">
-                    Delete
-                  </a>
-                  {% endif %}
-                </td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="6" class="empty">No batches found.</td>
-              </tr>
-              {% endfor %}
-            </tbody>
+                {% if batch.batch_id %}
+                <a href="{% url 'delete_batch' batch.batch_id %}" class="btn-sm delete">
+                  Delete
+                </a>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="empty">No batches found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
 
-          </table>
-        </div>
+        </table>
       </div>
+    </div>
 
-    </main>
+  </main>
   </div>
 
-<script src="{% static 'js/batch_list.js'%}"></script>
+  <script src="{% static 'js/batch_list.js'%}"></script>
 
 
 </body>

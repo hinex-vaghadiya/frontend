@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,6 +19,7 @@
       background: #ffffff;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
     }
+
     #category-form-card input[type="text"] {
       width: 100%;
       padding: 10px 14px;
@@ -25,39 +27,17 @@
       border: 1px solid #e5e7eb;
       margin-bottom: 20px;
     }
+
     #category-form-card button {
       margin-right: 10px;
     }
   </style>
 </head>
+
 <body>
 
-<div class="container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2 class="logo">Herbglow</h2>
-    <nav>
-      <p class="menu-title">Main Menu</p>
-      <a href="/admin/">Dashboard</a>
-      <a href="#">Order Management</a>
-      <a href="#">Customers</a>
-      <a href="#">Coupon Code</a>
-      <a href="#">Categories</a>
-      <a href="#">Transaction</a>
-      <a href="#">Brand</a>
-
-      <p class="menu-title">Product</p>
-      <a href="/admin/add-category" class="active">Category List</a>
-      <a href="/admin/product-list">Product List</a>
-      <a href="/admin/add-batch">Batch List</a>
-      <a href="#">Product Reviews</a>
-
-      <p class="menu-title">Admin</p>
-      <a href="#">Admin Role</a>
-      <a href="#">Control Authority</a>
-      <a href="/admin/logout/">Logout</a>
-    </nav>
-  </aside>
+  <!-- Nav Bar -->
+  {% include "admin_navbar.html" %}
 
   <!-- Main Content -->
   <main class="main">
@@ -68,9 +48,9 @@
     <!-- Messages -->
     <div class="messages">
       {% if messages %}
-          {% for message in messages %}
-              <p class="alert {{ message.tags }}">{{ message }}</p>
-          {% endfor %}
+      {% for message in messages %}
+      <p class="alert {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
       {% endif %}
     </div>
 
@@ -107,7 +87,8 @@
               <td>{{ category.category_id }}</td>
               <td>{{ category.category_name }}</td>
               <td class="actions">
-                <button class="btn-sm edit" onclick="editCategory('{{ category.slug }}', '{{ category.category_name }}')">Edit</button>
+                <button class="btn-sm edit"
+                  onclick="editCategory('{{ category.slug }}', '{{ category.category_name }}')">Edit</button>
                 <a href="{% url 'delete_category' category.slug %}" class="btn-sm delete">Delete</a>
               </td>
             </tr>
@@ -121,9 +102,10 @@
       </div>
     </div>
   </main>
-</div>
+  </div>
 
-<script src="{% static 'js/category_list.js'%}"></script>
+  <script src="{% static 'js/category_list.js'%}"></script>
 
 </body>
+
 </html>

@@ -13,125 +13,99 @@
 
 <body>
 
-  <div class="container">
+  <!-- Nav Bar -->
+  {% include "admin_navbar.html" %}
 
-    <!-- ================= SIDEBAR ================= -->
-    <aside class="sidebar">
-      <h2 class="logo">Herbglow</h2>
+  <!-- ================= MAIN ================= -->
+  <main class="main">
 
-      <nav>
-        <p class="menu-title">Main Menu</p>
-        <a href="/admin/">Dashboard</a>
-        <a href="#">Order Management</a>
-        <a href="#">Customers</a>
-        <a href="#">Coupon Code</a>
-        <a href="#">Categories</a>
-        <a href="#">Transaction</a>
-        <a href="#">Brand</a>
+    <div class="topbar">
+      <h2>Add Product</h2>
+    </div>
 
-        <p class="menu-title">Product</p>
-        <a href="/admin/add-category">Category List</a>
-        <a href="/admin/product-list" class="active">Product List</a>
-        <a href="/admin/add-batch">Batch List</a>
-        <a href="#">Product Reviews</a>
+    <div class="card">
 
-        <p class="menu-title">Admin</p>
-        <a href="#">Admin Role</a>
-        <a href="#">Control Authority</a>
-        <a href="/admin/logout">Logout</a>
-      </nav>
-    </aside>
-
-    <!-- ================= MAIN ================= -->
-    <main class="main">
-
-      <div class="topbar">
-        <h2>Add Product</h2>
+      {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+        <p class="alert {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
       </div>
+      {% endif %}
 
-      <div class="card">
+      <h3>Add Product</h3>
 
-        {% if messages %}
-        <div class="messages">
-          {% for message in messages %}
-          <p class="alert {{ message.tags }}">{{ message }}</p>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- ================= PRODUCT DETAILS ================= -->
+        <h4>Product Details</h4>
+
+        <input type="text" name="product_name" placeholder="Product Name" required>
+        <textarea name="description" placeholder="Description" required></textarea>
+
+        <select name="category_id" required>
+          <option value="" disabled selected>Select Category</option>
+          {% for category in categories %}
+          <option value="{{ category.category_id }}">{{ category.category_name }}</option>
           {% endfor %}
-        </div>
-        {% endif %}
+        </select>
 
-        <h3>Add Product</h3>
+        <hr>
 
-        <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
+        <!-- ================= PRODUCT IMAGES ================= -->
+        <h4>Product Images</h4>
 
-          <!-- ================= PRODUCT DETAILS ================= -->
-          <h4>Product Details</h4>
+        <label>Upload Product Images</label>
+        <input type="file" name="product_images" id="product_images" multiple accept="image/*" required>
 
-          <input type="text" name="product_name" placeholder="Product Name" required>
-          <textarea name="description" placeholder="Description" required></textarea>
+        <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
 
-          <select name="category_id" required>
-            <option value="" disabled selected>Select Category</option>
-            {% for category in categories %}
-            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
-            {% endfor %}
-          </select>
+        <div class="image-preview" id="imagePreview"></div>
 
-          <hr>
+        <hr>
 
-          <!-- ================= PRODUCT IMAGES ================= -->
-          <h4>Product Images</h4>
+        <!-- ================= VARIANTS ================= -->
+        <h4>Variants</h4>
 
-          <label>Upload Product Images</label>
-          <input type="file" name="product_images" id="product_images" multiple accept="image/*" required>
+        <div id="variants-container">
 
-          <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
+          <!-- FIRST VARIANT (COMPULSORY, NO REMOVE BUTTON) -->
+          <div class="variant-block" data-variant-index="0">
 
-          <div class="image-preview" id="imagePreview"></div>
+            <input type="text" name="variants[0][name]" placeholder="Variant Name" required>
+            <input type="text" name="variants[0][price]" placeholder="Price" required>
+            <input type="text" name="variants[0][compare_at_price]" placeholder="Compare At Price" required>
 
-          <hr>
+            <input type="text" value="0" readonly placeholder="Stock (auto calculated by batch)">
 
-          <!-- ================= VARIANTS ================= -->
-          <h4>Variants</h4>
+            <label>Variant Images</label>
+            <input type="file" name="variants[0][images]" multiple accept="image/*" class="variant-images-input"
+              data-variant-index="0" required>
 
-          <div id="variants-container">
+            <div class="image-preview variant-preview" id="variant-preview-0"></div>
 
-            <!-- FIRST VARIANT (COMPULSORY, NO REMOVE BUTTON) -->
-            <div class="variant-block" data-variant-index="0">
-
-              <input type="text" name="variants[0][name]" placeholder="Variant Name" required>
-              <input type="text" name="variants[0][price]" placeholder="Price" required>
-              <input type="text" name="variants[0][compare_at_price]" placeholder="Compare At Price" required>
-
-              <input type="text" value="0" readonly placeholder="Stock (auto calculated by batch)">
-
-              <label>Variant Images</label>
-              <input type="file" name="variants[0][images]" multiple accept="image/*" class="variant-images-input"
-                data-variant-index="0" required>
-
-              <div class="image-preview variant-preview" id="variant-preview-0"></div>
-
-              <hr>
-            </div>
-
+            <hr>
           </div>
 
-          <button type="button" class="btn btn-gray" onclick="addVariant()">
-            + Add Another Variant
-          </button>
+        </div>
+
+        <button type="button" class="btn btn-gray" onclick="addVariant()">
+          + Add Another Variant
+        </button>
 
 
 
-          <br><br>
+        <br><br>
 
-          <!-- ================= SUBMIT ================= -->
-          <button type="submit" class="btn btn-green">
-            Save Product
-          </button>
+        <!-- ================= SUBMIT ================= -->
+        <button type="submit" class="btn btn-green">
+          Save Product
+        </button>
 
-        </form>
-      </div>
-    </main>
+      </form>
+    </div>
+  </main>
   </div>
 
   <!-- ================= JS ================= -->

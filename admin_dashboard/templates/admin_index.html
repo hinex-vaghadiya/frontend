@@ -2,42 +2,19 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="{% static 'css/admin_style.css'%}">
 </head>
+
 <body>
 
-<div class="container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2 class="logo">Herbglow</h2>
 
-    <nav>
-      <p class="menu-title">Main Menu</p>
-      <a href="/admin/" class="active">Dashboard</a>
-      <a href="#">Order Management</a>
-      <a href="#" >Customers</a>
-      <a href="#">Coupon Code</a>
-      <a href="#">Categories</a>
-      <a href="#">Transaction</a>
-      <a href="#">Brand</a>
-
-      <p class="menu-title">Product</p>
-      <a href="/admin/add-category">Category List</a>
-      <a href="/admin/product-list">Product List</a>
-      <a href="/admin/add-batch">Batch List</a>
-      <a href="#">Product Reviews</a>
-
-      <p class="menu-title">Admin</p>
-      <a href="#">Admin Role</a>
-      <a href="#">Control Authority</a>
-      <a href="/admin/logout">Logout</a>
-    </nav>
-  </aside>
-
+  <!-- Nav Bar -->
+  {% include "admin_navbar.html" %}
   <!-- Main Content -->
   <main class="main">
     <!-- Topbar -->
@@ -129,22 +106,24 @@
   </aside>
 </div> -->
 
-<!-- Right Panel -->
-<aside class="profile">
+  <!-- Right Panel -->
+  <aside class="profile">
     <!-- Keep the image static -->
-    <img src="{{ profile.profile_pic }}" class ="admin_profile"alt="Admin Profile Picture" style="width:100px; height:100px; border-radius:50%;">
+    <img src="{{ profile.profile_pic }}" class="admin_profile" alt="Admin Profile Picture"
+      style="width:100px; height:100px; border-radius:50%;">
 
-  {% if profile%}
+    {% if profile%}
     <!-- Dynamic profile data -->
     <h4>{{ profile.name }}</h4>
     <p>{{ profile.email }}</p>
 
     <div class="profile-info">
-        <p>📞 {{ profile.mobile_number }}</p>
+      <p>📞 {{ profile.mobile_number }}</p>
     </div>
-  {% endif %}
-</aside>
+    {% endif %}
+  </aside>
 
 
 </body>
+
 </html>
