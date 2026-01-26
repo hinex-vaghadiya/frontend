@@ -229,7 +229,7 @@
     background-color: #d69e2e; /* amber */
 }
 
-.order-status.completed {
+.order-status.paid {
     background-color: #2f855a; /* green */
 }
 

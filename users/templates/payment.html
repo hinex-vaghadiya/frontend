@@ -135,10 +135,10 @@
     <div class="upi-container">
         <h2>Pay via UPI</h2>
 
-        <form action="/process-upi-payment/" method="POST">
+        <form action="{% url 'process-upi-payment'%}" method="POST">
             {% csrf_token %}
-
             <!-- UPI ID -->
+             <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
             <div class="form-group">
                 <label for="upiId">Enter Your UPI ID</label>
                 <input type="text" id="upiId" name="upiId" placeholder="example@upi" required>
@@ -165,11 +165,12 @@
             <!-- Buttons: Pay Now + Cancel -->
             <div class="button-row">
                 <button type="submit" class="upi-btn">Pay ₹{{ checkout_data.0.total_amount }}</button>
-                <a href="/checkout/" class="cancel-btn">Cancel</a>
-            </div>
-
-            <p class="info-text">Your payment is secure and processed via UPI.</p>
         </form>
+        <a href="/checkout/" class="cancel-btn">Cancel</a>
+    </div>
+
+    <p class="info-text">Your payment is secure and processed via UPI.</p>
+
     </div>
 </body>
 

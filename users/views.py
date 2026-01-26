@@ -575,4 +575,28 @@ def get_all_orders(request):
             messages.error(request,f"failed to fetch orders : {str(e)}")
         return render(request,'profile.html',context)
 
-                    
+payment_url='http://127.0.0.1:8002/api/order/'
+def process_upi_payment(request):
+    if request.method=='POST':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        headers={
+            "Authorization":f"Bearer {access_token}"
+        }
+        context={}
+        try:
+            id=request.POST.get('id')
+            print(f"id :{id}")
+            url=payment_url+id+'/pay/'
+            response=requests.post(url=url,headers=headers)
+            response.raise_for_status()
+            print(f"response\n {response}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed during payment : {str(e)}")
+        return render(request,'success.html')
