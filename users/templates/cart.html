@@ -106,8 +106,9 @@
                         <span>₹{{ cart.total_amount }}</span>
                     </p>
 
-                    
+                    <form action="{% url 'checkout' %}">
                     <button class="checkout-btn">Check Out</button>
+                    </form>
                 </div>
             </div>
 

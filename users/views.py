@@ -515,7 +515,33 @@ def update_cart_item(request):    # to update cart items functionalites
                 )
         return resp 
 
-# def checkout(request):
+checkout_url="http://127.0.0.1:8002/api/checkout/"
+
+def checkout(request):
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        headers={
+            "Authorization":f"Bearer {access_token}"
+        }
+        url=checkout_url
+        context={}
+        try:
+            response=requests.post(url=url,headers=headers)
+            response.raise_for_status()
+            checkout_data=response.json()
+            context = {
+            "checkout_data": [checkout_data]  # wrap in list
+            }
+            print(f" the checkout data\n {checkout_data}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed during checkout : {str(e)}")
+        return render(request,'temp.html',context)
 
 
 

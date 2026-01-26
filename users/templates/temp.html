@@ -1,0 +1,8 @@
+{% for data in checkout_data %}
+    <h4>Order ID: {{ data.id }}</h4>
+    <h4>Status: {{ data.status }}</h4>
+
+    {% for item in data.items %}
+        <p>{{ item.product_name }} - {{ item.quantity }}</p>
+    {% endfor %}
+{% endfor %}
