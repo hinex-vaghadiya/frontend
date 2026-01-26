@@ -468,19 +468,20 @@
     gap: 10px;
 }
 
-.cart-btn {
-    width: 48px;
-    background: #fff;
-    border: 2px solid #0a5c3a;
-    color: #0a5c3a;
-    font-size: 16px;
+.btn-cart {
+    width: 45px;
+    height: 40px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    transition: 0.3s ease;
+    font-size: 16px;
+    transition: background 0.2s;
 }
 
-.cart-btn:hover {
-    background: #0a5c3a;
-    color: #fff;
+.btn-cart:hover {
+    background-color: #555;
 }
 
 .product-actions .buy-btn {
