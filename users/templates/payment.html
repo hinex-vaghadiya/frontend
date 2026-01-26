@@ -166,7 +166,11 @@
             <div class="button-row">
                 <button type="submit" class="upi-btn">Pay ₹{{ checkout_data.0.total_amount }}</button>
         </form>
-        <a href="/checkout/" class="cancel-btn">Cancel</a>
+         <form action="{% url 'cancel-order'%}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+        <button type="submit" class="cancel-btn">Cancel</button>
+        </form>
     </div>
 
     <p class="info-text">Your payment is secure and processed via UPI.</p>

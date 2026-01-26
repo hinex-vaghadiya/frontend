@@ -21,5 +21,6 @@ urlpatterns = [
     path('checkout/',checkout,name='checkout'),
     path('get-all-orders',views.get_all_orders,name='get-all-orders'),
     path('process-upi-payment/',views.process_upi_payment,name='process-upi-payment'),
+    path('cancel-order/',views.cancel_order,name='cancel-order'),
     
 ]

@@ -600,3 +600,29 @@ def process_upi_payment(request):
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed during payment : {str(e)}")
         return render(request,'success.html')
+
+
+def cancel_order(request):
+    if request.method=='POST':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        headers={
+            "Authorization":f"Bearer {access_token}"
+        }
+        context={}
+        try:
+            id=request.POST.get('id')
+            print(f"id :{id}")
+            url=payment_url+id+'/cancel/'
+            response=requests.post(url=url,headers=headers)
+            response.raise_for_status()
+            print(f"response\n {response}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed during payment : {str(e)}")
+        return render(request,'success.html')
