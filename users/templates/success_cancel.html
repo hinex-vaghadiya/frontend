@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Status</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .status-container {
+            background: #fff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .success {
+            color: #0b6b3a;
+            animation: pop 0.5s ease;
+        }
+
+        .cancel {
+            color: #d9534f;
+            animation: shake 0.5s ease;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .success-icon {
+            color: #0b6b3a;
+        }
+
+        .cancel-icon {
+            color: #d9534f;
+        }
+
+        .btn {
+            padding: 14px 25px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            background: #0b6b3a;
+            color: #fff;
+        }
+
+        .btn:hover {
+            background: #09572d;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status-container">
+        {% if status == "success" %}
+        <div class="icon success-icon">✅</div>
+        <h1 class="success">Payment Successful!</h1>
+        <p class="message">Your payment of ₹{{ total_amount }} was completed successfully.</p>
+        {% elif status == "cancel" %}
+        <div class="icon cancel-icon">❌</div>
+        <h1 class="cancel">Payment Cancelled</h1>
+        <p class="message">Your payment was cancelled. No amount was deducted.</p>
+        {% endif %}
+
+        <a href="/" class="btn">Go to Home</a>
+    </div>
+
+    <!-- Optional sound effects -->
+    <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+    <audio id="cancelSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const status = "{{ status }}";
+            if (status === "success") {
+                document.getElementById("successSound").play();
+            } else if (status === "cancel") {
+                document.getElementById("cancelSound").play();
+            }
+        });
+    </script>
+</body>
+
+</html>

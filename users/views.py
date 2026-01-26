@@ -592,6 +592,7 @@ def process_upi_payment(request):
         context={}
         try:
             id=request.POST.get('id')
+            total_amount=request.POST.get('total_amount')
             print(f"id :{id}")
             url=payment_url+id+'/pay/'
             response=requests.post(url=url,headers=headers)
@@ -599,7 +600,7 @@ def process_upi_payment(request):
             print(f"response\n {response}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed during payment : {str(e)}")
-        return render(request,'success.html')
+        return render(request, 'success_cancel.html', {'status': 'success', 'total_amount': total_amount})
 
 
 def cancel_order(request):
@@ -618,6 +619,7 @@ def cancel_order(request):
         context={}
         try:
             id=request.POST.get('id')
+            total_amount=request.POST.get('total_amount')
             print(f"id :{id}")
             url=payment_url+id+'/cancel/'
             response=requests.post(url=url,headers=headers)
@@ -625,4 +627,4 @@ def cancel_order(request):
             print(f"response\n {response}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed during payment : {str(e)}")
-        return render(request,'success.html')
+        return render(request, 'success_cancel.html', {'status': 'cancel', 'total_amount': total_amount})

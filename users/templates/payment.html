@@ -139,6 +139,7 @@
             {% csrf_token %}
             <!-- UPI ID -->
              <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+             <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
             <div class="form-group">
                 <label for="upiId">Enter Your UPI ID</label>
                 <input type="text" id="upiId" name="upiId" placeholder="example@upi" required>
@@ -169,6 +170,7 @@
          <form action="{% url 'cancel-order'%}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+            <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
         <button type="submit" class="cancel-btn">Cancel</button>
         </form>
     </div>
