@@ -6,6 +6,7 @@ from django.contrib import messages
 from rest_framework import status
 import json
 from admin_dashboard.views import products_related_base_url
+import os
 user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
 # Create your views here.
 
@@ -375,7 +376,8 @@ def category_wise_products(request, slug):      # category wise products data
 
     return render(request,"shop.html",{"products": products,"category_name": slug,"is_authenticated": is_authenticated,})
 
-cart_url="http://127.0.0.1:8002/api/cart/"
+CART_URL=os.environ.get('CART_URL')
+cart_url="cart/"
 
 def add_to_cart(request):       # add to cart functionalities
     if request.method=='POST':
@@ -390,7 +392,7 @@ def add_to_cart(request):       # add to cart functionalities
         headers={
             "Authorization": f"Bearer {access_token}"
         }
-        url=f"{cart_url}add/"
+        url=f"{CART_URL}cart/add/"
         try:
             print('in try')
             response=requests.post(url=url,headers=headers,json={"variant_id": request.POST.get("variant_id"),"product_slug": request.POST.get("product_slug"),"quantity": 1,})
@@ -411,7 +413,7 @@ def get_cart_details(request):     # to get cart details
             access_token=new_token
         cart_data=[]
         try:
-            cart_resp=requests.get(url=cart_url,headers={"Authorization": f"Bearer {access_token}"})
+            cart_resp=requests.get(url=f"{CART_URL}cart/",headers={"Authorization": f"Bearer {access_token}"})
             print(cart_resp.json())
             cart_resp.raise_for_status()
             cart_data = cart_resp.json()
@@ -446,7 +448,7 @@ def delete_cart_item(request):     # to delete cart item
         headers={
             "Authorization": f"Bearer {access_token}"
         }
-        cart_item_delete_url=f"{cart_url}item/{item_id}/delete/"
+        cart_item_delete_url=f"{CART_URL}cart/item/{item_id}/delete/"
         try:
             response=requests.delete(url=cart_item_delete_url,headers=headers)
             response.raise_for_status()
@@ -493,7 +495,7 @@ def update_cart_item(request):    # to update cart items functionalites
             payload={
                 'quantity':item_quantity
             }
-            cart_update_url=f"{cart_url}item/{item_id}/update/"
+            cart_update_url=f"{CART_URL}cart/item/{item_id}/update/"
             try:
                 response=requests.patch(url=cart_update_url,headers=headers,json=payload)
                 response.raise_for_status()
@@ -515,7 +517,7 @@ def update_cart_item(request):    # to update cart items functionalites
                 )
         return resp 
 
-checkout_url="http://127.0.0.1:8002/api/checkout/"
+
 
 def checkout(request):
         access_token=get_access_token(request)
@@ -529,10 +531,10 @@ def checkout(request):
         headers={
             "Authorization":f"Bearer {access_token}"
         }
-        url=checkout_url
+        checkout_url=f"{CART_URL}checkout/"
         context={}
         try:
-            response=requests.post(url=url,headers=headers)
+            response=requests.post(url=checkout_url,headers=headers)
             response.raise_for_status()
             checkout_data=response.json()
             context = {
@@ -544,7 +546,7 @@ def checkout(request):
         return render(request,'payment.html',context)
 
 
-order_url="http://127.0.0.1:8002/api/get-all-orders/"
+
 
 def get_all_orders(request):
     if request.method=='GET':
@@ -560,10 +562,10 @@ def get_all_orders(request):
             "Authorization":f"Bearer {access_token}"
         }
 
-        url=order_url
+        order_url=f"{CART_URL}get-all-orders/"
         context={}
         try:
-            response=requests.get(url=url,headers=headers)
+            response=requests.get(url=order_url,headers=headers)
             response.raise_for_status()
             orders=response.json()
             context = {
@@ -575,7 +577,7 @@ def get_all_orders(request):
             messages.error(request,f"failed to fetch orders : {str(e)}")
         return render(request,'profile.html',context)
 
-payment_url='http://127.0.0.1:8002/api/order/'
+payment_url=f'{CART_URL}order/'
 def process_upi_payment(request):
     if request.method=='POST':
         access_token=get_access_token(request)
