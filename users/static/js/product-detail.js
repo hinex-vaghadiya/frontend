@@ -1,25 +1,14 @@
-/* ===============================
-   THUMB → MAIN IMAGE (UNCHANGED)
-=============================== */
 document.addEventListener("DOMContentLoaded", function () {
     const mainImage = document.getElementById("mainProductImage");
     const thumbsContainer = document.querySelector(".thumbs");
-
-    // product images already rendered by Django
+    const variantCards = document.querySelectorAll(".variant-card");
+    const variantInput = document.getElementById("variantInput"); // hidden input
     const productImages = Array.from(
         document.querySelectorAll(".thumb-image")
     ).map(img => img.dataset.image);
 
-    // Event delegation → works even after thumbs change
-    thumbsContainer.addEventListener("click", function (e) {
-        if (e.target.classList.contains("thumb-image")) {
-            mainImage.src = e.target.dataset.image;
-        }
-    });
-
     function updateThumbs(productImgs, variantImgs) {
         thumbsContainer.innerHTML = "";
-
         [...productImgs, ...variantImgs].forEach((img, index) => {
             const thumb = document.createElement("img");
             thumb.src = img;
@@ -27,20 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
             thumb.className = "thumb-image";
             thumbsContainer.appendChild(thumb);
 
-            // first image becomes main
-            if (index === 0) {
-                mainImage.src = img;
-            }
+            if (index === 0) mainImage.src = img;
         });
     }
 
-    /* ===============================
-       VARIANT CHANGE (ADDED ONLY)
-    =============================== */
-    const variantCards = document.querySelectorAll(".variant-card");
-
     function applyVariant(variant) {
-        // price
+        // Update price
         document.getElementById("price").textContent = `₹${variant.price}`;
 
         const compare = document.getElementById("compareAtPrice");
@@ -65,31 +46,37 @@ document.addEventListener("DOMContentLoaded", function () {
         const variantImages = variant.images.map(
             img => `https://res.cloudinary.com/diipo18tm/${img.image}`
         );
-
         updateThumbs(productImages, variantImages);
+
+        // Update hidden input for form
+        variantInput.value = variant.id;
     }
 
-    // first variant on load
+    // Initial variant on load
     if (variantCards.length > 0) {
         variantCards[0].classList.add("active");
         applyVariant(JSON.parse(variantCards[0].dataset.variant));
     }
 
+    // Variant click event
     variantCards.forEach(card => {
         card.addEventListener("click", function () {
             variantCards.forEach(v => v.classList.remove("active"));
             this.classList.add("active");
 
-            applyVariant(JSON.parse(this.dataset.variant));
+            const variantData = JSON.parse(this.dataset.variant);
+            applyVariant(variantData);
         });
     });
-});
 
+    // Thumbnail click
+    thumbsContainer.addEventListener("click", function (e) {
+        if (e.target.classList.contains("thumb-image")) {
+            mainImage.src = e.target.dataset.image;
+        }
+    });
 
-/* ===============================
-   QUANTITY (UNCHANGED)
-=============================== */
-document.addEventListener("DOMContentLoaded", function () {
+    /* Quantity buttons (unchanged) */
     const qtySpan = document.querySelector(".quantity span");
     const btnMinus = document.querySelector(".quantity button:first-child");
     const btnPlus = document.querySelector(".quantity button:last-child");
@@ -101,8 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     btnMinus.addEventListener("click", () => {
         let currentQty = parseInt(qtySpan.textContent);
-        if (currentQty > 1) {
-            qtySpan.textContent = currentQty - 1;
-        }
+        if (currentQty > 1) qtySpan.textContent = currentQty - 1;
     });
 });

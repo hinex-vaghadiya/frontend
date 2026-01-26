@@ -78,9 +78,13 @@
             </div>
 
             <div class="main-image">
+                {% if product.variants.0.images %}
                 <img id="mainProductImage"
                     src="https://res.cloudinary.com/diipo18tm/{{ product.variants.0.images.0.image }}"
                     alt="{{ product.product_name }}">
+                {% else %}
+                <img id="mainProductImage" src="{% static 'images/placeholder.png' %}" alt="No Image">
+                {% endif %}
             </div>
 
         </section>
@@ -109,13 +113,6 @@
                 ⭐ 4.8 <span>(Verified reviews)</span>
             </div>
 
-            <!-- <ul class="benefits">
-                <li>⚡ Enhances Energy & Stamina</li>
-                <li>🧠 Improves Focus & Mental Clarity</li>
-                <li>💪 Boosts Strength & Power</li>
-                <li>🛡 Supports Overall Wellness</li>
-            </ul> -->
-
             <p class="weight" id="stockInfo">
                 Stock Available: <strong>{{ product.variants.0.stock }}</strong>
             </p>
@@ -130,7 +127,8 @@
                     </div>
                     <form method="post" action="/add-to-cart/">
                         {% csrf_token %}
-                        <input type="hidden" name="variant_id" value="{{ variant.id }}">
+                        <!-- Hidden input for variant -->
+                        <input type="hidden" id="variantInput" name="variant_id" value="{{ product.variants.0.id }}">
                         <input type="hidden" name="product_slug" value="{{ product.slug }}">
 
                         <button class="btn primary add-cart">ADD TO CART</button>
@@ -153,6 +151,7 @@
                 <div class="variant-cards">
                     {% for variant in product.variants %}
                     <div class="variant-card {% if forloop.first %}active{% endif %}" data-variant='{
+                        "id": "{{ variant.id }}",
                         "price": "{{ variant.price }}",
                         "compare_at_price": "{{ variant.compare_at_price|default:"" }}",
                         "discount_percent": "{{ variant.discount_percent|default:"" }}",
@@ -167,8 +166,9 @@
                         <div class="variant-meta">
                             <span class="variant-name">{{ variant.name }}</span>
                             <span class="variant-price">₹{{ variant.price }}</span>
+                            {% if variant.compare_at_price %}
                             <span class="variant-price">₹{{ variant.compare_at_price }}</span>
-
+                            {% endif %}
                             {% if variant.discount_percent %}
                             <span class="variant-off">{{ variant.discount_percent }}% OFF</span>
                             {% endif %}
@@ -183,20 +183,17 @@
     </main>
 
     <!-- NEWSLETTER -->
-
     {% include "newsletter.html" %}
 
     <!-- FOOTER -->
-
     {% include "footer.html" %}
 
     <!-- AUTH OVERLAY -->
-
     {% include "auth_overlay.html" %}
 
     <!-- THUMB → MAIN IMAGE & VARIANT SWITCH SCRIPT -->
-    <script src="{% static 'js/script.js'%}"></script>
-    <script src="{% static 'js/product-detail.js'%}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/product-detail.js' %}"></script>
 
 </body>
 
