@@ -156,7 +156,7 @@ def profile(request):                          # profile html page
                 profile_data.update({"profile_pic":data['profile_pic']})
                 profile_data.update({"is_active":data['is_active']})
             
-            resp= render(request,'profile.html',{"profile":profile_data})
+            resp= render(request,'profile.html',{"profile":profile_data, "active_tab": "dashboard"})
             access_token_expiry = 20 * 60  # 20 minutes in seconds
                 #setting cookies
             resp.set_cookie(
@@ -567,11 +567,12 @@ def get_all_orders(request):
             response.raise_for_status()
             orders=response.json()
             context = {
-            "orders": orders["orders"]  # wrap in list
+            "orders": orders["orders"],
+            "active_tab": "orders"  
             }
             print(f"the orders is \n {orders}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to fetch orders : {str(e)}")
-        return render(request,'temp2.html',context)
+        return render(request,'profile.html',context)
 
                     

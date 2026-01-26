@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>My Account | HERBGLOW</title>
@@ -10,134 +11,150 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
+
 <body>
 
-<!-- TOP BAR (same as index) -->
-{% include "topbar.html" %}
+    {% include "topbar.html" %}
+    {% include "navbar.html" %}
+    <p>ACTIVE TAB: {{ active_tab }}</p>
+    <section class="account-wrapper">
 
-{% include "navbar.html" %}
+        <!-- SIDEBAR -->
+        <aside class="account-sidebar">
+            <ul>
+                <li class="{% if active_tab == 'dashboard' %}active{% endif %} dashboard">
+                    <a href="{% url 'profile' %}">
+                        <i class="fa-solid fa-table-columns"></i>
+                        Dashboard
+                    </a>
+                </li>
 
-<section class="account-wrapper">
+                <li class="{% if active_tab == 'orders' %}active{% endif %} get-all-orders ">
+                    <a href="{% url 'get-all-orders' %}">
+                        <i class="fa-solid fa-box"></i>
+                        Order History
+                    </a>
+                </li>
 
-    <!-- SIDEBAR -->
-    <aside class="account-sidebar">
-        <ul>
-            <li class="active">
-                <i class="fa-solid fa-table-columns"></i>
-                Dashboard
-            </li>
-            <li>
-                <a href="{% url 'get-all-orders' %}">
-                <i class="fa-solid fa-box"></i>
-                Order History
-                </a>
-            </li>
-            <!-- <li>
-                <i class="fa-solid fa-location-dot"></i>
-                Addresses
-            </li> -->
-            <li class="logout">
-                <a href="{% url 'logout' %}">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-    </aside>
+                <li class="logout">
+                    <a href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="account-content">
-        <h2>Account Details</h2> <button type="button" class="edit-btn" id="editProfileBtn">EDIT</button>
-        <br>
-        {% if messages %}
-            {% for message in messages %}
-                <p class="goto_success">{{message}}</p>
-            {% endfor %}
-        {% endif %}
-        <!-- EDIT PROFILE FORM (HIDDEN INITIALLY) -->
-<form action = "/profile-update/" method="post"  class="profile-form" id="profileForm" style="display: none;">
-     {% csrf_token %}
-    <div class="form-row">
-        <label>Name</label>
-        <input type="text" value="{{ profile.name }}" name="name">
-    </div>
-    <div class="form-row">
-        <label>Username</label>
-        <input type="text" value="{{ profile.username }}" disabled>
-    </div>
+        <!-- MAIN CONTENT -->
+        <main class="account-content">
 
-    <div class="form-row">
-        <label>Email</label>
-        <input type="email" value="{{ profile.email }}" disabled>
-    </div>
+            {% if active_tab == "dashboard" %}
+            <!-- ================= DASHBOARD ================= -->
 
-    <div class="form-row">
-        <label>Mobile</label>
-        <input type="text" value="{{ profile.mobile_number }}" name="mobile_number">
-    </div>
+            <h2>Account Details</h2>
+            <button type="button" class="edit-btn" id="editProfileBtn">EDIT</button>
 
-    <div class="form-row">
-        <label>Address</label>
-        <textarea rows="3" name="address">{{ profile.address }}</textarea>
-    </div>
+            <form action="/profile-update/" method="post" class="profile-form" id="profileForm" style="display:none;">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label>Name</label>
+                    <input type="text" value="{{ profile.name }}" name="name">
+                </div>
 
-    <button type="submit" class="save-btn">SAVE CHANGES</button>
-</form>
+                <div class="form-row">
+                    <label>Username</label>
+                    <input type="text" value="{{ profile.username }}" disabled>
+                </div>
 
+                <div class="form-row">
+                    <label>Email</label>
+                    <input type="email" value="{{ profile.email }}" disabled>
+                </div>
 
-        <div class="account-card" id="accountCard">
-            <div class="row">
-                <span>Name</span>
-                <span>{{ profile.name|default:"—" }}</span>
-            </div>
-            <div class="row">
-                <span>Username</span>
-                <span>{{ profile.username|default:"—" }}</span>
+                <div class="form-row">
+                    <label>Mobile</label>
+                    <input type="text" value="{{ profile.mobile_number }}" name="mobile_number">
+                </div>
+
+                <div class="form-row">
+                    <label>Address</label>
+                    <textarea rows="3" name="address">{{ profile.address }}</textarea>
+                </div>
+
+                <button type="submit" class="save-btn">SAVE CHANGES</button>
+            </form>
+
+            <div class="account-card" id="accountCard">
+                <div class="row"><span>Name</span><span>{{ profile.name|default:"—" }}</span></div>
+                <div class="row"><span>Username</span><span>{{ profile.username }}</span></div>
+                <div class="row"><span>Email</span><span>{{ profile.email }}</span></div>
+                <div class="row"><span>Mobile</span><span>{{ profile.mobile_number|default:"—" }}</span></div>
+                <div class="row"><span>Address</span><span>{{ profile.address|default:"—" }}</span></div>
             </div>
 
-            <div class="row">
-                <span>Email</span>
-                <span>{{ profile.email }}</span>
-            </div>
+            {% endif %}
 
-            <div class="row">
-                <span>Mobile</span>
-                <span>{{ profile.mobile_number|default:"—" }}</span>
-            </div>
 
-            <div class="row">
-                <span>Address</span>
-                <span>{{ profile.address|default:"—" }}</span>
-            </div>
+            {% if active_tab == "orders" %}
+            <!-- ================= ORDERS ================= -->
+
+            <h2>Order History</h2>
+
+            <div class="orders-card">
+                {% if orders %}
+                {% for order in orders %}
+                <div class="order-item">
+                    <!-- ORDER HEADER -->
+                    <div class="order-header">
+                        <span>Order #: {{ order.order_number }}</span>
+                        <span class="order-status {{ order.status|lower }}">
+                            {{ order.status }}
+                        </span>
+                    </div>
+
+                    <!-- ORDER ITEMS -->
+                    <div class="order-items">
+                        {% for item in order.items %}
+                        <div class="item">
+                            <span>{{ item.product_name }} ({{ item.variant_name }})</span>
+                            <span>× {{ item.quantity }}</span>
+                            <span>₹{{ item.subtotal }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- ORDER TOTAL -->
+                    <div class="order-total">
+                        Total: ₹{{ order.total_amount }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No orders found.</p>
+                    {% endif %}
+                {% endif %}
             
-        </div>
-    </main>
 
-</section>
-<script>
-     const editBtn = document.getElementById("editProfileBtn");
-    const profileForm = document.getElementById("profileForm");
-    const accountCard = document.getElementById("accountCard");
 
-    // initial state
-    profileForm.style.display = "none";
-    accountCard.style.display = "block";
+        </main>
 
-    editBtn.addEventListener("click", () => {
-        const isEditing = profileForm.style.display === "block";
+    </section>
 
-        if (isEditing) {
-            // CANCEL
-            profileForm.style.display = "none";
-            accountCard.style.display = "block";
-            editBtn.textContent = "EDIT";
-        } else {
-            // EDIT
-            profileForm.style.display = "block";
-            accountCard.style.display = "none";
-            editBtn.textContent = "CANCEL";
-        }
-    });
-</script>
+    {% if active_tab == "dashboard" %}
+    <script>
+        const editBtn = document.getElementById("editProfileBtn");
+        const profileForm = document.getElementById("profileForm");
+        const accountCard = document.getElementById("accountCard");
+
+        editBtn?.addEventListener("click", () => {
+            const isEditing = profileForm.style.display === "block";
+            profileForm.style.display = isEditing ? "none" : "block";
+            accountCard.style.display = isEditing ? "block" : "none";
+            editBtn.textContent = isEditing ? "EDIT" : "CANCEL";
+        });
+    </script>
+    {% endif %}
+
 </body>
+
 </html>

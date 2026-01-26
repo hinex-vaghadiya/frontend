@@ -40,6 +40,14 @@
     text-decoration: none;
 }
 
+.account-sidebar li.get-all-orders a{
+    color: grey;
+    text-decoration: none;
+}
+.account-sidebar li.dashboard a{
+    color: goldenrod;
+    text-decoration: none;
+}
 /* CONTENT */
 .account-content {
     flex: 1;
@@ -173,4 +181,82 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+/* ===========================
+   ORDERS CARD
+=========================== */
+.orders-card {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+/* SINGLE ORDER */
+.order-item {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    transition: box-shadow 0.2s ease;
+}
+
+.order-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ORDER HEADER */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* ORDER STATUS */
+.order-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+}
+
+.order-status.pending {
+    background-color: #d69e2e; /* amber */
+}
+
+.order-status.completed {
+    background-color: #2f855a; /* green */
+}
+
+.order-status.cancelled {
+    background-color: #c53030; /* red */
+}
+
+/* ORDER ITEMS */
+.order-items {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.order-items .item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+
+
+/* ORDER TOTAL */
+.order-total {
+    text-align: right;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #333;
 }
