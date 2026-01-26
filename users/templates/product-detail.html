@@ -128,8 +128,13 @@
                         <span>1</span>
                         <button>+</button>
                     </div>
+                    <form method="post" action="/add-to-cart/">
+                        {% csrf_token %}
+                        <input type="hidden" name="variant_id" value="{{ variant.id }}">
+                        <input type="hidden" name="product_slug" value="{{ product.slug }}">
 
-                    <button class="btn primary add-cart">ADD TO CART</button>
+                        <button class="btn primary add-cart">ADD TO CART</button>
+                    </form>
                 </div>
 
                 <button class="btn secondary buy-now">BUY IT NOW</button>
@@ -177,10 +182,10 @@
         </section>
     </main>
 
-     <!-- NEWSLETTER -->
-    
+    <!-- NEWSLETTER -->
+
     {% include "newsletter.html" %}
-    
+
     <!-- FOOTER -->
 
     {% include "footer.html" %}
