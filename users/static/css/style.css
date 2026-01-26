@@ -52,6 +52,10 @@
     font-weight: bold;
     color: #0a5c3a;
 }
+.logo-redirect{
+    text-decoration: none;
+
+}
 
 .logo-sub {
     display: block;
