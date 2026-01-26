@@ -1,0 +1,17 @@
+{% for order in orders %}
+    <h4>Order Number: {{ order.order_number }}</h4>
+    <h4>Status: {{ order.status }}</h4>
+    <h4>Total: {{ order.total_amount }}</h4>
+
+    <ul>
+        {% for item in order.items %}
+            <li>
+                {{ item.product_name }}
+                ({{ item.variant_name }})
+                × {{ item.quantity }}
+                — ₹{{ item.subtotal }}
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+{% endfor %}

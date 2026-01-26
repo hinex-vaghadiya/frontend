@@ -544,6 +544,34 @@ def checkout(request):
         return render(request,'temp.html',context)
 
 
+order_url="http://127.0.0.1:8002/api/get-all-orders/"
 
+def get_all_orders(request):
+    if request.method=='GET':
+        access_token=get_access_token(request)
+        if not access_token:
+            new_token=refresh_access_token(request)
+            if not new_token:
+                return if_not_new_token(request)
+            access_token=new_token
+        
+
+        headers={
+            "Authorization":f"Bearer {access_token}"
+        }
+
+        url=order_url
+        context={}
+        try:
+            response=requests.get(url=url,headers=headers)
+            response.raise_for_status()
+            orders=response.json()
+            context = {
+            "orders": orders["orders"]  # wrap in list
+            }
+            print(f"the orders is \n {orders}")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to fetch orders : {str(e)}")
+        return render(request,'temp2.html',context)
 
                     
