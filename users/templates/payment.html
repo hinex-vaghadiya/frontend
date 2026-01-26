@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment Gateway</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .upi-container {
+            background: #fff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .upi-container h2 {
+            color: #0b6b3a;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #0b6b3a;
+            box-shadow: 0 0 5px rgba(11, 107, 58, 0.3);
+        }
+
+        .form-group input[readonly] {
+            background: #e6f2eb;
+            color: #333;
+            cursor: not-allowed;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .upi-btn,
+        .cancel-btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .upi-btn {
+            background: #0b6b3a;
+            color: #fff;
+        }
+
+        .upi-btn:hover {
+            background: #09572d;
+        }
+
+        .cancel-btn {
+            background: #ccc;
+            color: #333;
+        }
+
+        .cancel-btn:hover {
+            background: #999;
+        }
+
+        .qr-section {
+            margin: 20px 0;
+        }
+
+        .qr-section img {
+            max-width: 200px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media(max-width:450px) {
+            .qr-section img {
+                max-width: 150px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="upi-container">
+        <h2>Pay via UPI</h2>
+
+        <form action="/process-upi-payment/" method="POST">
+            {% csrf_token %}
+
+            <!-- UPI ID -->
+            <div class="form-group">
+                <label for="upiId">Enter Your UPI ID</label>
+                <input type="text" id="upiId" name="upiId" placeholder="example@upi" required>
+            </div>
+
+            <!-- Total Amount (readonly) -->
+            <div class="form-group">
+                <label for="amount">Amount (INR)</label>
+                <input type="number" id="amount" name="amount" value="{{ checkout_data.0.total_amount }}" readonly>
+            </div>
+
+            <!-- Optional Name -->
+            <div class="form-group">
+                <label for="name">Name (Optional)</label>
+                <input type="text" id="name" name="name" placeholder="John Doe">
+            </div>
+
+            <!-- QR Code -->
+            <div class="qr-section">
+                <p>Or scan QR code:</p>
+                <img src="https://via.placeholder.com/200?text=UPI+QR" alt="UPI QR Code">
+            </div>
+
+            <!-- Buttons: Pay Now + Cancel -->
+            <div class="button-row">
+                <button type="submit" class="upi-btn">Pay ₹{{ checkout_data.0.total_amount }}</button>
+                <a href="/checkout/" class="cancel-btn">Cancel</a>
+            </div>
+
+            <p class="info-text">Your payment is secure and processed via UPI.</p>
+        </form>
+    </div>
+</body>
+
+</html>

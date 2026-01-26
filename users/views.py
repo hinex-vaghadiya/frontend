@@ -541,7 +541,7 @@ def checkout(request):
             print(f" the checkout data\n {checkout_data}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed during checkout : {str(e)}")
-        return render(request,'temp.html',context)
+        return render(request,'payment.html',context)
 
 
 order_url="http://127.0.0.1:8002/api/get-all-orders/"
