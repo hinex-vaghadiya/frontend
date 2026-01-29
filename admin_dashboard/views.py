@@ -525,7 +525,7 @@ def edit_batch(request,batch_id):                   # to edit batch
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-batch')
 
-# CART_URL="https://carts-2fy5.onrender.com/api/"
+CART_URL="https://carts-2fy5.onrender.com/api/"
 def customer_data(request):
     get_all_customer_url = user_base_url + 'register'
     order_url = f"{CART_URL}admin-get-all-orders/"
