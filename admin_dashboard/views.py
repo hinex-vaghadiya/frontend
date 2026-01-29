@@ -6,7 +6,7 @@ from django.contrib import messages
 from rest_framework import status
 import json
 
-
+get_all_customer_url="https://users-1wfh.onrender.com/api/register"
 # Create your views here.
 
 #imports of some comman methods that are written in users.views
@@ -86,7 +86,8 @@ def admin_profile(request):                          # profile html page
             return redirect('/admin/login?tokenr=error')
         
 def admin_index(request):         #admin index page
-    return admin_profile(request)    
+    # return admin_profile(request) 
+    return customer_data(request)
 
 def admin_login(request):         #admin login page
     token_status=request.GET.get('token')
@@ -524,7 +525,67 @@ def edit_batch(request,batch_id):                   # to edit batch
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-batch')
 
+# CART_URL="https://carts-2fy5.onrender.com/api/"
+def customer_data(request):
+    get_all_customer_url = user_base_url + 'register'
+    order_url = f"{CART_URL}admin-get-all-orders/"
 
+    customers = []
+    orders = []
+
+    # -------------------------------
+    # Fetch customers
+    # -------------------------------
+    try:
+
+        response = requests.get(url=get_all_customer_url)
+        response.raise_for_status()
+        customers = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"failed to get customers: {str(e)}")
+
+
+    # -------------------------------
+    # Fetch orders
+    # -------------------------------
+    try:
+        print("in the order api")
+        response = requests.get(url=order_url,)
+        response.raise_for_status()
+        orders = response.json().get("orders", [])
+        print(f"orders :{orders}")
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"failed to fetch orders: {str(e)}")
+
+    # -------------------------------
+    # Build order summary per customer
+    # -------------------------------
+    order_summary = {}
+
+    for order in orders:
+        customer_id = order.get("user")
+        amount = order.get("total_price", 0)
+
+        if customer_id not in order_summary:
+            order_summary[customer_id] = {
+                "total_orders": 0,
+                "total_spend": 0
+            }
+
+        order_summary[customer_id]["total_orders"] += 1
+        order_summary[customer_id]["total_spend"] += amount
+
+    # -------------------------------
+    # Attach summary to customers
+    # -------------------------------
+    for customer in customers:
+        summary = order_summary.get(customer["id"], {})
+        customer["total_orders"] = summary.get("total_orders", 0)
+        customer["total_spend"] = summary.get("total_spend", 0)
+
+    return render(request, "admin_index.html", {
+        "customers": customers
+    })
 
 
 
