@@ -6,7 +6,7 @@ from django.contrib import messages
 from rest_framework import status
 import json
 
-get_all_customer_url="https://users-1wfh.onrender.com/api/register"
+user_base_url="https://users-1wfh.onrender.com/api/register"
 # Create your views here.
 
 #imports of some comman methods that are written in users.views
