@@ -549,9 +549,6 @@ def customer_data(request):
         customers = []
         orders = []
 
-        # -------------------------------
-        # Fetch customers
-        # -------------------------------
         try:
             response = requests.get(get_all_customer_url)
             response.raise_for_status()
@@ -559,9 +556,6 @@ def customer_data(request):
         except requests.exceptions.RequestException as e:
             messages.error(request, f"Failed to get customers: {str(e)}")
 
-        # -------------------------------
-        # Fetch orders
-        # -------------------------------
         try:
             response = requests.get(order_url)
             response.raise_for_status()
@@ -569,9 +563,7 @@ def customer_data(request):
         except requests.exceptions.RequestException as e:
             messages.error(request, f"Failed to fetch orders: {str(e)}")
 
-        # -------------------------------
-        # Build order summary per customer
-        # -------------------------------
+        
         order_summary = {}
 
         for order in orders:
@@ -590,9 +582,7 @@ def customer_data(request):
             order_summary[customer_id]["total_orders"] += 1
             order_summary[customer_id]["total_spend"] += amount
 
-        # -------------------------------
-        # Attach summary to customers
-        # -------------------------------
+
         for customer in customers:
             summary = order_summary.get(customer.get("id"), {})
             customer["total_orders"] = summary.get("total_orders", 0)
