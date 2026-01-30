@@ -81,7 +81,7 @@
             <td>{{ customer.mobile_number }}</td>
 
             <td>{{ customer.total_orders }}</td>
-            <td>${{ customer.total_spend }}</td>
+            <td>₹{{ customer.total_spend }}</td>
 
 
             <td class="{% if customer.is_active %}active{% else %}inactive{% endif %}">

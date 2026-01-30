@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib import messages
 from rest_framework import status
 import json
-
+import os
 user_base_url="https://users-1wfh.onrender.com/api/"
 # Create your views here.
 
@@ -525,67 +525,93 @@ def edit_batch(request,batch_id):                   # to edit batch
             messages.error(request,f"failed to update category : {str(e)}")
         return redirect('/admin/add-batch')
 
-CART_URL="https://carts-2fy5.onrender.com/api/"
+import requests
+from django.contrib import messages
+from django.shortcuts import render
+
+CART_URL = os.environ.get('CART_URL')
+
 def customer_data(request):
-    get_all_customer_url = user_base_url + 'register'
-    order_url = f"{CART_URL}admin-get-all-orders/"
+    if request.method=='GET':
+        access_token=admin_get_access_token(request)
+        if not access_token:
+            new_token=admin_refresh_access_token(request)
+            if not new_token:
+                return admin_if_not_new_token(request)
+            access_token=new_token
+        # headers={
+        #     "Authorization":f"Bearer {access_token}"
+        # }
 
-    customers = []
-    orders = []
+        get_all_customer_url = user_base_url + 'register'
+        order_url = f"{CART_URL}admin-get-all-orders/"
 
-    # -------------------------------
-    # Fetch customers
-    # -------------------------------
-    try:
+        customers = []
+        orders = []
 
-        response = requests.get(url=get_all_customer_url)
-        response.raise_for_status()
-        customers = response.json()
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"failed to get customers: {str(e)}")
+        # -------------------------------
+        # Fetch customers
+        # -------------------------------
+        try:
+            response = requests.get(get_all_customer_url)
+            response.raise_for_status()
+            customers = response.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to get customers: {str(e)}")
 
+        # -------------------------------
+        # Fetch orders
+        # -------------------------------
+        try:
+            response = requests.get(order_url)
+            response.raise_for_status()
+            orders = response.json().get("orders", [])
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch orders: {str(e)}")
 
-    # -------------------------------
-    # Fetch orders
-    # -------------------------------
-    try:
-        print("in the order api")
-        response = requests.get(url=order_url,)
-        response.raise_for_status()
-        orders = response.json().get("orders", [])
-        print(f"orders :{orders}")
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"failed to fetch orders: {str(e)}")
+        # -------------------------------
+        # Build order summary per customer
+        # -------------------------------
+        order_summary = {}
 
-    # -------------------------------
-    # Build order summary per customer
-    # -------------------------------
-    order_summary = {}
+        for order in orders:
+            customer_id = order.get("user_id")          # ✅ FIXED
+            amount = order.get("total_amount", 0)       # ✅ FIXED
 
-    for order in orders:
-        customer_id = order.get("user")
-        amount = order.get("total_price", 0)
+            if not customer_id:
+                continue
 
-        if customer_id not in order_summary:
-            order_summary[customer_id] = {
-                "total_orders": 0,
-                "total_spend": 0
-            }
+            if customer_id not in order_summary:
+                order_summary[customer_id] = {
+                    "total_orders": 0,
+                    "total_spend": 0
+                }
 
-        order_summary[customer_id]["total_orders"] += 1
-        order_summary[customer_id]["total_spend"] += amount
+            order_summary[customer_id]["total_orders"] += 1
+            order_summary[customer_id]["total_spend"] += amount
 
-    # -------------------------------
-    # Attach summary to customers
-    # -------------------------------
-    for customer in customers:
-        summary = order_summary.get(customer["id"], {})
-        customer["total_orders"] = summary.get("total_orders", 0)
-        customer["total_spend"] = summary.get("total_spend", 0)
+        # -------------------------------
+        # Attach summary to customers
+        # -------------------------------
+        for customer in customers:
+            summary = order_summary.get(customer.get("id"), {})
+            customer["total_orders"] = summary.get("total_orders", 0)
+            customer["total_spend"] = summary.get("total_spend", 0)
 
-    return render(request, "admin_index.html", {
-        "customers": customers
-    })
+        resp= render(request, "admin_index.html", {
+            "customers": customers
+        })
+        access_token_expiry = 20 * 60
+        resp.set_cookie(
+                        "admin_access_token",
+                        access_token,
+                        max_age=access_token_expiry,
+                        httponly=True,
+                        secure=False,
+                        samesite='lax'
+                    )
+        return resp
+
 
 
 
