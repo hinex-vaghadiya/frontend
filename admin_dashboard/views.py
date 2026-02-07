@@ -634,6 +634,25 @@ def admin_get_all_orders(request):
         print(f"orders data are\n {orders}")
         return resp
 
+def customer_list_data(request):
+    if request.method=='GET':
+        access_token=admin_get_access_token(request)
+        if not access_token:
+            new_token=admin_refresh_access_token(request)
+            if not new_token:
+                return admin_if_not_new_token(request)
+            access_token=new_token
+        get_all_customer_url = user_base_url + 'register'
+        try:
+            response = requests.get(get_all_customer_url)
+            response.raise_for_status()
+            customers = response.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to get customers: {str(e)}")
+        resp= render(request, "customers_list.html", {
+            "customers": customers
+        })
+        return resp
 
 
 
