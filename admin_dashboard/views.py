@@ -602,6 +602,37 @@ def customer_data(request):
                     )
         return resp
 
+def admin_get_all_orders(request):
+    if request.method=='GET':
+        access_token=admin_get_access_token(request)
+        if not access_token:
+            new_token=admin_refresh_access_token(request)
+            if not new_token:
+                return admin_if_not_new_token(request)
+            access_token=new_token
+        order_url = f"{CART_URL}admin-get-all-orders/"
+        orders=[]
+        try:
+            response=requests.get(url=order_url)
+            response.raise_for_status()
+            orders=response.json()
+            messages.success(request,f"oredrs fetched successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request,f"failed to fetch orders data :{str(e)}")
+        
+        resp= render(request,'orders_list.html',{'orders':orders})
+        access_token_expiry = 20 * 60
+        resp.set_cookie(
+            "admin_access_token",
+                        access_token,
+                        max_age=access_token_expiry,
+                        httponly=True,
+                        secure=False,
+                        samesite='lax'
+
+        )
+        print(f"orders data are\n {orders}")
+        return resp
 
 
 
