@@ -7,7 +7,14 @@
             </a>
         </div>
 
-        <nav class="menu">
+        <!-- Hamburger button for mobile -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav class="menu" id="mobileMenu">
             <a href="{% url 'shop' %}"><i class="fa-solid fa-store"></i> Shop All</a>
             <a href="{% url 'category-products' 'soap' %}"><i class="fa-solid fa-shield-heart"></i> Soap</a>
             <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>

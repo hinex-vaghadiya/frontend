@@ -1,111 +1,125 @@
-/* ===============================
-   PRODUCT LIST MODERN TABLE CSS
-================================= */
+/* =========================
+   ADMIN LISTS — DARK PREMIUM THEME
+========================= */
 
-/* 1. Table Card Container */
+/* Table Card Container */
 .table-card {
-  background: #ffffff;
+  background: var(--admin-card-bg, #1e293b);
   border-radius: 14px;
   padding: 24px 28px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-  margin: 30px;
+  border: 1px solid var(--admin-border, #334155);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin: 24px 0;
 }
 
-/* 2. Header (Title + Add Button) */
+/* Header (Title + Add Button) */
 .table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .table-header h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--admin-text, #e2e8f0);
 }
 
-/* 3. Table Wrapper (Smooth Scroll) */
+/* Table Wrapper */
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 4. Table Core */
+/* Table Core */
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .admin-table thead {
-  background: #f9fafb;
+  background: rgba(15, 23, 42, 0.4);
 }
 
 .admin-table th {
   text-align: left;
-  padding: 16px 14px;
-  font-size: 13px;
+  padding: 14px 14px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7280;
-  border-bottom: 2px solid #e5e7eb;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted, #94a3b8);
+  border-bottom: 1px solid var(--admin-border, #334155);
+  font-weight: 600;
 }
 
-/* 5. Table Body Rows */
+/* Table Body Rows */
 .admin-table td {
-  padding: 16px 14px;
-  border-bottom: 1px solid #eef2f7;
+  padding: 14px;
+  border-bottom: 1px solid var(--admin-border, #334155);
   vertical-align: middle;
-  color: #374151;
+  color: var(--admin-text, #e2e8f0);
 }
 
 .admin-table tbody tr {
-  transition: background 0.2s ease;
+  transition: background 0.15s ease;
 }
 
 .admin-table tbody tr:hover {
-  background: #f9fbff;
+  background: rgba(20, 184, 166, 0.04);
 }
 
-/* 6. Product Thumbnail */
+/* Product Thumbnail */
 .product-thumb {
   width: 56px;
   height: 56px;
   object-fit: cover;
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--admin-border, #334155);
 }
 
 /* Product Info */
+.product-info strong {
+  color: var(--admin-text, #e2e8f0);
+}
+
 .product-info small {
   display: block;
-  color: #6b7280;
+  color: var(--admin-text-muted, #94a3b8);
   margin-top: 4px;
 }
 
-/* 7. Status Badges */
+/* Status Badges */
 .status {
   padding: 6px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   display: inline-block;
 }
 
 .status.active {
-  background: #ecfdf5;
-  color: #047857;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
 }
 
 .status.inactive {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }
 
-/* 8. Action Buttons */
+.status.pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+/* Action Buttons */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-sm {
@@ -115,48 +129,173 @@
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .btn-sm.edit {
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
 }
 
 .btn-sm.edit:hover {
-  background: #dbeafe;
+  background: rgba(59, 130, 246, 0.2);
 }
 
 .btn-sm.delete {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }
 
 .btn-sm.delete:hover {
-  background: #fee2e2;
+  background: rgba(239, 68, 68, 0.2);
 }
 
-/* 9. Empty State */
+.btn-sm.warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+.btn-sm.warning:hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.btn-sm.success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.btn-sm.success:hover {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+/* Empty State */
 .empty {
   text-align: center;
   padding: 30px;
-  color: #9ca3af;
+  color: var(--admin-text-muted, #94a3b8);
   font-size: 15px;
 }
 
-/* 10. Add Product Button */
+/* Add Product Button */
 .btn-green {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: var(--admin-accent, #14b8a6);
   color: white;
-  padding: 10px 18px;
+  padding: 10px 20px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
+  transition: all 0.2s ease;
 }
 
 .btn-green:hover {
+  background: var(--admin-accent-hover, #0d9488);
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.45);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-card {
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   PAGINATION CONTROLS
+========================= */
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--admin-border, #334155);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page-info {
+  font-size: 13px;
+  color: var(--admin-text-muted, #94a3b8);
+  font-weight: 500;
+}
+
+.page-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.page-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border, #334155);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--admin-text-muted, #94a3b8);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.1);
+  border-color: var(--admin-accent, #14b8a6);
+  color: var(--admin-accent, #14b8a6);
+  transform: translateY(-1px);
+}
+
+.page-btn.active {
+  background: var(--admin-accent, #14b8a6);
+  border-color: var(--admin-accent, #14b8a6);
+  color: #fff;
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .pagination-controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .page-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
 }

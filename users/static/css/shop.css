@@ -46,14 +46,15 @@
     border: 1px solid #eaeaea;
     border-radius: 8px;
     overflow: hidden;
-    position: relative; /* Essential for absolute positioning of badge */
+    position: relative;
+    /* Essential for absolute positioning of badge */
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Green Discount Badge */
@@ -74,7 +75,8 @@
 .product-image-wrapper {
     position: relative;
     width: 100%;
-    height: 250px; /* Fixed height for large visibility */
+    height: 250px;
+    /* Fixed height for large visibility */
     overflow: hidden;
 }
 
@@ -84,7 +86,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Fill the wrapper nicely */
+    object-fit: cover;
+    /* Fill the wrapper nicely */
     transition: opacity 0.4s ease, transform 0.3s ease;
     display: block;
 }
@@ -200,4 +203,70 @@
 
 .btn-buy:hover {
     background-color: #008550;
+}
+
+/* =========================
+   SHOP PAGE RESPONSIVE
+========================= */
+@media (max-width: 992px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-container {
+        margin: 16px auto;
+        padding: 0 12px;
+    }
+
+    .shop-header {
+        margin-bottom: 16px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .product-image-wrapper {
+        height: 200px;
+    }
+
+    .product-title {
+        font-size: 13px;
+        height: auto;
+    }
+
+    .card-actions {
+        padding: 0 10px 14px;
+        gap: 6px;
+    }
+
+    .btn-buy {
+        font-size: 12px;
+        height: 36px;
+    }
+
+    .btn-cart {
+        width: 38px;
+        height: 36px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .product-image-wrapper {
+        height: 240px;
+    }
+
+    .product-title {
+        font-size: 14px;
+    }
 }

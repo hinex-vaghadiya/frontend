@@ -28,8 +28,13 @@
 }
 
 @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .marquee span {
@@ -52,7 +57,8 @@
     font-weight: bold;
     color: #0a5c3a;
 }
-.logo-redirect{
+
+.logo-redirect {
     text-decoration: none;
 
 }
@@ -98,7 +104,8 @@
 .hero {
     position: relative;
     width: 100%;
-    height: 90vh;              /* Responsive height */
+    height: 90vh;
+    /* Responsive height */
     min-height: 520px;
     overflow: hidden;
     color: #fff;
@@ -195,7 +202,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     opacity: 0;
     visibility: hidden;
     transition: 0.3s ease;
@@ -209,15 +216,18 @@
 
 .auth-drawer {
     position: fixed;
-    top: 0px; /* Push down below the fixed bars */
+    top: 0px;
+    /* Push down below the fixed bars */
     right: -400px;
     width: 380px;
-    height: 100vh; /* Full height minus bars */
+    height: 100vh;
+    /* Full height minus bars */
     background: #fff;
     padding: 30px;
-    box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.25);
     transition: 0.4s ease;
-    z-index: 1200; /* Above navbar and top-bar */
+    z-index: 1200;
+    /* Above navbar and top-bar */
 }
 
 
@@ -352,7 +362,7 @@
 }
 
 .product-card:hover {
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     transform: translateY(-4px);
 }
 
@@ -391,7 +401,8 @@
 .product-image-wrapper img.primary {
     opacity: 1;
     z-index: 1;
-    position: relative; /* make sure primary is behind hover */
+    position: relative;
+    /* make sure primary is behind hover */
 }
 
 .product-image-wrapper img.hover {
@@ -559,11 +570,13 @@
     white-space: nowrap;
     padding: 8px 0;
 
-    position: fixed;   /* Make top-bar sticky */
+    position: fixed;
+    /* Make top-bar sticky */
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1100;     /* Stay above other content */
+    z-index: 1100;
+    /* Stay above other content */
 }
 
 /* =========================
@@ -577,16 +590,20 @@
     background: #fff;
     border-bottom: 1px solid #ddd;
 
-    position: fixed;   /* Make navbar sticky */
-    top: 32px;         /* Just below the top-bar */
+    position: fixed;
+    /* Make navbar sticky */
+    top: 32px;
+    /* Just below the top-bar */
     left: 0;
     width: 100%;
-    z-index: 1000;     /* Below top-bar */
+    z-index: 1000;
+    /* Below top-bar */
 }
 
 /* Prevent content overlap */
 body {
-    padding-top: 92px; /* top-bar + navbar combined height */
+    padding-top: 92px;
+    /* top-bar + navbar combined height */
 }
 
 
@@ -614,7 +631,8 @@ body {
 
 .video-card video {
     width: 100%;
-    height: 380px; /* increased from 320px */
+    height: 380px;
+    /* increased from 320px */
     object-fit: cover;
 }
 
@@ -622,7 +640,7 @@ body {
 .video-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     align-items: center;
     justify-content: center;
@@ -678,66 +696,68 @@ body {
 
 
 .wellness-promise-section {
-  padding: 50px 20px; 
-  text-align: center;
+    padding: 50px 20px;
+    text-align: center;
 }
 
 .wellness-promise-section .section-title {
-  font-weight: 900;
-  font-size: 2rem;
-  margin-bottom: 25px;
-  position: relative;
-  display: inline-block;
+    font-weight: 900;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
 }
 
 .wellness-promise-section .section-title::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 4px;
-  background-color: #008000; /* green underline */
-  margin: 8px auto 0;
-  border-radius: 2px;
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #008000;
+    /* green underline */
+    margin: 8px auto 0;
+    border-radius: 2px;
 }
 
 .wellness-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1100px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .wellness-card {
-  background: #e6f0e6; /* light green card background */
-  padding: 30px 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgb(0 128 0 / 0.1);
-  transition: box-shadow 0.3s ease;
+    background: #e6f0e6;
+    /* light green card background */
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgb(0 128 0 / 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
 .wellness-card:hover {
-  box-shadow: 0 6px 15px rgb(0 128 0 / 0.2);
+    box-shadow: 0 6px 15px rgb(0 128 0 / 0.2);
 }
 
 .wellness-icon {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 20px;
-  filter: invert(29%) sepia(72%) saturate(401%) hue-rotate(74deg) brightness(88%) contrast(86%);
+    width: 70px;
+    height: 70px;
+    margin-bottom: 20px;
+    filter: invert(29%) sepia(72%) saturate(401%) hue-rotate(74deg) brightness(88%) contrast(86%);
 }
 
 .wellness-card h3 {
-  font-weight: 700;
-  font-size: 1.25rem;
-  margin-bottom: 12px;
-  color: #004d00;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    color: #004d00;
 }
 
 .wellness-card p {
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.4;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
 }
 
 
@@ -841,120 +861,122 @@ body {
 /* real people real result --------------------------------------------------------------------------------------------------------------------*/
 
 .real-people-heading {
-  text-align: center;
-  margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .real-people-heading h2 {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0;
 }
 
 .real-people-heading .highlight {
-  color: #0a8f44; /* same green */
+    color: #0a8f44;
+    /* same green */
 }
 
 @media (max-width: 768px) {
-  .real-people-heading h2 {
-    font-size: 28px;
-  }
+    .real-people-heading h2 {
+        font-size: 28px;
+    }
 }
 
 
 .flip-card-section {
-  padding: 60px 0;
+    padding: 60px 0;
 }
 
 .flip-card-wrapper {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  max-width: 1200px;
-  margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: auto;
 }
 
 .flip-card {
-  perspective: 1200px;
+    perspective: 1200px;
 }
 
 .flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 360px;
-  transition: transform 0.6s ease;
-  transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 360px;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
 }
 
 .flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 /* Front */
 .flip-card-front,
 .flip-card-back {
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  backface-visibility: hidden;
-  overflow: hidden;
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    overflow: hidden;
 }
 
 /* FRONT DESIGN */
 .flip-card-front {
-  background: #fff;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  text-align: center;
-  padding-bottom: 16px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding-bottom: 16px;
 }
 
 .flip-card-front img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
 }
 
 .flip-card-front h4 {
-  margin: 12px 0 4px;
-  font-weight: 600;
+    margin: 12px 0 4px;
+    font-weight: 600;
 }
 
 .flip-card-front p {
-  font-size: 14px;
-  color: #666;
+    font-size: 14px;
+    color: #666;
 }
 
 /* BACK DESIGN */
 .flip-card-back {
-  background: #0a8f44; /* Spirulina green */
-  color: #fff;
-  padding: 24px;
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    background: #0a8f44;
+    /* Spirulina green */
+    color: #fff;
+    padding: 24px;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .flip-card-back h4 {
-  margin-bottom: 12px;
+    margin-bottom: 12px;
 }
 
 .flip-card-back p {
-  font-size: 15px;
-  line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.6;
 }
 
 /* Responsive */
 @media (max-width: 992px) {
-  .flip-card-wrapper {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .flip-card-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 576px) {
-  .flip-card-wrapper {
-    grid-template-columns: 1fr;
-  }
+    .flip-card-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
 
 
@@ -1437,3 +1459,427 @@ body {
     }
 }
 
+/* =========================
+   HAMBURGER BUTTON
+========================= */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2.5px;
+    background: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Animate to X when active */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* =========================
+   RESPONSIVE — MOBILE ≤768px
+========================= */
+@media (max-width: 768px) {
+
+    /* Top bar */
+    .top-bar {
+        padding: 5px 0;
+    }
+
+    .marquee span {
+        font-size: 12px;
+    }
+
+    /* Navbar */
+    .navbar {
+        padding: 10px 16px;
+        flex-wrap: wrap;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .menu {
+        display: none;
+        width: 100%;
+        order: 3;
+        flex-direction: column;
+        background: #fff;
+        border-top: 1px solid #eee;
+        padding: 10px 0;
+        margin-top: 10px;
+    }
+
+    .menu.active {
+        display: flex;
+    }
+
+    .menu a {
+        margin: 0;
+        padding: 12px 16px;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 15px;
+    }
+
+    .menu a:last-child {
+        border-bottom: none;
+    }
+
+    .menu a:hover {
+        background: #f0faf5;
+        color: #0a5c3a;
+    }
+
+    .icons {
+        gap: 15px;
+    }
+
+    .icons i {
+        font-size: 16px;
+    }
+
+    /* Logo */
+    .logo-text {
+        font-size: 20px;
+    }
+
+    .logo-sub {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+}
+
+/* =========================
+   RESPONSIVE — SMALL MOBILE ≤480px
+========================= */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 12px;
+    }
+
+    .icons {
+        gap: 12px;
+    }
+}
+
+/* =========================
+   PAGE-LEVEL RESPONSIVE ≤768px
+   (Hero, Bestseller, Community, Wellness,
+    Accordion, Flip Cards, Reviews,
+    Marketplace, Newsletter, Footer, Cart)
+========================= */
+@media (max-width: 768px) {
+
+    /* Hero */
+    .hero {
+        height: 50vh;
+        min-height: 300px;
+    }
+
+    .hero-text {
+        padding: 30px 20px;
+        max-width: 100%;
+    }
+
+    .hero-text h1 {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    .hero-text p {
+        font-size: 14px;
+    }
+
+    .slider-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Bestsellers */
+    .bestsellers {
+        padding: 30px 16px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        margin-bottom: 24px;
+    }
+
+    .bestseller-nav {
+        width: 34px;
+        height: 34px;
+    }
+
+    .bestseller-nav.prev {
+        left: -8px;
+    }
+
+    .bestseller-nav.next {
+        right: -8px;
+    }
+
+    /* Community Videos */
+    .community-section {
+        padding: 30px 16px;
+    }
+
+    .community-videos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .video-card video {
+        height: 260px;
+    }
+
+    /* Wellness Promise */
+    .wellness-promise-section {
+        padding: 30px 16px;
+    }
+
+    .wellness-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .wellness-card {
+        padding: 20px 16px;
+    }
+
+    .wellness-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Why Choose / Accordion */
+    .why-choose-section {
+        padding: 30px 16px;
+    }
+
+    .why-choose-container {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .accordion-btn {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+
+    /* Flip Cards */
+    .flip-card-section {
+        padding: 30px 16px;
+    }
+
+    .flip-card-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .flip-card-inner {
+        height: 280px;
+    }
+
+    .real-people-heading h2 {
+        font-size: 22px;
+    }
+
+    /* Client Reviews */
+    .client-reviews {
+        padding: 30px 16px;
+    }
+
+    .client-reviews .section-title {
+        font-size: 22px;
+        margin-bottom: 24px;
+    }
+
+    .reviews-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .review-card {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    /* Marketplace Logos */
+    .marketplace-section {
+        padding: 24px 16px;
+    }
+
+    .marketplace-logos {
+        gap: 24px;
+    }
+
+    .marketplace-logos img {
+        max-height: 30px;
+    }
+
+    /* Newsletter */
+    .newsletter-section {
+        padding: 40px 16px;
+    }
+
+    .newsletter-section h2 {
+        font-size: 22px;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .newsletter-form input {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .newsletter-form button {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    /* Footer */
+    .site-footer {
+        padding: 30px 16px 20px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .footer-brand h3 {
+        font-size: 20px;
+    }
+
+    /* Auth Drawer */
+    .auth-drawer {
+        width: 100%;
+        right: -100%;
+    }
+
+    /* Cart Page */
+    .cart-page {
+        padding: 20px 12px;
+    }
+
+    .cart-container {
+        flex-direction: column;
+    }
+
+    .cart-box,
+    .cart-summary {
+        width: 100%;
+    }
+
+    .cart-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .cart-table thead {
+        display: none;
+    }
+
+    .cart-table tbody tr {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .cart-table td {
+        border: none;
+        padding: 4px 8px;
+    }
+
+    .cart-table td.product-info {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .cart-table td.product-info img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .qty-box {
+        flex-wrap: nowrap;
+    }
+
+    .summary-box {
+        position: static;
+        margin-top: 16px;
+    }
+}
+
+/* =========================
+   PAGE-LEVEL RESPONSIVE ≤480px
+   (Smallest phones fine-tuning)
+========================= */
+@media (max-width: 480px) {
+
+    /* Hero */
+    .hero {
+        height: 40vh;
+        min-height: 250px;
+    }
+
+    .hero-text h1 {
+        font-size: 22px;
+    }
+
+    /* Community Videos single column */
+    .community-videos {
+        grid-template-columns: 1fr;
+    }
+
+    .video-card video {
+        height: 320px;
+    }
+
+    /* Flip Cards single column */
+    .flip-card-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .flip-card-inner {
+        height: 320px;
+    }
+
+    /* Marketplace */
+    .marketplace-logos {
+        gap: 16px;
+    }
+
+    .marketplace-logos img {
+        max-height: 24px;
+    }
+}

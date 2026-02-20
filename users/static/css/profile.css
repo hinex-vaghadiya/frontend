@@ -40,14 +40,16 @@
     text-decoration: none;
 }
 
-.account-sidebar li.get-all-orders a{
+.account-sidebar li.get-all-orders a {
     color: grey;
     text-decoration: none;
 }
-.account-sidebar li.dashboard a{
+
+.account-sidebar li.dashboard a {
     color: goldenrod;
     text-decoration: none;
 }
+
 /* CONTENT */
 .account-content {
     flex: 1;
@@ -177,6 +179,7 @@
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -204,7 +207,7 @@
 }
 
 .order-item:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ORDER HEADER */
@@ -226,15 +229,18 @@
 }
 
 .order-status.pending {
-    background-color: #d69e2e; /* amber */
+    background-color: #d69e2e;
+    /* amber */
 }
 
 .order-status.paid {
-    background-color: #2f855a; /* green */
+    background-color: #2f855a;
+    /* green */
 }
 
 .order-status.cancelled {
-    background-color: #c53030; /* red */
+    background-color: #c53030;
+    /* red */
 }
 
 /* ORDER ITEMS */
@@ -259,4 +265,85 @@
     margin-top: 10px;
     font-weight: 600;
     color: #333;
+}
+
+/* =========================
+   PROFILE PAGE RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .account-wrapper {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .account-sidebar {
+        width: 100%;
+    }
+
+    .account-sidebar ul {
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+    }
+
+    .account-sidebar ul li {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .account-sidebar ul li a {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .account-content {
+        width: 100%;
+    }
+
+    .account-content h2 {
+        font-size: 20px;
+    }
+
+    .account-card .row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .profile-form .form-row {
+        flex-direction: column;
+    }
+
+    .profile-form .form-row input,
+    .profile-form .form-row textarea {
+        width: 100%;
+    }
+
+    .order-item {
+        padding: 12px;
+    }
+
+    .order-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .order-items .item {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .account-wrapper {
+        padding: 10px;
+    }
+
+    .account-sidebar ul li a {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
 }

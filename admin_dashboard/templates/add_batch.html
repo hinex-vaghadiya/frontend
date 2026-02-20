@@ -17,8 +17,9 @@
       margin: 30px;
       border-radius: 14px;
       padding: 24px 28px;
-      background: #ffffff;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+      background: var(--admin-card-bg, #1e293b);
+      border: 1px solid var(--admin-border, #334155);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
     #batch-form-card input,
@@ -26,8 +27,18 @@
       width: 100%;
       padding: 10px 14px;
       border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--admin-border, #334155);
+      background: rgba(15, 23, 42, 0.5);
+      color: var(--admin-text, #e2e8f0);
       margin-bottom: 16px;
+      font-family: inherit;
+    }
+
+    #batch-form-card input:focus,
+    #batch-form-card select:focus {
+      outline: none;
+      border-color: var(--admin-accent, #14b8a6);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
     }
   </style>
 </head>
@@ -139,6 +150,7 @@
 
   <script src="{% static 'js/batch_list.js'%}"></script>
 
+  <script src="{% static 'js/admin_script.js'%}"></script>
 
 </body>
 

@@ -589,7 +589,8 @@ def customer_data(request):
             customer["total_spend"] = summary.get("total_spend", 0)
 
         resp= render(request, "admin_index.html", {
-            "customers": customers
+            "customers": customers,
+            "orders": orders,
         })
         access_token_expiry = 20 * 60
         resp.set_cookie(

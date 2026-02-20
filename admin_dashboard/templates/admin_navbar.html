@@ -1,17 +1,25 @@
 <div class="container">
+  <!-- Mobile Hamburger -->
+  <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle sidebar">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="adminSidebar">
     <h2 class="logo">Herbglow</h2>
 
     <nav>
       <p class="menu-title">Main Menu</p>
-      <a href="/admin/" class="active">Dashboard</a>
+      <a href="/admin/">Dashboard</a>
       <a href="/admin/orders-list">Order Management</a>
-      <a href="/admin/customers-list" >Customers</a>
+      <a href="/admin/customers-list">Customers</a>
       <a href="#">Coupon Code</a>
-      <a href="#">Categories</a>
       <a href="#">Transaction</a>
-      <a href="#">Brand</a>
 
       <p class="menu-title">Product</p>
       <a href="/admin/add-category">Category List</a>
@@ -22,6 +30,12 @@
       <p class="menu-title">Admin</p>
       <a href="#">Admin Role</a>
       <a href="#">Control Authority</a>
-      <a href="/admin/logout">Logout</a>
+      <a href="/admin/logout" class="logout-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg> Logout</a>
     </nav>
   </aside>

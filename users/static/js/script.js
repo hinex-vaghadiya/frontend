@@ -1,4 +1,25 @@
 /* =========================
+   HAMBURGER MENU TOGGLE
+========================= */
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+
+if (hamburgerBtn && mobileMenu) {
+    hamburgerBtn.addEventListener("click", () => {
+        hamburgerBtn.classList.toggle("active");
+        mobileMenu.classList.toggle("active");
+    });
+
+    // Close menu when clicking a nav link on mobile
+    mobileMenu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            hamburgerBtn.classList.remove("active");
+            mobileMenu.classList.remove("active");
+        });
+    });
+}
+
+/* =========================
    AUTH DRAWER LOGIC (UNCHANGED)
 ========================= */
 

@@ -21,7 +21,8 @@ body {
 .product-images {
   display: flex;
   gap: 60px;
-  width: 65%; /* increased width for main image */
+  width: 65%;
+  /* increased width for main image */
 }
 
 .main-image {
@@ -274,3 +275,84 @@ body {
   box-shadow: 0 0 0 2px rgba(11, 107, 58, 0.15);
 }
 
+/* =========================
+   PRODUCT DETAIL RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+  }
+
+  .product-images {
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .thumbs img {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+  }
+
+  .main-image {
+    width: 100%;
+  }
+
+  .main-image img {
+    max-height: 350px;
+  }
+
+  .product-info {
+    width: 100%;
+  }
+
+  .product-info h1 {
+    font-size: 22px;
+  }
+
+  .qty-cart-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn.primary,
+  .btn.secondary,
+  .btn.whatsapp {
+    width: 100%;
+  }
+
+  .variant-cards {
+    gap: 10px;
+  }
+
+  .variant-card {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-container {
+    padding: 12px;
+  }
+
+  .main-image img {
+    max-height: 280px;
+  }
+
+  .product-info h1 {
+    font-size: 19px;
+  }
+}

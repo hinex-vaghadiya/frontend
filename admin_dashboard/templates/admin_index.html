@@ -37,16 +37,34 @@
         <span class="green">+20%</span>
       </div>
       <div class="card">
-        <p>Visitors</p>
-        <h3>250k</h3>
-        <span class="green">+20%</span>
+        <p>Total Visitors</p>
+        <h3>100</h3>
+        <span class="green">+10 today</span>
       </div>
     </div>
 
-    <!-- Chart -->
-    <div class="chart">
-      <h3>Customer Overview</h3>
-      <div class="chart-placeholder">Chart Area</div>
+    <!-- Chart Section with Dropdown -->
+    <div class="chart" style="margin-bottom: 24px;">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <select id="chartSelector" class="chart-select">
+            <option value="sales">📈 Sales Overview</option>
+            <option value="spenders" selected>📊 Top Customers by Spend</option>
+            <option value="status">🍩 Customer Status</option>
+          </select>
+        </div>
+        <div class="chart-filters" id="salesFilters">
+          <button class="filter-btn active" data-range="1">1M</button>
+          <button class="filter-btn" data-range="3">3M</button>
+          <button class="filter-btn" data-range="6">6M</button>
+          <button class="filter-btn" data-range="12">1Y</button>
+          <button class="filter-btn" data-range="0">All</button>
+        </div>
+      </div>
+      <div id="chartContainer" style="position: relative; height: 300px;">
+        <canvas id="mainChart"></canvas>
+      </div>
     </div>
 
     <!-- Table -->
@@ -117,6 +135,221 @@
     </div>
     {% endif %}
   </aside> -->
+
+  <!-- Customer data JSON -->
+  <script id="chartData" type="application/json">
+    [
+    {% for c in customers %}
+      {
+        "name": "{% if c.name and c.name != ' ' %}{{ c.name }}{% else %}{{ c.username }}{% endif %}",
+        "spend": {{ c.total_spend|default:"0" }},
+        "orders": {{ c.total_orders|default:"0" }},
+        "active": {% if c.is_active %}true{% else %}false{% endif %}
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    ]
+  </script>
+
+  <!-- Orders data JSON -->
+  <script id="ordersData" type="application/json">
+    [
+    {% for o in orders %}
+      {
+        "amount": {{ o.total_amount|default:"0" }},
+        "date": "{% firstof o.created_at o.order_date o.createdAt o.orderDate '' %}",
+        "status": "{{ o.status|default:'UNKNOWN' }}"
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    ]
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="{% static 'js/admin_script.js'%}"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var customers = JSON.parse(document.getElementById('chartData').textContent);
+      var orders = JSON.parse(document.getElementById('ordersData').textContent);
+
+      var teal = '#14b8a6';
+      var green = '#22c55e';
+      var red = '#ef4444';
+      var borderClr = '#334155';
+      var mutedText = '#94a3b8';
+      var tooltipStyle = { backgroundColor: '#1e293b', borderColor: borderClr, borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#e2e8f0', padding: 12, cornerRadius: 8 };
+
+      Chart.defaults.color = mutedText;
+      Chart.defaults.borderColor = borderClr;
+      Chart.defaults.font.family = "'Inter', sans-serif";
+
+      var canvas = document.getElementById('mainChart');
+      var container = document.getElementById('chartContainer');
+      var selector = document.getElementById('chartSelector');
+      var filtersDiv = document.getElementById('salesFilters');
+      var currentChart = null;
+      var currentRange = 1;
+
+      function destroyCurrent() {
+        if (currentChart) { currentChart.destroy(); currentChart = null; }
+      }
+
+      function getMonthLabel(d) {
+        var m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return m[d.getMonth()] + ' ' + d.getFullYear();
+      }
+
+      function buildSalesData(rangeMonths) {
+        var now = new Date();
+        var cutoff = rangeMonths > 0 ? new Date(now.getFullYear(), now.getMonth() - rangeMonths, 1) : null;
+        var monthMap = {};
+
+        orders.forEach(function (o) {
+          var d = o.date ? new Date(o.date) : null;
+          if (!d || isNaN(d.getTime())) d = new Date();
+          if (cutoff && d < cutoff) return;
+          var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+          if (!monthMap[key]) monthMap[key] = { sales: 0, count: 0, date: new Date(d.getFullYear(), d.getMonth(), 1) };
+          monthMap[key].sales += (o.amount || 0);
+          monthMap[key].count += 1;
+        });
+
+        var sorted = Object.values(monthMap).sort(function (a, b) { return a.date - b.date; });
+        if (sorted.length === 0) {
+          var n = rangeMonths > 0 ? Math.min(rangeMonths, 6) : 6;
+          for (var i = n - 1; i >= 0; i--) {
+            sorted.push({ sales: 0, count: 0, date: new Date(now.getFullYear(), now.getMonth() - i, 1) });
+          }
+        }
+        return { labels: sorted.map(function (m) { return getMonthLabel(m.date); }), sales: sorted.map(function (m) { return m.sales; }), counts: sorted.map(function (m) { return m.count; }) };
+      }
+
+      /* ── Sales Overview ── */
+      function renderSales(range) {
+        destroyCurrent();
+        container.style.height = '300px';
+        var data = buildSalesData(range);
+        var ctx = canvas.getContext('2d');
+        var grad = ctx.createLinearGradient(0, 0, 0, 280);
+        grad.addColorStop(0, 'rgba(20, 184, 166, 0.25)');
+        grad.addColorStop(1, 'rgba(20, 184, 166, 0)');
+
+        // Calculate totals for summary
+        var totalRev = data.sales.reduce(function (a, b) { return a + b; }, 0);
+        var totalOrd = data.counts.reduce(function (a, b) { return a + b; }, 0);
+
+        currentChart = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: data.labels,
+            datasets: [
+              { label: 'Revenue (₹' + totalRev.toLocaleString() + ')', data: data.sales, borderColor: teal, backgroundColor: grad, fill: true, tension: 0.4, pointRadius: 5, pointHoverRadius: 8, pointBackgroundColor: teal, pointBorderColor: '#0f172a', pointBorderWidth: 2, borderWidth: 2.5 },
+              { label: 'Orders (' + totalOrd + ')', data: data.counts, borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.08)', fill: false, tension: 0.4, pointRadius: 4, pointHoverRadius: 7, pointBackgroundColor: '#a78bfa', pointBorderColor: '#0f172a', pointBorderWidth: 2, borderWidth: 2, borderDash: [5, 5], yAxisID: 'y1' }
+            ]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { labels: { usePointStyle: true, pointStyleWidth: 8, padding: 20, font: { size: 12, weight: 500 } } },
+              tooltip: {
+                backgroundColor: '#1e293b', borderColor: borderClr, borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#e2e8f0', padding: 14, cornerRadius: 10, titleFont: { size: 13, weight: 600 },
+                callbacks: {
+                  label: function (ctx) {
+                    if (ctx.datasetIndex === 0) return ' Revenue: ₹' + ctx.raw.toLocaleString();
+                    return ' Orders: ' + ctx.raw;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+              y: { position: 'left', grid: { color: 'rgba(51,65,85,0.25)', drawBorder: false }, ticks: { font: { size: 11 }, callback: function (v) { return '₹' + v.toLocaleString(); } }, border: { display: false } },
+              y1: { position: 'right', grid: { display: false }, ticks: { font: { size: 11 } }, border: { display: false } }
+            }
+          }
+        });
+      }
+
+      /* ── Top Spenders Bar ── */
+      function renderSpenders() {
+        destroyCurrent();
+        container.style.height = '300px';
+        var sorted = customers.slice().sort(function (a, b) { return b.spend - a.spend; }).slice(0, 8);
+        var ctx = canvas.getContext('2d');
+        var grad = ctx.createLinearGradient(0, 0, 0, 280);
+        grad.addColorStop(0, teal);
+        grad.addColorStop(1, 'rgba(20, 184, 166, 0.15)');
+
+        currentChart = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: sorted.map(function (c) { return c.name.length > 12 ? c.name.substring(0, 12) + '...' : c.name; }),
+            datasets: [{ label: 'Total Spend', data: sorted.map(function (c) { return c.spend; }), backgroundColor: grad, borderColor: teal, borderWidth: 1, borderRadius: 6, borderSkipped: false, maxBarThickness: 44 }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1e293b', borderColor: borderClr, borderWidth: 1, titleColor: '#e2e8f0', bodyColor: '#e2e8f0', padding: 12, cornerRadius: 8,
+                callbacks: { label: function (ctx) { return ' ₹' + ctx.raw.toLocaleString(); } }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+              y: { grid: { color: 'rgba(51,65,85,0.3)', drawBorder: false }, ticks: { font: { size: 11 }, callback: function (v) { return '₹' + v.toLocaleString(); } }, border: { display: false } }
+            }
+          }
+        });
+      }
+
+      /* ── Customer Status Doughnut ── */
+      function renderStatus() {
+        destroyCurrent();
+        container.style.height = '260px';
+        var ac = customers.filter(function (c) { return c.active; }).length;
+        var inac = customers.length - ac;
+
+        currentChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['Active (' + ac + ')', 'Inactive (' + inac + ')'],
+            datasets: [{ data: [ac, inac], backgroundColor: [green, red], borderColor: '#0f172a', borderWidth: 3, hoverOffset: 6 }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, pointStyleWidth: 10, font: { size: 13, weight: 500 } } },
+              tooltip: tooltipStyle
+            }
+          }
+        });
+      }
+
+      /* ── Switch chart ── */
+      function switchChart() {
+        var val = selector.value;
+        filtersDiv.style.display = val === 'sales' ? 'flex' : 'none';
+        if (val === 'sales') renderSales(currentRange);
+        else if (val === 'spenders') renderSpenders();
+        else if (val === 'status') renderStatus();
+      }
+
+      selector.addEventListener('change', switchChart);
+
+      document.querySelectorAll('#salesFilters .filter-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('#salesFilters .filter-btn').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentRange = parseInt(btn.getAttribute('data-range'));
+          renderSales(currentRange);
+        });
+      });
+
+      switchChart();
+    });
+  </script>
 
 </body>
 
