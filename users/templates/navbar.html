@@ -31,15 +31,24 @@
 
         <div class="user-menu">
             {% if is_authenticated %}
-            <a href="{% url 'profile' %}">
-                <i class="fa-regular fa-user"></i>
+            <a href="{% url 'profile' %}" class="icon-link" title="My Account">
+                <i class="fa-solid fa-user icon-logged-in"></i>
             </a>
             {% else %}
-            <i class="fa-regular fa-user" id="userIcon"></i>
+            <i class="fa-regular fa-user" id="userIcon" title="Login / Register"></i>
             {% endif %}
         </div>
-        <a href="{% url 'cart' %}">
-            <i class="fa-solid fa-cart-shopping"></i>
+
+        {% if is_authenticated %}
+        <a href="{% url 'cart' %}" class="icon-link cart-link" title="Cart">
+            <i class="fa-solid fa-cart-shopping icon-dark"></i>
+            <span class="cart-badge">{{ cart_count|default:"0" }}</span>
         </a>
+        {% else %}
+        <span class="icon-link cart-link" id="cartLoginTrigger" title="Login to view cart" style="cursor:pointer;">
+            <i class="fa-solid fa-cart-shopping icon-dark"></i>
+            <span class="cart-badge">0</span>
+        </span>
+        {% endif %}
     </div>
 </header>

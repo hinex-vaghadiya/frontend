@@ -114,6 +114,7 @@
                         </p>
 
                         <div class="product-actions">
+                            {% if is_authenticated %}
                             <form method="post" action="/add-to-cart/">
                                 {% csrf_token %}
                                 <input type="hidden" name="variant_id" value="{{ variant.id }}">
@@ -122,6 +123,11 @@
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </button>
                             </form>
+                            {% else %}
+                            <button class="btn-cart login-required-btn">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+                            {% endif %}
 
                             <button class="buy-btn">BUY NOW</button>
                         </div>
@@ -172,30 +178,40 @@
     <!-- WELLNESS PROMISE SECTION -->
     <section class="wellness-promise-section">
         <h2 class="section-title">Our Wellness Promise</h2>
+        <p class="section-subtitle">Rooted in Ayurveda, designed for modern life</p>
 
         <div class="wellness-cards">
             <div class="wellness-card">
-                <img src="{% static 'icons/ayurvedic-product.jpeg' %}" alt="Ayurvedic Products Icon" class="wellness-icon">
+                <div class="wellness-icon-wrap">
+                    <i class="fa-solid fa-mortar-pestle"></i>
+                </div>
                 <h3>Ayurvedic Products</h3>
-                <p>That can easily integrate into your daily life</p>
+                <p>Carefully crafted remedies that seamlessly integrate into your daily routine for lasting wellness.
+                </p>
             </div>
 
             <div class="wellness-card">
-                <img src="{% static 'icons/lifestyle.jpeg' %}" alt="Lifestyle Recommendations Icon" class="wellness-icon">
+                <div class="wellness-icon-wrap">
+                    <i class="fa-solid fa-spa"></i>
+                </div>
                 <h3>Lifestyle Recommendations</h3>
-                <p>Complement it with yoga asanas for maximum benefit</p>
+                <p>Complement your wellness journey with yoga asanas and mindful practices for maximum benefit.</p>
             </div>
 
             <div class="wellness-card">
-                <img src="{% static 'icons/wellness-tips.png' %}" alt="Wellness Tips Icon" class="wellness-icon">
+                <div class="wellness-icon-wrap">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
                 <h3>Wellness Tips</h3>
-                <p>Blogs on daily Ayurvedic self-care practices to enhance well-being.</p>
+                <p>Expert blogs on daily Ayurvedic self-care practices to enhance your well-being naturally.</p>
             </div>
 
             <div class="wellness-card">
-                <img src="{% static 'icons/expert-connect.png' %}" alt="Expert Connect Icon" class="wellness-icon">
+                <div class="wellness-icon-wrap">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
                 <h3>Expert Connect</h3>
-                <p>Reach out to our Ayurveda experts</p>
+                <p>Reach out to our certified Ayurveda experts for personalized health guidance and support.</p>
             </div>
         </div>
     </section>
@@ -417,7 +433,7 @@
 
     {% include "auth_overlay.html" %}
 
-    
+
     <script src="{% static 'js/script.js'%}"></script>
 </body>
 

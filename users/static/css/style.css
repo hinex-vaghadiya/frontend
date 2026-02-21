@@ -92,6 +92,44 @@
     cursor: pointer;
 }
 
+.icon-link {
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon-dark {
+    color: #1a1a1a !important;
+}
+
+.icon-logged-in {
+    color: #0a5c3a !important;
+}
+
+.cart-link {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #0a5c3a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: none;
+}
+
 /* AMAZON-STYLE EXPANDABLE SEARCH */
 .nav-search {
     display: flex;
@@ -757,16 +795,18 @@ body {
 
 
 .wellness-promise-section {
-    padding: 50px 20px;
+    padding: 60px 20px;
     text-align: center;
+    background: linear-gradient(135deg, #f0faf4 0%, #e8f5e9 100%);
 }
 
 .wellness-promise-section .section-title {
     font-weight: 900;
     font-size: 2rem;
-    margin-bottom: 25px;
+    margin-bottom: 8px;
     position: relative;
     display: inline-block;
+    color: #1a1a1a;
 }
 
 .wellness-promise-section .section-title::after {
@@ -774,51 +814,68 @@ body {
     display: block;
     width: 60px;
     height: 4px;
-    background-color: #008000;
-    /* green underline */
+    background-color: #0a5c3a;
     margin: 8px auto 0;
     border-radius: 2px;
 }
 
+.section-subtitle {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 40px;
+    letter-spacing: 0.3px;
+}
+
 .wellness-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
 .wellness-card {
-    background: #e6f0e6;
-    /* light green card background */
-    padding: 30px 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgb(0 128 0 / 0.1);
-    transition: box-shadow 0.3s ease;
+    background: #fff;
+    padding: 36px 24px 30px;
+    border-radius: 16px;
+    border-left: 4px solid #0a5c3a;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
 }
 
 .wellness-card:hover {
-    box-shadow: 0 6px 15px rgb(0 128 0 / 0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 28px rgba(10, 92, 58, 0.15);
 }
 
-.wellness-icon {
-    width: 70px;
-    height: 70px;
+.wellness-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0a5c3a, #0d7a4d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
-    filter: invert(29%) sepia(72%) saturate(401%) hue-rotate(74deg) brightness(88%) contrast(86%);
+}
+
+.wellness-icon-wrap i {
+    font-size: 22px;
+    color: #fff;
 }
 
 .wellness-card h3 {
     font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 12px;
-    color: #004d00;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    color: #1a1a1a;
 }
 
 .wellness-card p {
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.4;
+    font-size: 0.92rem;
+    color: #666;
+    line-height: 1.55;
 }
 
 
@@ -1731,12 +1788,16 @@ body {
     }
 
     .wellness-card {
-        padding: 20px 16px;
+        padding: 24px 18px;
     }
 
-    .wellness-icon {
-        width: 50px;
-        height: 50px;
+    .wellness-icon-wrap {
+        width: 46px;
+        height: 46px;
+    }
+
+    .wellness-icon-wrap i {
+        font-size: 18px;
     }
 
     /* Why Choose / Accordion */

@@ -8,6 +8,7 @@ import json
 from admin_dashboard.views import products_related_base_url
 import os
 user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
+CART_URL=os.environ.get('CART_URL')
 # Create your views here.
 
 # User Module----------------
@@ -58,6 +59,26 @@ def check_is_authentictated(request):
         is_authenticated = True   
     return JsonResponse({"message":"success","is_authenticated":is_authenticated},status=status.HTTP_200_OK)
 
+def get_cart_count(request):
+    """Returns the number of items in the user's cart (0 if not authenticated)."""
+    access_token = get_access_token(request)
+    if not access_token:
+        access_token = refresh_access_token(request)
+    if not access_token:
+        return 0
+    try:
+        resp = requests.get(url=f"{CART_URL}cart/", headers={"Authorization": f"Bearer {access_token}"})
+        resp.raise_for_status()
+        cart_data = resp.json()
+        if isinstance(cart_data, list):
+            return len(cart_data)
+        elif isinstance(cart_data, dict):
+            items = cart_data.get("items", cart_data.get("cart", []))
+            return len(items) if isinstance(items, list) else 0
+    except Exception:
+        pass
+    return 0
+
 
 def index(request):
     resp= check_is_authentictated(request)
@@ -79,9 +100,11 @@ def index(request):
         messages.error(request, f"Invalid response format for products: {str(e)}")
 
     # Combine all info in context
+    cart_count = get_cart_count(request) if is_authenticated else 0
     context = {
         "is_authenticated": is_authenticated,
         "products": products,
+        "cart_count": cart_count,
     }
 
     return render(request, 'index.html', context)  #index html page 
@@ -324,7 +347,8 @@ def shop(request):       #to get shop all page provide all products data
             products=response.json()
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to fetch {str(e)}")
-        return render(request,'shop.html',{"products":products,"is_authenticated": is_authenticated})
+        cart_count = get_cart_count(request) if is_authenticated else 0
+        return render(request,'shop.html',{"products":products,"is_authenticated": is_authenticated,"cart_count": cart_count})
 
 
 def product_detail(request,slug):       # product deatil page using slug 
@@ -342,7 +366,8 @@ def product_detail(request,slug):       # product deatil page using slug
         product=response.json()
     except requests.exceptions.RequestException as e:
         messages.error(request,f"failed to fetch product detail : {str(e)}")
-    return render(request,'product-detail.html',{"product":product,"is_authenticated": is_authenticated})
+    cart_count = get_cart_count(request) if is_authenticated else 0
+    return render(request,'product-detail.html',{"product":product,"is_authenticated": is_authenticated,"cart_count": cart_count})
 
 
 def category_wise_products(request, slug):      # category wise products data
@@ -374,9 +399,9 @@ def category_wise_products(request, slug):      # category wise products data
     except requests.exceptions.RequestException as e:
         messages.error(request, f"failed to fetch product detail : {str(e)}")
 
-    return render(request,"shop.html",{"products": products,"category_name": slug,"is_authenticated": is_authenticated,})
+    cart_count = get_cart_count(request) if is_authenticated else 0
+    return render(request,"shop.html",{"products": products,"category_name": slug,"is_authenticated": is_authenticated,"cart_count": cart_count})
 
-CART_URL=os.environ.get('CART_URL')
 cart_url="cart/"
 
 def add_to_cart(request):       # add to cart functionalities

@@ -123,6 +123,29 @@ if (userIcon) {
     });
 }
 
+/* Open login popup when non-authenticated user clicks cart */
+const cartLoginTrigger = document.getElementById("cartLoginTrigger");
+if (cartLoginTrigger && authDrawer && authOverlay) {
+    cartLoginTrigger.addEventListener("click", () => {
+        authDrawer.classList.add("active");
+        authOverlay.classList.add("active");
+        loginForm.style.display = "block";
+        registerForm.style.display = "none";
+    });
+}
+
+/* Open login popup when non-authenticated user clicks any add-to-cart button */
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".login-required-btn");
+    if (btn && authDrawer && authOverlay) {
+        e.preventDefault();
+        authDrawer.classList.add("active");
+        authOverlay.classList.add("active");
+        loginForm.style.display = "block";
+        registerForm.style.display = "none";
+    }
+});
+
 /* Close drawer */
 function closeDrawer() {
     authDrawer.classList.remove("active");
