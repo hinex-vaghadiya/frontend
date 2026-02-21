@@ -21,7 +21,7 @@
     <!-- Topbar -->
     <div class="topbar">
       <h2>Customers</h2>
-      <input type="text" placeholder="Search data, users, or reports">
+      <input type="text" id="dashboardSearch" placeholder="Search customers by name, ID, or phone...">
     </div>
 
     <!-- Stats -->
@@ -37,9 +37,9 @@
         <span class="green">+20%</span>
       </div>
       <div class="card">
-        <p>Total Visitors</p>
-        <h3>100</h3>
-        <span class="green">+10 today</span>
+        <p>Total Revenue</p>
+        <h3 id="totalRevenue">₹0</h3>
+        <span class="green" id="totalOrders">0 orders</span>
       </div>
     </div>
 
@@ -83,7 +83,7 @@
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="customerTable">
           {% for customer in customers %}
           <tr>
             <td>#CUST{{ customer.id }}</td>
@@ -348,6 +348,42 @@
       });
 
       switchChart();
+
+      /* ── Total Revenue card ── */
+      var totalRev = orders.reduce(function (s, o) { return s + (o.amount || 0); }, 0);
+      var revEl = document.getElementById('totalRevenue');
+      var ordEl = document.getElementById('totalOrders');
+      if (revEl) revEl.textContent = '₹' + totalRev.toLocaleString();
+      if (ordEl) ordEl.textContent = orders.length + ' orders';
+
+      /* ── Live search filter ── */
+      var searchInput = document.getElementById('dashboardSearch');
+      var tbody = document.getElementById('customerTable');
+      if (searchInput && tbody) {
+        searchInput.addEventListener('input', function () {
+          var query = this.value.toLowerCase().trim();
+          var rows = tbody.querySelectorAll('tr');
+          var visible = 0;
+
+          rows.forEach(function (row) {
+            if (row.querySelector('td[colspan]')) { row.style.display = 'none'; return; } // skip "no results" row
+            var text = row.textContent.toLowerCase();
+            var show = !query || text.indexOf(query) > -1;
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+          });
+
+          // Show/hide "no results" message
+          var noResult = document.getElementById('noSearchResult');
+          if (!noResult) {
+            noResult = document.createElement('tr');
+            noResult.id = 'noSearchResult';
+            noResult.innerHTML = '<td colspan="6" style="text-align:center; color: var(--admin-text-muted); padding: 24px;">No customers match your search</td>';
+            tbody.appendChild(noResult);
+          }
+          noResult.style.display = (query && visible === 0) ? '' : 'none';
+        });
+      }
     });
   </script>
 

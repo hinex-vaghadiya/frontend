@@ -20,6 +20,85 @@ if (hamburgerBtn && mobileMenu) {
 }
 
 /* =========================
+   INLINE SEARCH BAR
+========================= */
+const searchInput = document.getElementById("siteSearch");
+const searchBtn = document.getElementById("searchBtn");
+const navSearch = document.getElementById("navSearch");
+
+function filterProducts(query) {
+    const cards = document.querySelectorAll(".product-card");
+    if (cards.length === 0) return;
+
+    let visible = 0;
+    cards.forEach(card => {
+        const title = card.querySelector(".product-title");
+        const text = title ? title.textContent.toLowerCase() : "";
+        const show = !query || text.indexOf(query) > -1;
+        card.style.display = show ? "" : "none";
+        if (show) visible++;
+    });
+
+    let noResult = document.getElementById("noSearchResult");
+    if (!noResult) {
+        noResult = document.createElement("p");
+        noResult.id = "noSearchResult";
+        noResult.textContent = "No products match your search";
+        noResult.style.cssText = "text-align:center; color:#999; padding:40px 0; grid-column: 1/-1; font-size:16px;";
+        const grid = document.querySelector(".product-grid");
+        if (grid) grid.appendChild(noResult);
+    }
+    noResult.style.display = (query && visible === 0) ? "" : "none";
+}
+
+function doSearch() {
+    const query = searchInput ? searchInput.value.trim() : "";
+    if (query) {
+        window.location.href = "/shop/?q=" + encodeURIComponent(query);
+    }
+}
+
+if (searchBtn && navSearch && searchInput) {
+    // Click icon: expand or search
+    searchBtn.addEventListener("click", () => {
+        if (!navSearch.classList.contains("expanded")) {
+            navSearch.classList.add("expanded");
+            setTimeout(() => searchInput.focus(), 350);
+        } else {
+            doSearch();
+        }
+    });
+
+    // Enter key triggers search
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doSearch();
+    });
+
+    // Live filter on pages with product cards
+    searchInput.addEventListener("input", () => {
+        filterProducts(searchInput.value.toLowerCase().trim());
+    });
+
+    // Click outside to collapse
+    document.addEventListener("click", (e) => {
+        if (!navSearch.contains(e.target) && navSearch.classList.contains("expanded")) {
+            if (!searchInput.value.trim()) {
+                navSearch.classList.remove("expanded");
+            }
+        }
+    });
+
+    // Auto-apply ?q= param on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get("q");
+    if (initialQuery) {
+        searchInput.value = initialQuery;
+        navSearch.classList.add("expanded");
+        filterProducts(initialQuery.toLowerCase().trim());
+    }
+}
+
+/* =========================
    AUTH DRAWER LOGIC (UNCHANGED)
 ========================= */
 

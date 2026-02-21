@@ -92,6 +92,67 @@
     cursor: pointer;
 }
 
+/* AMAZON-STYLE EXPANDABLE SEARCH */
+.nav-search {
+    display: flex;
+    align-items: center;
+    border: 2px solid #0a5c3a;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: width 0.35s ease, box-shadow 0.2s ease;
+    width: 42px;
+}
+
+.nav-search.expanded {
+    width: 380px;
+    box-shadow: 0 0 0 3px rgba(10, 92, 58, 0.2);
+}
+
+.nav-search input {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-family: inherit;
+    color: #333;
+    background: #fff;
+    transition: width 0.35s ease, padding 0.35s ease, opacity 0.25s ease;
+}
+
+.nav-search.expanded input {
+    width: 100%;
+    flex: 1;
+    padding: 9px 14px;
+    opacity: 1;
+}
+
+.nav-search input::placeholder {
+    color: #999;
+}
+
+.nav-search-btn {
+    border: none;
+    background: #0a5c3a;
+    color: #fff;
+    padding: 9px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.nav-search-btn:hover {
+    background: #084a2e;
+}
+
+.nav-search-btn i {
+    font-size: 15px;
+}
+
 /* USER DROPDOWN */
 .user-menu {
     position: relative;
@@ -1556,6 +1617,13 @@ body {
 
     .icons i {
         font-size: 16px;
+    }
+
+    .nav-search {
+        order: 2;
+        max-width: 100%;
+        margin: 10px 0 0 0;
+        width: 100%;
     }
 
     /* Logo */

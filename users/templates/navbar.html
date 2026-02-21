@@ -1,41 +1,45 @@
 <header class="navbar">
-        <div class="logo">
-            <a href="/" class="logo-redirect">
+    <div class="logo">
+        <a href="/" class="logo-redirect">
             <span class="logo-text">HERBGLOW</span>
-            
             <span class="logo-sub">Too Natural</span>
-            </a>
+        </a>
+    </div>
+
+    <!-- Hamburger button for mobile -->
+    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav class="menu" id="mobileMenu">
+        <a href="{% url 'shop' %}"><i class="fa-solid fa-store"></i> Shop All</a>
+        <a href="{% url 'category-products' 'soap' %}"><i class="fa-solid fa-shield-heart"></i> Soap</a>
+        <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
+        <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
+        <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
+    </nav>
+
+    <div class="icons">
+        <div class="nav-search" id="navSearch">
+            <input type="text" id="siteSearch" placeholder="Search products..." autocomplete="off">
+            <button class="nav-search-btn" id="searchBtn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </div>
 
-        <!-- Hamburger button for mobile -->
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <nav class="menu" id="mobileMenu">
-            <a href="{% url 'shop' %}"><i class="fa-solid fa-store"></i> Shop All</a>
-            <a href="{% url 'category-products' 'soap' %}"><i class="fa-solid fa-shield-heart"></i> Soap</a>
-            <a href="#"><i class="fa-solid fa-face-smile"></i> Skin Care</a>
-            <a href="#"><i class="fa-solid fa-heart-pulse"></i> Heart Care</a>
-            <a href="#"><i class="fa-solid fa-spa"></i> Wellness</a>
-        </nav>
-
-        <div class="icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <div class="user-menu">
-                {% if is_authenticated %}
-                <a href="{% url 'profile' %}">
-                    <i class="fa-regular fa-user"></i>
-                </a>
-                {% else %}
-                <i class="fa-regular fa-user" id="userIcon"></i>
-                {% endif %}
-            </div>
-            <a href="{% url 'cart' %}">
+        <div class="user-menu">
+            {% if is_authenticated %}
+            <a href="{% url 'profile' %}">
+                <i class="fa-regular fa-user"></i>
+            </a>
+            {% else %}
+            <i class="fa-regular fa-user" id="userIcon"></i>
+            {% endif %}
+        </div>
+        <a href="{% url 'cart' %}">
             <i class="fa-solid fa-cart-shopping"></i>
-            </a>
-        </div>
-    </header>
+        </a>
+    </div>
+</header>
