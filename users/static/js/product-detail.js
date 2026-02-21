@@ -80,14 +80,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const qtySpan = document.querySelector(".quantity span");
     const btnMinus = document.querySelector(".quantity button:first-child");
     const btnPlus = document.querySelector(".quantity button:last-child");
+    const quantityInput = document.getElementById("quantityInput");
 
     btnPlus.addEventListener("click", () => {
         let currentQty = parseInt(qtySpan.textContent);
         qtySpan.textContent = currentQty + 1;
+        if (quantityInput) quantityInput.value = currentQty + 1;
     });
 
     btnMinus.addEventListener("click", () => {
         let currentQty = parseInt(qtySpan.textContent);
-        if (currentQty > 1) qtySpan.textContent = currentQty - 1;
+        if (currentQty > 1) {
+            qtySpan.textContent = currentQty - 1;
+            if (quantityInput) quantityInput.value = currentQty - 1;
+        }
     });
 });

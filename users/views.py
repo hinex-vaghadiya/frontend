@@ -420,12 +420,13 @@ def add_to_cart(request):       # add to cart functionalities
         url=f"{CART_URL}cart/add/"
         try:
             print('in try')
-            response=requests.post(url=url,headers=headers,json={"variant_id": request.POST.get("variant_id"),"product_slug": request.POST.get("product_slug"),"quantity": 1,})
+            quantity = int(request.POST.get("quantity", 1))
+            response=requests.post(url=url,headers=headers,json={"variant_id": request.POST.get("variant_id"),"product_slug": request.POST.get("product_slug"),"quantity": quantity,})
             response.raise_for_status()
             print(f"response{response.json()}")
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to add to cart : {str(e)}")
-        return redirect('/')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
     
 
 def get_cart_details(request):     # to get cart details

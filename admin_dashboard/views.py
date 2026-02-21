@@ -435,8 +435,69 @@ def add_product(request):               # to add product along with its variants
             messages.error(request,data["error"])
             return redirect('/admin/product-list')
 
-def edit_product(request,slug):
-    return render(request,'edit_product.html')
+def edit_product(request, slug):
+    product_detail_url = products_related_base_url + f"products/{slug}/"
+    category_url = products_related_base_url + 'categories/'
+    
+    if request.method == 'GET':
+        product = {}
+        categories = []
+        try:
+            # Fetch categories
+            cat_response = requests.get(url=category_url)
+            cat_response.raise_for_status()
+            categories = cat_response.json()
+            
+            # Fetch product details (using exact mechanism from users/views.py)
+            response = requests.post(url=products_related_base_url + f"products/{slug}")
+            response.raise_for_status()
+            product = response.json()
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch product detail: {str(e)}")
+            return redirect('/admin/product-list')
+            
+        return render(request, 'edit_product.html', {"product": product, "categories": categories})
+        
+    if request.method == 'POST':
+        is_active = request.POST.get('is_active') == 'on'
+        payload = {
+            "product_name": request.POST.get('product_name'),
+            "description": request.POST.get('description'),
+            "is_active": is_active,
+            "category_id": int(request.POST.get('category_id'))
+        }
+        product_id = request.POST.get('product_id')
+        
+        try:
+            # Use PUT to update base product
+            response = requests.put(url=product_detail_url, data=payload)
+            response.raise_for_status()
+            
+            # Handle new images
+            new_images = request.FILES.getlist('new_images')
+            if new_images and product_id:
+                product_images_url = products_related_base_url + 'product-images/'
+                for img in new_images:
+                    files = {'image': (img.name, img, img.content_type)}
+                    payload_img = {'product': product_id, 'is_primary': 'false'} # Default explicitly false
+                    img_response = requests.post(url=product_images_url, files=files, data=payload_img)
+                    img_response.raise_for_status()
+            
+            messages.success(request, "Product updated successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to update product: {str(e)}")
+            
+        return redirect(f'/admin/edit-product/{slug}')
+
+def delete_product_image(request, image_id, slug):
+    url = f"{products_related_base_url}product-images/{image_id}/"
+    try:
+        response = requests.delete(url)
+        response.raise_for_status()
+        messages.success(request, "Image deleted successfully")
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Failed to delete image: {str(e)}")
+    return redirect(f'/admin/edit-product/{slug}')
 
 
 def delete_product(request,slug):

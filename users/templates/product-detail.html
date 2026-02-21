@@ -125,13 +125,18 @@
                         <span>1</span>
                         <button>+</button>
                     </div>
-                    <form method="post" action="/add-to-cart/">
+                    <form method="post" action="/add-to-cart/" id="addToCartForm">
                         {% csrf_token %}
                         <!-- Hidden input for variant -->
                         <input type="hidden" id="variantInput" name="variant_id" value="{{ product.variants.0.id }}">
                         <input type="hidden" name="product_slug" value="{{ product.slug }}">
+                        <input type="hidden" id="quantityInput" name="quantity" value="1">
 
-                        <button class="btn primary add-cart">ADD TO CART</button>
+                        {% if is_authenticated %}
+                        <button type="submit" class="btn primary add-cart">ADD TO CART</button>
+                        {% else %}
+                        <button type="button" class="btn primary add-cart login-required-btn">ADD TO CART</button>
+                        {% endif %}
                     </form>
                 </div>
 
