@@ -7,183 +7,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
     <style>
-        .checkout-page-container {
-            min-height: calc(100vh - 400px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-            background: #fafafa;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
 
-        .checkout-card {
+        body {
             background: #fff;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 12px;
-            padding: 40px;
+            color: #111;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eee;
+            padding: 20px;
         }
 
         .checkout-icon {
-            font-size: 48px;
+            font-size: 64px;
             color: #0a5c3a;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        .checkout-card h2 {
-            color: #111;
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 600;
+        h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
         }
 
         .checkout-subtitle {
+            font-size: 18px;
             color: #666;
-            margin-bottom: 30px;
-            font-size: 15px;
+            margin-bottom: 50px;
+            max-width: 500px;
+            line-height: 1.5;
         }
 
         .amount-display {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 30px;
-            border: 1px dashed #ccc;
+            font-size: 64px;
+            font-weight: 800;
+            color: #0a5c3a;
+            margin-bottom: 50px;
         }
 
         .amount-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 8px;
+            font-size: 16px;
+            color: #888;
             text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .amount-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #0a5c3a;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
         }
 
         .button-row {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+            justify-content: center;
         }
 
         .checkout-btn {
             background: #0a5c3a;
             color: #fff;
             border: none;
-            padding: 16px;
-            font-size: 16px;
+            padding: 20px 40px;
+            font-size: 18px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
+            gap: 12px;
+            flex: 2;
         }
 
         .checkout-btn:hover {
             background: #084c30;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(10, 92, 58, 0.2);
+            box-shadow: 0 10px 25px rgba(10, 92, 58, 0.25);
         }
 
         .cancel-btn {
-            background: #fff;
-            color: #333;
-            border: 1px solid #ddd;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 8px;
+            background: transparent;
+            color: #555;
+            border: 2px solid #ddd;
+            padding: 20px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
+            flex: 1;
         }
 
         .cancel-btn:hover {
-            background: #f5f5f5;
+            border-color: #999;
+            color: #111;
         }
 
         .secure-badge {
-            margin-top: 25px;
+            margin-top: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             color: #888;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .secure-badge i {
             color: #0c8a49;
         }
+
+        @media (max-width: 600px) {
+            .button-row {
+                flex-direction: column;
+            }
+
+            h2 {
+                font-size: 32px;
+            }
+
+            .amount-display {
+                font-size: 48px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- TOP INFO BAR -->
-    {% include "topbar.html" %}
-
-    <!-- NAVBAR -->
-    {% include "navbar.html" %}
-
-    <div class="checkout-page-container">
-        <div class="checkout-card">
-            <div class="checkout-icon">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-
-            <h2>Secure Checkout</h2>
-            <p class="checkout-subtitle">You are about to be redirected to our trusted payment partner</p>
-
-            <div class="amount-display">
-                <div class="amount-label">Order Total</div>
-                <div class="amount-value">₹{{ checkout_data.0.total_amount }}</div>
-            </div>
-
-            <div class="button-row">
-                <form action="{% url 'process-upi-payment'%}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
-                    <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
-                    <button type="submit" class="checkout-btn">
-                        <span>Pay Securely with Stripe</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </form>
-
-                <form action="{% url 'cancel-order'%}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
-                    <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
-                    <button type="submit" class="cancel-btn">Cancel & Return to Cart</button>
-                </form>
-            </div>
-
-            <div class="secure-badge">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>SSL Secured Checkout</span>
-            </div>
-        </div>
+    <div class="checkout-icon">
+        <i class="fa-solid fa-lock"></i>
     </div>
 
-    <!-- FOOTER -->
-    {% include "footer.html" %}
+    <h2>Secure Checkout</h2>
+    <p class="checkout-subtitle">You are about to be redirected to our trusted payment partner to complete your
+        purchase.</p>
 
-    <script src="{% static 'js/script.js'%}"></script>
+    <div>
+        <span class="amount-label">Order Total</span>
+        <div class="amount-display">₹{{ checkout_data.0.total_amount }}</div>
+    </div>
+
+    <div class="button-row">
+        <form action="{% url 'process-upi-payment'%}" method="POST" style="flex:2; display:flex;">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+            <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
+            <button type="submit" class="checkout-btn" style="width:100%;">
+                <span>Pay Securely with Stripe</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <form action="{% url 'cancel-order'%}" method="POST" style="flex:1; display:flex;">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+            <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
+            <button type="submit" class="cancel-btn" style="width:100%;">Cancel</button>
+        </form>
+    </div>
+
+    <div class="secure-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>SSL Secured Checkout</span>
+    </div>
 </body>
 
 </html>
