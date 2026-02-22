@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Variant | {{ variant.name }}</title>
+
+    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/wizard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lists.css' %}">
+</head>
+
+<body>
+
+    <!-- Nav Bar -->
+    {% include "admin_navbar.html" %}
+
+    <main class="main">
+
+        <div class="topbar">
+            <h2>Edit Variant</h2>
+        </div>
+
+        <div class="card">
+            <a href="/admin/edit-product/{{ variant.product_slug }}" class="btn-sm"
+                style="display:inline-block; margin-bottom: 20px;">&larr; Back to Product</a>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p class="alert {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <h3>Variant Details</h3>
+
+            <form method="POST" action="/admin/edit-variant/{{ variant.id }}/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ variant.product }}">
+
+                <label>Variant Name</label>
+                <input type="text" name="name" value="{{ variant.name }}" required>
+
+                <div style="display:flex; gap:15px; margin-bottom: 15px;">
+                    <div style="flex:1;">
+                        <label>Price (₹)</label>
+                        <input type="number" name="price" value="{{ variant.price }}" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Compare at Price (₹)</label>
+                        <input type="number" name="compare_at_price"
+                            value="{% if variant.compare_at_price %}{{ variant.compare_at_price }}{% endif %}">
+                    </div>
+                    <div style="flex:1;">
+                        <label>Stock</label>
+                        <input type="number" name="stock" value="{{ variant.stock }}" required>
+                    </div>
+                </div>
+
+                <hr style="margin-top:20px; margin-bottom:20px;">
+                <h4>Variant Images</h4>
+
+                <div style="display:flex; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
+                    {% for img in variant.images %}
+                    <div style="border:1px solid #ddd; padding:10px; border-radius:5px; text-align:center;">
+                        <img src="https://res.cloudinary.com/diipo18tm/{{ img.image }}"
+                            style="width:100px; height:100px; object-fit:cover; border-radius:4px; display:block; margin-bottom:10px;">
+
+                        <a href="/admin/delete-variant-image/{{ img.id }}/{{ variant.id }}/" class="btn-sm delete"
+                            onclick="return confirm('Delete this image?');"
+                            style="display:inline-block; margin-top:5px; text-decoration:none;">Delete</a>
+                    </div>
+                    {% empty %}
+                    <p style="color:#666; font-size:14px;">No images uploaded.</p>
+                    {% endfor %}
+                </div>
+
+                <label>Add New Images</label>
+                <input type="file" name="new_images" multiple accept="image/*" style="margin-bottom:15px;" />
+
+                <br><br>
+
+                <button type="submit" class="btn btn-green">
+                    Update Variant Details
+                </button>
+
+            </form>
+
+            <hr style="margin-top:30px; margin-bottom:20px;">
+            <a href="/admin/delete-variant/{{ variant.id }}/" class="btn delete"
+                onclick="return confirm('Are you sure you want to completely delete this variant?');"
+                style="background-color: #dc3545; color: white;">Delete Entire Variant</a>
+
+        </div>
+    </main>
+
+    <script src="{% static 'js/admin_script.js'%}"></script>
+</body>
+
+</html>

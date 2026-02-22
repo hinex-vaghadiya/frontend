@@ -1,5 +1,5 @@
 from django.urls import path,include
-from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list,delete_product,delete_batch,edit_batch,edit_product,admin_get_all_orders,customer_list_data,delete_product_image
+from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list,delete_product,delete_batch,edit_batch,edit_product,admin_get_all_orders,customer_list_data,delete_product_image,delete_variant,edit_variant,delete_variant_image
 urlpatterns = [
     path('', admin_index,name='admin_index'),
     path('login/', admin_login,name='admin_login'),
@@ -13,12 +13,12 @@ urlpatterns = [
     path('product-list',product_list,name='product_list'),
     path('delete-product/<slug:slug>/',delete_product,name='delete_product'),
     path('delete-product-image/<int:image_id>/<slug:slug>/',delete_product_image,name='delete_product_image'),
+    path('delete-variant-image/<int:image_id>/<int:variant_id>/',delete_variant_image,name='delete_variant_image'),
+    path('delete-variant/<int:variant_id>/',delete_variant,name='delete_variant'),
+    path('edit-variant/<int:variant_id>/',edit_variant,name='edit_variant'),
     path('delete-batch/<int:batch_id>/',delete_batch,name='delete_batch'),
     path('edit-batch/<int:batch_id>/',edit_batch,name='edit_batch'),
     path('edit-product/<slug:slug>/',edit_product,name='edit_product'),
     path('orders-list',admin_get_all_orders,name='orders-list'),
     path('customers-list',customer_list_data,name='customers-list'),
-
-    
-    
 ]

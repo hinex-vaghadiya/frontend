@@ -499,6 +499,80 @@ def delete_product_image(request, image_id, slug):
         messages.error(request, f"Failed to delete image: {str(e)}")
     return redirect(f'/admin/edit-product/{slug}')
 
+def edit_variant(request, variant_id):
+    variant_url = f"{products_related_base_url}variants/{variant_id}/"
+    variant_images_url = f"{products_related_base_url}variant-images/"
+    
+    if request.method == 'GET':
+        variant_data = {}
+        try:
+            response = requests.get(url=variant_url)
+            response.raise_for_status()
+            variant_data = response.json()
+            
+            # Fetch product to get its slug for the "Back" button
+            if 'product' in variant_data:
+                product_url = f"{products_related_base_url}products/{variant_data['product']}/"
+                prod_response = requests.get(url=product_url)
+                if prod_response.status_code == 200:
+                    variant_data['product_slug'] = prod_response.json().get('slug')
+                    
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch variant details: {str(e)}")
+            return redirect(request.META.get('HTTP_REFERER', '/admin/product-list'))
+            
+        return render(request, 'edit_variant.html', {"variant": variant_data})
+        
+    if request.method == 'POST':
+        payload = {
+            "product": int(request.POST.get('product_id')),
+            "name": request.POST.get('name'),
+            "price": int(request.POST.get('price')),
+            "stock": int(request.POST.get('stock', 0)),
+            "compare_at_price": request.POST.get('compare_at_price') or None
+        }
+        
+        try:
+            # Update variant details
+            response = requests.put(url=variant_url, json=payload)
+            response.raise_for_status()
+            
+            # Handle new images
+            new_images = request.FILES.getlist('new_images')
+            if new_images:
+                for img in new_images:
+                    files = {'image': (img.name, img, img.content_type)}
+                    payload_img = {'variant': variant_id}
+                    img_response = requests.post(url=variant_images_url, files=files, data=payload_img)
+                    img_response.raise_for_status()
+                    
+            messages.success(request, "Variant updated successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to update variant: {str(e)}")
+            
+        return redirect(f'/admin/edit-variant/{variant_id}')
+
+def delete_variant_image(request, image_id, variant_id):
+    url = f"{products_related_base_url}variant-images/{image_id}/"
+    try:
+        response = requests.delete(url)
+        response.raise_for_status()
+        messages.success(request, "Variant image deleted successfully")
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Failed to delete variant image: {str(e)}")
+    return redirect(f'/admin/edit-variant/{variant_id}')
+
+def delete_variant(request, variant_id):
+    url = f"{products_related_base_url}variants/{variant_id}/"
+    if request.method == 'GET':
+        try:
+            response = requests.delete(url)
+            response.raise_for_status()
+            messages.success(request, "Variant deleted successfully")
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to delete variant: {str(e)}")
+        # Go back to the referring page, which in our case is the edit product page
+        return redirect(request.META.get('HTTP_REFERER', '/admin/product-list'))
 
 def delete_product(request,slug):
     delete_product_url=f"{products_related_base_url}products/{slug}/"

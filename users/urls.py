@@ -1,5 +1,5 @@
 from django.urls import path,include
-from users.views import home,login,index,verify_login,profile,logout,register,verify_register,profile_update,shop,product_detail,category_wise_products,add_to_cart,get_cart_details,update_cart_item,delete_cart_item,checkout
+from users.views import home,login,index,verify_login,profile,logout,register,verify_register,profile_update,shop,product_detail,category_wise_products,add_to_cart,get_cart_details,update_cart_item,delete_cart_item,checkout,payment_success,payment_cancel,check_payment_status
 import users.views as views
 urlpatterns = [
     path('', index,name='index'),
@@ -22,5 +22,7 @@ urlpatterns = [
     path('get-all-orders',views.get_all_orders,name='get-all-orders'),
     path('process-upi-payment/',views.process_upi_payment,name='process-upi-payment'),
     path('cancel-order/',views.cancel_order,name='cancel-order'),
-    
+    path('payment-success/', payment_success, name='payment-success'),
+    path('payment-cancel/', payment_cancel, name='payment-cancel'),
+    path('api/check-payment-status/<int:order_id>/', check_payment_status, name='check-payment-status'),
 ]

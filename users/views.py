@@ -623,12 +623,28 @@ def process_upi_payment(request):
             total_amount=request.POST.get('total_amount')
             print(f"id :{id}")
             url=payment_url+id+'/pay/'
-            response=requests.post(url=url,headers=headers)
+            
+            domain = request.build_absolute_uri('/')[:-1]
+            payload = {
+                'success_url': f"{domain}/payment-success?session_id={{CHECKOUT_SESSION_ID}}",
+                'cancel_url': f"{domain}/payment-cancel"
+            }
+            
+            response=requests.post(url=url,headers=headers, json=payload)
             response.raise_for_status()
             print(f"response\n {response}")
+            
+            response_data = response.json()
+            checkout_url = response_data.get("checkout_url")
+            if checkout_url:
+                resp = redirect(checkout_url)
+                resp.set_cookie('current_order_id', id, max_age=3600, httponly=True, samesite='lax')
+                return resp
+            else:
+                return JsonResponse({"error": "No checkout_url provided", "raw_response": response_data})
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"failed during payment : {str(e)}")
-        return render(request, 'success_cancel.html', {'status': 'success', 'total_amount': total_amount})
+            return JsonResponse({"error": f"Failed during payment: {str(e)}", "response_text": getattr(e.response, 'text', '') if hasattr(e, 'response') else ''})
+        return redirect('/cart')
 
 
 def cancel_order(request):
@@ -656,3 +672,33 @@ def cancel_order(request):
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed during payment : {str(e)}")
         return render(request, 'success_cancel.html', {'status': 'cancel', 'total_amount': total_amount})
+
+def payment_success(request):
+    order_id = request.COOKIES.get('current_order_id')
+    if not order_id:
+        messages.error(request, "No active order found.")
+        return redirect('/cart')
+    return render(request, 'payment_success_poll.html', {'order_id': order_id})
+
+def check_payment_status(request, order_id):
+    access_token = get_access_token(request)
+    if not access_token:
+        new_token = refresh_access_token(request)
+        if not new_token:
+            return JsonResponse({'status': 'UNAUTHENTICATED'}, status=401)
+        access_token = new_token
+    
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    url = f"{CART_URL}order/{order_id}/pay/status/"
+    try:
+        response = requests.get(url=url, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+        return JsonResponse(data)
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'status': 'ERROR', 'message': str(e)}, status=500)
+
+def payment_cancel(request):
+    return render(request, 'success_cancel.html', {'status': 'cancel', 'total_amount': 0})

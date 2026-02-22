@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Payment Gateway</title>
+    <title>Stripe Checkout Gateway</title>
     <style>
         * {
             box-sizing: border-box;
@@ -133,17 +133,12 @@
 
 <body>
     <div class="upi-container">
-        <h2>Pay via UPI</h2>
+        <h2>Secure Checkout</h2>
 
         <form action="{% url 'process-upi-payment'%}" method="POST">
             {% csrf_token %}
-            <!-- UPI ID -->
-             <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
-             <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
-            <div class="form-group">
-                <label for="upiId">Enter Your UPI ID</label>
-                <input type="text" id="upiId" name="upiId" placeholder="example@upi" required>
-            </div>
+            <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
+            <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
 
             <!-- Total Amount (readonly) -->
             <div class="form-group">
@@ -151,31 +146,19 @@
                 <input type="number" id="amount" name="amount" value="{{ checkout_data.0.total_amount }}" readonly>
             </div>
 
-            <!-- Optional Name -->
-            <div class="form-group">
-                <label for="name">Name (Optional)</label>
-                <input type="text" id="name" name="name" placeholder="John Doe">
-            </div>
-
-            <!-- QR Code -->
-            <div class="qr-section">
-                <p>Or scan QR code:</p>
-                <img src="https://via.placeholder.com/200?text=UPI+QR" alt="UPI QR Code">
-            </div>
-
             <!-- Buttons: Pay Now + Cancel -->
             <div class="button-row">
                 <button type="submit" class="upi-btn">Pay ₹{{ checkout_data.0.total_amount }}</button>
         </form>
-         <form action="{% url 'cancel-order'%}" method="POST">
+        <form action="{% url 'cancel-order'%}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ checkout_data.0.id }}">
             <input type="hidden" name="total_amount" value="{{ checkout_data.0.total_amount }}">
-        <button type="submit" class="cancel-btn">Cancel</button>
+            <button type="submit" class="cancel-btn">Cancel</button>
         </form>
     </div>
 
-    <p class="info-text">Your payment is secure and processed via UPI.</p>
+    <p class="info-text">Your payment is secure and processed via Stripe Checkout.</p>
 
     </div>
 </body>
