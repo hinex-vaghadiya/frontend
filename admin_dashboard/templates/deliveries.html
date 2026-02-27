@@ -24,24 +24,6 @@
                 {% endif %}
                 <h3>Deliveries</h3>
             </div>
-
-            <div style="padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: flex-end;">
-                <form action="/admin/deliveries" method="GET" style="display: flex; gap: 10px; align-items: center;">
-                    <label for="status" style="font-weight: 500;">Filter by Status:</label>
-                    <select name="status" onchange="this.form.submit()"
-                        style="padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc;">
-                        <option value="">All Orders</option>
-                        <option value="PENDING" {% if current_filter=='PENDING' %}selected{% endif %}>Pending</option>
-                        <option value="PAID" {% if current_filter=='PAID' %}selected{% endif %}>Paid / Processing
-                        </option>
-                        <option value="SHIPPED" {% if current_filter=='SHIPPED' %}selected{% endif %}>Shipped</option>
-                        <option value="DELIVERED" {% if current_filter=='DELIVERED' %}selected{% endif %}>Delivered
-                        </option>
-                        <option value="FAILED" {% if current_filter=='FAILED' %}selected{% endif %}>Failed</option>
-                    </select>
-                </form>
-            </div>
-
             <div class="table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -69,7 +51,7 @@
                                 </form>
                             </td>
                             <td class="actions">
-                                <a href="/admin/order/{{ order.id }}/" class="btn-sm edit">View</a>
+                                <a href="#view" class="btn-sm edit">View</a>
                             </td>
                         </tr>
                         {% empty %}
