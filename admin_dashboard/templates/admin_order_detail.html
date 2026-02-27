@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Detail #{{ order.order_number }}</title>
+    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lists.css' %}">
+    <style>
+        .order-info {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-info p {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include "admin_navbar.html" %}
+    <div class="main">
+        <div class="table-card">
+            <div class="table-header">
+                <h3>Order Details: {{ order.order_number }}</h3>
+                <a href="/admin/orders-list" class="btn-sm" style="background:#555;color:#fff;">Back to Orders</a>
+            </div>
+
+            <div class="order-info">
+                <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                <p><strong>User ID:</strong> {{ order.user_id }}</p>
+                <p><strong>Status:</strong> <span class="status {{ order.status|lower }}">{{ order.status }}</span></p>
+                <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                <p><strong>Delivery Date:</strong> {{ order.delivery_date|default:"-" }}</p>
+                <p><strong>Created At:</strong> {{ order.created_at|slice:":10" }}</p>
+            </div>
+
+            <h4>Items</h4>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Variant</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.items %}
+                        <tr>
+                            <td>{{ item.product_name }}</td>
+                            <td>{{ item.variant_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ item.price }}</td>
+                            <td>₹{{ item.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -3,7 +3,7 @@ from admin_dashboard.views import (
     admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,
     add_product,add_batch,product_list,delete_product,delete_batch,edit_batch,edit_product,admin_get_all_orders,
     customer_list_data,delete_product_image,delete_variant,edit_variant,delete_variant_image,
-    deliveries_list, update_delivery_status, toggle_customer, delete_customer, transactions_list, reviews_list, delete_review
+    deliveries_list, update_delivery_status, toggle_customer, delete_customer, transactions_list, reviews_list, delete_review, admin_order_detail
 )
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     path('edit-batch/<int:batch_id>/',edit_batch,name='edit_batch'),
     path('edit-product/<slug:slug>/',edit_product,name='edit_product'),
     path('orders-list',admin_get_all_orders,name='orders-list'),
+    path('order/<int:order_id>/', admin_order_detail, name='admin_order_detail'),
     path('customers-list',customer_list_data,name='customers-list'),
     path('deliveries', deliveries_list, name='deliveries_list'),
     path('update-delivery/<int:order_id>/', update_delivery_status, name='update_delivery_status'),

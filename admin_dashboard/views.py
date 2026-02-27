@@ -799,10 +799,12 @@ def deliveries_list(request):
         if not access_token:
             new_token = admin_refresh_access_token(request)
             if not new_token: return admin_if_not_new_token(request)
+            access_token = new_token
         
         order_url = f"{CART_URL}admin-get-all-orders/"
+        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            resp = requests.get(order_url)
+            resp = requests.get(order_url, headers=headers)
             resp.raise_for_status()
             all_orders = resp.json().get('orders', [])
             deliveries = [o for o in all_orders if o.get('status') in ['PAID', 'SHIPPED', 'DELIVERED']]
@@ -827,10 +829,15 @@ def update_delivery_status(request, order_id):
 def toggle_customer(request, pk):
     if request.method == 'POST':
         access_token = admin_get_access_token(request)
-        if not access_token: return admin_if_not_new_token(request)
+        if not access_token:
+            new_token = admin_refresh_access_token(request)
+            if not new_token: return admin_if_not_new_token(request)
+            access_token = new_token
+            
         url = f"{user_base_url}admin/users/{pk}/"
+        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            requests.patch(url)
+            requests.patch(url, headers=headers)
             messages.success(request, "Toggled status successfully")
         except:
             messages.error(request, "Failed to toggle status")
@@ -839,14 +846,39 @@ def toggle_customer(request, pk):
 def delete_customer(request, pk):
     if request.method == 'GET':
         access_token = admin_get_access_token(request)
-        if not access_token: return admin_if_not_new_token(request)
+        if not access_token:
+            new_token = admin_refresh_access_token(request)
+            if not new_token: return admin_if_not_new_token(request)
+            access_token = new_token
+            
         url = f"{user_base_url}admin/users/{pk}/"
+        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            requests.delete(url)
+            requests.delete(url, headers=headers)
             messages.success(request, "Customer deleted")
         except:
             messages.error(request, "Failed to delete")
         return redirect('/admin/customers-list')
+
+def admin_order_detail(request, order_id):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token:
+            new_token = admin_refresh_access_token(request)
+            if not new_token: return admin_if_not_new_token(request)
+            access_token = new_token
+
+        order_url = f"{CART_URL}admin-orders/{order_id}/"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        
+        try:
+            response = requests.get(url=order_url, headers=headers)
+            response.raise_for_status()
+            order = response.json()
+            return render(request, 'admin_order_detail.html', {'order': order})
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch order details: {str(e)}")
+            return redirect('/admin/orders-list')
 
 def transactions_list(request):
     if request.method == 'GET':
