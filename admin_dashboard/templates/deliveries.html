@@ -41,11 +41,11 @@
                                 <form action="/admin/update-delivery/{{ order.id }}/" method="POST"
                                     style="display:inline;">{% csrf_token %}
                                     <select name="status" onchange="this.form.submit()">
-                                        <option value="PAID" {% if order.status=='PAID' %}selected{% endif %}>Paid /
+                                        <option value="PAID" {% if order.status == 'PAID' %}selected{% endif %}>Paid /
                                             Processing</option>
-                                        <option value="SHIPPED" {% if order.status=='SHIPPED' %}selected{% endif %}>
+                                        <option value="SHIPPED" {% if order.status == 'SHIPPED' %}selected{% endif %}>
                                             Shipped</option>
-                                        <option value="DELIVERED" {% if order.status=='DELIVERED' %}selected{% endif %}>
+                                        <option value="DELIVERED" {% if order.status == 'DELIVERED' %}selected{% endif %}>
                                             Delivered</option>
                                     </select>
                                 </form>
