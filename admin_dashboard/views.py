@@ -747,9 +747,10 @@ def admin_get_all_orders(request):
                 return admin_if_not_new_token(request)
             access_token=new_token
         order_url = f"{CART_URL}admin-get-all-orders/"
+        headers = {"Authorization": f"Bearer {access_token}"}
         orders=[]
         try:
-            response=requests.get(url=order_url)
+            response=requests.get(url=order_url, headers=headers)
             response.raise_for_status()
             orders=response.json()
             messages.success(request,f"oredrs fetched successfully")
@@ -806,9 +807,16 @@ def deliveries_list(request):
         try:
             resp = requests.get(order_url, headers=headers)
             resp.raise_for_status()
-            all_orders = resp.json().get('orders', [])
+            # The 'orders' structure has an inner 'orders' list
+            data = resp.json()
+            if 'orders' in data and isinstance(data['orders'], list):
+                all_orders = data['orders']
+            else:
+                all_orders = data if isinstance(data, list) else []
+                
             deliveries = [o for o in all_orders if o.get('status') in ['PAID', 'SHIPPED', 'DELIVERED']]
-        except:
+        except Exception as e:
+            print(e)
             deliveries = []
         return render(request, 'deliveries.html', {'orders': deliveries})
 
