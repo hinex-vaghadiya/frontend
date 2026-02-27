@@ -802,23 +802,27 @@ def deliveries_list(request):
             if not new_token: return admin_if_not_new_token(request)
             access_token = new_token
         
+        status_filter = request.GET.get('status', '')
         order_url = f"{CART_URL}admin-get-all-orders/"
         headers = {"Authorization": f"Bearer {access_token}"}
         try:
             resp = requests.get(order_url, headers=headers)
             resp.raise_for_status()
-            # The 'orders' structure has an inner 'orders' list
             data = resp.json()
             if 'orders' in data and isinstance(data['orders'], list):
                 all_orders = data['orders']
             else:
                 all_orders = data if isinstance(data, list) else []
                 
-            deliveries = [o for o in all_orders if o.get('status') in ['PAID', 'SHIPPED', 'DELIVERED']]
+            if status_filter:
+                deliveries = [o for o in all_orders if o.get('status') == status_filter.upper()]
+            else:
+                deliveries = all_orders
         except Exception as e:
             print(e)
             deliveries = []
-        return render(request, 'deliveries.html', {'orders': deliveries})
+            
+        return render(request, 'deliveries.html', {'orders': deliveries, 'current_filter': status_filter})
 
 def update_delivery_status(request, order_id):
     if request.method == 'POST':
