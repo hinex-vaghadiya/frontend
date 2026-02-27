@@ -359,15 +359,25 @@ def product_detail(request,slug):       # product deatil page using slug
     else:
         is_authenticated=False
     product_detail_url=products_base_url+f"products/{slug}"
+    reviews_url = products_base_url + f"{slug}/reviews/"
     product=[]
+    reviews=[]
     try:
         response=requests.post(url=product_detail_url)
         response.raise_for_status()
         product=response.json()
     except requests.exceptions.RequestException as e:
         messages.error(request,f"failed to fetch product detail : {str(e)}")
+    
+    try:
+        rev_resp = requests.get(url=reviews_url)
+        rev_resp.raise_for_status()
+        reviews = rev_resp.json()
+    except:
+        pass
+        
     cart_count = get_cart_count(request) if is_authenticated else 0
-    return render(request,'product-detail.html',{"product":product,"is_authenticated": is_authenticated,"cart_count": cart_count})
+    return render(request,'product-detail.html',{"product":product,"reviews":reviews,"is_authenticated": is_authenticated,"cart_count": cart_count})
 
 
 def category_wise_products(request, slug):      # category wise products data
@@ -702,3 +712,52 @@ def check_payment_status(request, order_id):
 
 def payment_cancel(request):
     return render(request, 'success_cancel.html', {'status': 'cancel', 'total_amount': 0})
+
+def submit_review(request, slug):
+    if request.method == 'POST':
+        access_token = get_access_token(request)
+        if not access_token:
+            new_token = refresh_access_token(request)
+            if not new_token: return if_not_new_token(request)
+            access_token = new_token
+            
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
+        
+        url = f"{products_related_base_url}{slug}/reviews/add/"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        payload = {"rating": rating, "review_text": review_text}
+        
+        try:
+            response = requests.post(url, json=payload, headers=headers)
+            response.raise_for_status()
+            messages.success(request, "Review submitted successfully")
+        except requests.exceptions.RequestException as e:
+            err = "Failed to submit review."
+            try:
+                err = response.json().get('error', err)
+            except: pass
+            messages.error(request, err)
+            
+        return redirect(f'/product-detail/{slug}')
+
+
+def user_invoice(request, order_id):
+    if request.method == 'GET':
+        access_token = get_access_token(request)
+        if not access_token:
+            new_token = refresh_access_token(request)
+            if not new_token: return if_not_new_token(request)
+            access_token = new_token
+            
+        order_url = f"{CART_URL}order/{order_id}/"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        
+        try:
+            response = requests.get(url=order_url, headers=headers)
+            response.raise_for_status()
+            order = response.json()
+            return render(request, 'invoice.html', {'order': order})
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f"Failed to fetch order details: {str(e)}")
+            return redirect('/profile')

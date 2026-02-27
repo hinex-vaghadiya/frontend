@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Reviews</title>
+    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lists.css' %}">
+</head>
+
+<body>
+    {% include "admin_navbar.html" %}
+    <div class="main">
+        <div class="table-card">
+            <div class="table-header">
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <p class="alert {{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <h3>Product Reviews</h3>
+            </div>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product ID</th>
+                            <th>User ID</th>
+                            <th>Rating</th>
+                            <th>Review Text</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for review in reviews %}
+                        <tr>
+                            <td>{{ review.id }}</td>
+                            <td>{{ review.product }}</td>
+                            <td>{{ review.user_id }}</td>
+                            <td>{{ review.rating }} / 5</td>
+                            <td>{{ review.review_text }}</td>
+                            <td class="actions">
+                                <a href="/admin/delete-review/{{ review.id }}/" class="btn-sm delete"
+                                    onclick="return confirm('Delete this review?');">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty">No reviews found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/admin_script.js'%}"></script>
+</body>
+
+</html>

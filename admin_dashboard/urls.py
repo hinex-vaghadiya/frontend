@@ -1,5 +1,11 @@
 from django.urls import path,include
-from admin_dashboard.views import admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,add_product,add_batch,product_list,delete_product,delete_batch,edit_batch,edit_product,admin_get_all_orders,customer_list_data,delete_product_image,delete_variant,edit_variant,delete_variant_image
+from admin_dashboard.views import (
+    admin_index,admin_login,admin_verify_login,admin_logout,add_category,edit_category,delete_category,
+    add_product,add_batch,product_list,delete_product,delete_batch,edit_batch,edit_product,admin_get_all_orders,
+    customer_list_data,delete_product_image,delete_variant,edit_variant,delete_variant_image,
+    deliveries_list, update_delivery_status, toggle_customer, delete_customer, transactions_list, reviews_list, delete_review
+)
+
 urlpatterns = [
     path('', admin_index,name='admin_index'),
     path('login/', admin_login,name='admin_login'),
@@ -21,4 +27,11 @@ urlpatterns = [
     path('edit-product/<slug:slug>/',edit_product,name='edit_product'),
     path('orders-list',admin_get_all_orders,name='orders-list'),
     path('customers-list',customer_list_data,name='customers-list'),
+    path('deliveries', deliveries_list, name='deliveries_list'),
+    path('update-delivery/<int:order_id>/', update_delivery_status, name='update_delivery_status'),
+    path('toggle-customer/<int:pk>/', toggle_customer, name='toggle_customer'),
+    path('delete-customer/<int:pk>/', delete_customer, name='delete_customer'),
+    path('transactions-list', transactions_list, name='transactions_list'),
+    path('reviews-list', reviews_list, name='reviews_list'),
+    path('delete-review/<int:review_id>/', delete_review, name='delete_review'),
 ]

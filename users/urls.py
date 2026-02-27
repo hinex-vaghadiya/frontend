@@ -25,4 +25,6 @@ urlpatterns = [
     path('payment-success/', payment_success, name='payment-success'),
     path('payment-cancel/', payment_cancel, name='payment-cancel'),
     path('api/check-payment-status/<int:order_id>/', check_payment_status, name='check-payment-status'),
+    path('submit-review/<slug:slug>/', views.submit_review, name='submit-review'),
+    path('invoice/<int:order_id>/', views.user_invoice, name='user-invoice'),
 ]

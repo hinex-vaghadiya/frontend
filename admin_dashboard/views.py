@@ -791,10 +791,97 @@ def customer_list_data(request):
         return resp
 
 
+# new endpoints
 
+def deliveries_list(request):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token:
+            new_token = admin_refresh_access_token(request)
+            if not new_token: return admin_if_not_new_token(request)
+        
+        order_url = f"{CART_URL}admin-get-all-orders/"
+        try:
+            resp = requests.get(order_url)
+            resp.raise_for_status()
+            all_orders = resp.json().get('orders', [])
+            deliveries = [o for o in all_orders if o.get('status') in ['PAID', 'SHIPPED', 'DELIVERED']]
+        except:
+            deliveries = []
+        return render(request, 'deliveries.html', {'orders': deliveries})
 
+def update_delivery_status(request, order_id):
+    if request.method == 'POST':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        new_status = request.POST.get('status')
+        url = f"{CART_URL}admin-orders/{order_id}/status/"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        try:
+            requests.patch(url, json={"status": new_status}, headers=headers)
+            messages.success(request, "Status updated successfully")
+        except:
+            messages.error(request, "Failed to update status")
+        return redirect('/admin/deliveries')
 
+def toggle_customer(request, pk):
+    if request.method == 'POST':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        url = f"{user_base_url}admin/users/{pk}/"
+        try:
+            requests.patch(url)
+            messages.success(request, "Toggled status successfully")
+        except:
+            messages.error(request, "Failed to toggle status")
+        return redirect('/admin/customers-list')
 
+def delete_customer(request, pk):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        url = f"{user_base_url}admin/users/{pk}/"
+        try:
+            requests.delete(url)
+            messages.success(request, "Customer deleted")
+        except:
+            messages.error(request, "Failed to delete")
+        return redirect('/admin/customers-list')
 
+def transactions_list(request):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        order_url = f"{CART_URL}admin-get-all-orders/"
+        try:
+            resp = requests.get(order_url)
+            resp.raise_for_status()
+            orders = resp.json().get('orders', [])
+        except:
+            orders = []
+        return render(request, 'transactions.html', {'orders': orders})
 
+def reviews_list(request):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        url = f"{products_related_base_url}admin-reviews/"
+        try:
+            resp = requests.get(url)
+            resp.raise_for_status()
+            reviews = resp.json()
+        except:
+            reviews = []
+        return render(request, 'reviews_admin.html', {'reviews': reviews})
 
+def delete_review(request, review_id):
+    if request.method == 'GET':
+        access_token = admin_get_access_token(request)
+        if not access_token: return admin_if_not_new_token(request)
+        url = f"{products_related_base_url}admin-reviews/{review_id}/"
+        try:
+            requests.delete(url)
+            messages.success(request, "Review deleted")
+        except:
+            messages.error(request, "Failed to delete review")
+        return redirect('/admin/reviews-list')

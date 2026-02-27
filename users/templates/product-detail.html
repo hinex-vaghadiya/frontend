@@ -185,6 +185,65 @@
 
 
         </section>
+
+        <!-- REVIEWS SECTION -->
+        <section class="reviews-section" id="reviews"
+            style="width: 100%; margin-top: 40px; padding: 20px; border-top: 1px solid #ddd; grid-column: 1 / -1;">
+            <h2>Customer Reviews</h2>
+
+            {% if is_authenticated %}
+            <div class="write-review" style="margin-bottom: 30px; background:#f9f9f9; padding:20px; border-radius:8px;">
+                <h3>Write a Review</h3>
+                <form action="/submit-review/{{ product.slug }}/" method="POST">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 10px;">
+                        <label>Rating (1-5):</label>
+                        <select name="rating" required style="padding:5px;">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Good</option>
+                            <option value="3">3 - Average</option>
+                            <option value="2">2 - Poor</option>
+                            <option value="1">1 - Terrible</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label>Your Review:</label><br>
+                        <textarea name="review_text" rows="4" required
+                            style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-top:5px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn primary"
+                        style="background:#0b6b3a; color:white; padding:10px 20px; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Submit
+                        Review</button>
+                    <p style="font-size:0.85rem; color:#666; margin-top:10px;">Note: You must have successfully
+                        purchased and received this product to leave a review.</p>
+                </form>
+            </div>
+            {% endif %}
+
+            <div class="reviews-list">
+                {% if messages %}
+                <div class="messages" style="margin-bottom: 20px;">
+                    {% for message in messages %}
+                    <p class="alert {{ message.tags }}" style="padding:10px; background:#e8f4fd; color:#0b6b3a;">{{
+                        message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% for review in reviews %}
+                <div class="review-item" style="border-bottom: 1px solid #eee; padding: 15px 0;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
+                        <strong>User #{{ review.user_id }}</strong>
+                        <span style="color:#d4af37; font-weight:bold;">{{ review.rating }} / 5 ⭐</span>
+                    </div>
+                    <p style="color:#555; line-height:1.4;">{{ review.review_text }}</p>
+                    <small style="color:#999;">Posted on: {{ review.created_at|slice:":10" }}</small>
+                </div>
+                {% empty %}
+                <p>No reviews yet. Be the first to review this product!</p>
+                {% endfor %}
+            </div>
+        </section>
     </main>
 
     <!-- NEWSLETTER -->

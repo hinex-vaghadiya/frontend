@@ -105,20 +105,38 @@
                 {% for order in orders %}
                 <div class="order-item">
                     <!-- ORDER HEADER -->
-                    <div class="order-header">
-                        <span>Order #: {{ order.order_number }}</span>
-                        <span class="order-status {{ order.status|lower }}">
-                            {{ order.status }}
-                        </span>
+                    <div class="order-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span>Order #: {{ order.order_number }}</span>
+                            <span class="order-status {{ order.status|lower }}">
+                                {{ order.status }}
+                            </span>
+                        </div>
+                        <div class="order-actions">
+                            <a href="/invoice/{{ order.id }}/" target="_blank" class="btn-sm"
+                                style="background:#555;color:#fff;padding:4px 8px;border-radius:4px;text-decoration:none;font-size:0.85rem;">View
+                                Bill</a>
+                        </div>
                     </div>
 
                     <!-- ORDER ITEMS -->
                     <div class="order-items">
                         {% for item in order.items %}
-                        <div class="item">
-                            <span>{{ item.product_name }} ({{ item.variant_name }})</span>
-                            <span>× {{ item.quantity }}</span>
-                            <span>₹{{ item.subtotal }}</span>
+                        <div class="item"
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                            <div style="flex:1;">
+                                <span>{{ item.product_name }} ({{ item.variant_name }})</span>
+                                <span>× {{ item.quantity }}</span>
+                            </div>
+                            <div style="margin-right: 15px;">₹{{ item.subtotal }}</div>
+                            {% if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED' %}
+                            <div>
+                                <!-- We assume product_slug is available or we provide a generic link to the shop if not passed from backend correctly -->
+                                <a href="/shop/" class="btn-sm"
+                                    style="background:#44aa44;color:#fff;padding:4px 8px;border-radius:4px;text-decoration:none;font-size:0.85rem;">Review
+                                    Item</a>
+                            </div>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>
@@ -131,9 +149,9 @@
                 {% endfor %}
                 {% else %}
                 <p>No orders found.</p>
-                    {% endif %}
                 {% endif %}
-            
+                {% endif %}
+
 
 
         </main>

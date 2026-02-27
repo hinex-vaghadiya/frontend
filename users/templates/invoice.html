@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice #{{ order.order_number }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        }
+
+        table {
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f9f9f9;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #588157;
+            padding-bottom: 20px;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #588157;
+        }
+
+        .print-btn {
+            background: #588157;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <button class="print-btn" onclick="window.print()">Print / Download PDF</button>
+        <div class="header">
+            <div>
+                <h2 style="color: #588157; margin-top:0;">HERBGLOW</h2>
+                <p>Order #: {{ order.order_number }}</p>
+                <p>Date: {{ order.created_at|slice:":10" }}</p>
+                <p>Status: <strong>{{ order.status }}</strong></p>
+            </div>
+            <div style="text-align: right;">
+                <strong>Customer Info:</strong><br>
+                User ID: {{ order.user_id }}<br>
+                {% if order.payment_date %}Paid on: {{ order.payment_date|slice:":10" }}<br>{% endif %}
+                {% if order.delivery_date %}Delivered on: {{ order.delivery_date|slice:":10" }}<br>{% endif %}
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Variant</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items %}
+                <tr>
+                    <td>{{ item.product_name }}</td>
+                    <td>{{ item.variant_name }}</td>
+                    <td>₹{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.subtotal }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No items found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="total">
+            Grand Total: ₹{{ order.total_amount }}
+        </div>
+    </div>
+</body>
+
+</html>
