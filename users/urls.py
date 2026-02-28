@@ -27,4 +27,10 @@ urlpatterns = [
     path('api/check-payment-status/<int:order_id>/', check_payment_status, name='check-payment-status'),
     path('submit-review/<slug:slug>/', views.submit_review, name='submit-review'),
     path('invoice/<int:order_id>/', views.user_invoice, name='user-invoice'),
+
+    # Static Pages
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
+    path('blog/', views.blog, name='blog'),
+    path('faq/', views.faq, name='faq'),
 ]

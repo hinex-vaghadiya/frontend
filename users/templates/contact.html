@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us | HERBGLOW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <style>
+        .static-banner {
+            background: linear-gradient(135deg, #0a5c3a, #0d7a4d);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .static-banner h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        .contact-info {
+            padding: 40px;
+            background: #fdfdfd;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(10, 92, 58, 0.1);
+        }
+
+        .contact-info h3 {
+            color: #0a5c3a;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .contact-item i {
+            width: 40px;
+            height: 40px;
+            background: #e8f5e9;
+            color: #0a5c3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            padding: 40px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(10, 92, 58, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: #0a5c3a;
+            outline: none;
+        }
+
+        .submit-btn {
+            background: #0a5c3a;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #084a2f;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include "topbar.html" %}
+    {% include "navbar.html" %}
+
+    <div class="static-banner">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you. Reach out with any questions!</p>
+    </div>
+
+    <div class="contact-container">
+        <!-- Contact details -->
+        <div class="contact-info">
+            <h3>Get in Touch</h3>
+            <div class="contact-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>123 Ayurveda Lane,<br>Rajkot, Gujarat, India</span>
+            </div>
+            <div class="contact-item">
+                <i class="fa-solid fa-envelope"></i>
+                <span>support@herbglow.com</span>
+            </div>
+            <div class="contact-item">
+                <i class="fa-solid fa-phone"></i>
+                <span>+91 98765 43210</span>
+            </div>
+            <div class="contact-item">
+                <i class="fa-regular fa-clock"></i>
+                <span>Mon - Sat: 9:00 AM - 6:00 PM</span>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+            <h3 style="color: #0a5c3a; margin-bottom: 20px; font-size: 1.5rem;">Send a Message</h3>
+            <form action="#" method="get" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Your Email</label>
+                    <input type="email" placeholder="john@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <textarea rows="4" placeholder="How can we help?" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+    {% include "auth_overlay.html" %}
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+
+</html>

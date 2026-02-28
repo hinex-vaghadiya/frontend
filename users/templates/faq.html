@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FAQs | HERBGLOW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <style>
+        .static-banner {
+            background: linear-gradient(135deg, #0a5c3a, #0d7a4d);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .static-banner h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .faq-item {
+            background: #fff;
+            border: 1px solid rgba(10, 92, 58, 0.1);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s;
+            color: #555;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .faq-item.active {
+            border-color: #0a5c3a;
+        }
+
+        .faq-item.active .faq-question {
+            color: #0a5c3a;
+            background: rgba(10, 92, 58, 0.03);
+        }
+
+        .faq-item.active .faq-answer {
+            padding-bottom: 25px;
+            max-height: 200px;
+        }
+
+        .fa-plus {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .fa-plus {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+
+<body>
+    {% include "topbar.html" %}
+    {% include "navbar.html" %}
+
+    <div class="static-banner">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about our products and services.</p>
+    </div>
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <button class="faq-question">Are HerbGlow products 100% natural? <i class="fa-solid fa-plus"></i></button>
+            <div class="faq-answer">
+                <p>Yes, all HerbGlow products are formulated using 100% natural, Ayurvedic herbs and ingredients without
+                    any harmful chemicals or synthetic additives.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">How long does shipping take? <i class="fa-solid fa-plus"></i></button>
+            <div class="faq-answer">
+                <p>Orders are typically processed within 24 hours. Depending on your location, standard delivery takes
+                    3-5 business days. You can track your order in your Dashboard.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">Can I use your skincare products on sensitive skin? <i
+                    class="fa-solid fa-plus"></i></button>
+            <div class="faq-answer">
+                <p>Absolutely. Our products are dermatologically tested and specifically designed to be gentle and safe
+                    for all skin types, including sensitive skin.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">What is your return policy? <i class="fa-solid fa-plus"></i></button>
+            <div class="faq-answer">
+                <p>We offer a hassle-free 7-day return policy for unused products in their original packaging. Please
+                    contact our support team to initiate a return.</p>
+            </div>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+    {% include "auth_overlay.html" %}
+    <script src="{% static 'js/script.js'%}"></script>
+    <script>
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const isActive = item.classList.contains('active');
+
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                if (!isActive) item.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

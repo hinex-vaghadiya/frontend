@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About Us | HERBGLOW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <style>
+        .static-banner {
+            background: linear-gradient(135deg, #0a5c3a, #0d7a4d);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .static-banner h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .static-content {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .static-content h2 {
+            color: #0a5c3a;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    {% include "topbar.html" %}
+    {% include "navbar.html" %}
+
+    <div class="static-banner">
+        <h1>About Us</h1>
+        <p>Discover the journey and promise of HerbGlow.</p>
+    </div>
+
+    <div class="static-content">
+        <h2>Our Story</h2>
+        <p>HERBGLOW was founded with a promise of purity, honesty, and authentic Ayurveda for every household. We
+            believe in the power of nature to heal, nourish, and restore balance to modern lives.</p>
+
+        <h2>Our Promise</h2>
+        <p>Every product we create is focused on long-term health, safety, and visible results you can trust.
+            Handcrafted with care, our remedies seamlessly integrate into your daily routine for lasting wellness.</p>
+
+        <h2>100% Pure & Natural</h2>
+        <p>We source only the highest-quality herbal ingredients, crafted to fill nutritional gaps without synthetic
+            additives. From skincare to dietary supplements, HERBGLOW is your trusted partner in natural wellness.</p>
+    </div>
+
+    {% include "footer.html" %}
+    {% include "auth_overlay.html" %}
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+
+</html>

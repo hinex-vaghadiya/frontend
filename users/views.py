@@ -59,6 +59,19 @@ def check_is_authentictated(request):
         is_authenticated = True   
     return JsonResponse({"message":"success","is_authenticated":is_authenticated},status=status.HTTP_200_OK)
 
+# Static Pages
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
+def blog(request):
+    return render(request, 'blog.html')
+
+def faq(request):
+    return render(request, 'faq.html')
+
 def get_cart_count(request):
     """Returns the number of items in the user's cart (0 if not authenticated)."""
     access_token = get_access_token(request)

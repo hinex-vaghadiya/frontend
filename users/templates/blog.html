@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blog | HERBGLOW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <style>
+        .static-banner {
+            background: linear-gradient(135deg, #0a5c3a, #0d7a4d);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .static-banner h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .blog-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(10, 92, 58, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: #0a5c3a;
+        }
+
+        .blog-img {
+            width: 100%;
+            height: 220px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #0a5c3a;
+        }
+
+        .blog-content {
+            padding: 30px;
+        }
+
+        .blog-date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .blog-title {
+            color: #1a1a1a;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .blog-text {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: #0a5c3a;
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid #0a5c3a;
+            padding-bottom: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include "topbar.html" %}
+    {% include "navbar.html" %}
+
+    <div class="static-banner">
+        <h1>HerbGlow Journal</h1>
+        <p>Insights into Ayurveda, wellness tips, and healthy living.</p>
+    </div>
+
+    <div class="blog-container">
+        <div class="blog-card">
+            <div class="blog-img">
+                <i class="fa-solid fa-mortar-pestle"></i>
+            </div>
+            <div class="blog-content">
+                <span class="blog-date">March 15, 2026</span>
+                <h3 class="blog-title">The Benefits of Daily Ayurvedic Rituals</h3>
+                <p class="blog-text">Incorporating ancient wisdom into modern lifestyles for better digestion, immunity,
+                    and inner peace.</p>
+                <a href="#" class="read-more">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <div class="blog-img">
+                <i class="fa-solid fa-spa"></i>
+            </div>
+            <div class="blog-content">
+                <span class="blog-date">March 10, 2026</span>
+                <h3 class="blog-title">Skincare Secrets from Nature</h3>
+                <p class="blog-text">Why switching to natural, chemical-free skincare can save your skin from premature
+                    aging and acne.</p>
+                <a href="#" class="read-more">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <div class="blog-img">
+                <i class="fa-solid fa-leaf"></i>
+            </div>
+            <div class="blog-content">
+                <span class="blog-date">March 02, 2026</span>
+                <h3 class="blog-title">Power Herbs: Shilajit & Ashwagandha</h3>
+                <p class="blog-text">A deep dive into the properties of these two potent adaptogens and why you should
+                    consider them.</p>
+                <a href="#" class="read-more">Read Article <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+    {% include "auth_overlay.html" %}
+    <script src="{% static 'js/script.js'%}"></script>
+</body>
+
+</html>

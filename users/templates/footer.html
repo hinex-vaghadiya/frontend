@@ -15,18 +15,15 @@
 
         <div class="footer-links">
             <h4>Who We Are</h4>
-            <a href="#">About Us</a>
-            <a href="#">Contact Us</a>
-            <a href="#">Blog</a>
-            <a href="#">FAQs</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'blog' %}">Blog</a>
+            <a href="{% url 'faq' %}">FAQs</a>
         </div>
 
-        <div class="footer-links">
+        <div class="footer-links" id="footer-best-sellers">
             <h4>Best Seller</h4>
-            <a href="#">Spirulina Capsule</a>
-            <a href="#">Shilajit Resin</a>
-            <a href="#">Moringa Powder</a>
-            <a href="#">Hair Oil</a>
+            <!-- Fetched dynamically -->
         </div>
 
         <div class="footer-contact">
@@ -41,4 +38,23 @@
     <div class="footer-bottom">
         <p>&copy; 2026 HERBGLOW. All rights reserved.</p>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('https://products-k4ov.onrender.com/api/products/')
+                .then(res => res.json())
+                .then(data => {
+                    const bestSellerLinks = document.getElementById('footer-best-sellers');
+                    if (bestSellerLinks && Array.isArray(data)) {
+                        data.slice(0, 4).forEach(product => {
+                            const a = document.createElement('a');
+                            a.href = `/product-detail/${product.slug}`;
+                            a.textContent = product.product_name;
+                            bestSellerLinks.appendChild(a);
+                        });
+                    }
+                })
+                .catch(err => console.error("Error fetching best sellers for footer:", err));
+        });
+    </script>
 </footer>
