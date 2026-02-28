@@ -122,6 +122,12 @@
   gap: 8px;
 }
 
+.listactions {
+  display: flex;
+  gap: 8px;
+  margin-top: 30px;
+}
+
 .btn-sm {
   padding: 7px 14px;
   border-radius: 8px;
