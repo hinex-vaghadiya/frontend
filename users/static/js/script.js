@@ -390,58 +390,69 @@ const modalVideo = document.getElementById('modalVideo');
 const cards = document.querySelectorAll('.video-card');
 let currentVideo = null; // track which card's video is currently open
 
-cards.forEach(card => {
-    card.addEventListener('click', () => {
-        currentVideo = card.querySelector('video');
-        const src = card.getAttribute('data-video');
-        modal.style.display = 'flex';
-        modalVideo.src = src;
-        modalVideo.play();
+if (modal && modalVideo && cards.length > 0) {
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            currentVideo = card.querySelector('video');
+            const src = card.getAttribute('data-video');
+            modal.style.display = 'flex';
+            modalVideo.src = src;
+            modalVideo.play();
+        });
     });
-});
 
-// Close modal
-document.querySelector('.close-modal').addEventListener('click', () => {
-    modal.style.display = 'none';
-    modalVideo.pause();
-    modalVideo.src = '';
-    currentVideo = null;
-});
-
-// Close on outside click
-modal.addEventListener('click', e => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-        modalVideo.pause();
-        modalVideo.src = '';
-        currentVideo = null;
+    // Close modal
+    const closeModal = document.querySelector('.close-modal');
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalVideo.pause();
+            modalVideo.src = '';
+            currentVideo = null;
+        });
     }
-});
 
-// Helper to get current video index
-function getCurrentVideoIndex() {
-    return Array.from(cards).findIndex(card => card.querySelector('video') === currentVideo);
+    // Close on outside click
+    modal.addEventListener('click', e => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            modalVideo.pause();
+            modalVideo.src = '';
+            currentVideo = null;
+        }
+    });
+
+    // Helper to get current video index
+    function getCurrentVideoIndex() {
+        return Array.from(cards).findIndex(card => card.querySelector('video') === currentVideo);
+    }
+
+    // Modal next video
+    const nextVideoBtn = document.getElementById('nextVideo');
+    if (nextVideoBtn) {
+        nextVideoBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            let idx = getCurrentVideoIndex();
+            idx = (idx + 1) % cards.length;
+            currentVideo = cards[idx].querySelector('video');
+            modalVideo.src = cards[idx].getAttribute('data-video');
+            modalVideo.play();
+        });
+    }
+
+    // Modal previous video
+    const prevVideoBtn = document.getElementById('prevVideo');
+    if (prevVideoBtn) {
+        prevVideoBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            let idx = getCurrentVideoIndex();
+            idx = (idx - 1 + cards.length) % cards.length;
+            currentVideo = cards[idx].querySelector('video');
+            modalVideo.src = cards[idx].getAttribute('data-video');
+            modalVideo.play();
+        });
+    }
 }
-
-// Modal next video
-document.getElementById('nextVideo').addEventListener('click', e => {
-    e.stopPropagation();
-    let idx = getCurrentVideoIndex();
-    idx = (idx + 1) % cards.length;
-    currentVideo = cards[idx].querySelector('video');
-    modalVideo.src = cards[idx].getAttribute('data-video');
-    modalVideo.play();
-});
-
-// Modal previous video
-document.getElementById('prevVideo').addEventListener('click', e => {
-    e.stopPropagation();
-    let idx = getCurrentVideoIndex();
-    idx = (idx - 1 + cards.length) % cards.length;
-    currentVideo = cards[idx].querySelector('video');
-    modalVideo.src = cards[idx].getAttribute('data-video');
-    modalVideo.play();
-});
 
 
 

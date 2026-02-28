@@ -353,6 +353,7 @@ def shop(request):       #to get shop all page provide all products data
         else:
             is_authenticated=False
         products=[]
+        categories=[]
         url=products_base_url+'products'
         try:
             response=requests.get(url=url)
@@ -360,8 +361,15 @@ def shop(request):       #to get shop all page provide all products data
             products=response.json()
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to fetch {str(e)}")
+        # Fetch categories
+        try:
+            cat_resp=requests.get(url=products_base_url+'categories/')
+            cat_resp.raise_for_status()
+            categories=cat_resp.json()
+        except:
+            pass
         cart_count = get_cart_count(request) if is_authenticated else 0
-        return render(request,'shop.html',{"products":products,"is_authenticated": is_authenticated,"cart_count": cart_count})
+        return render(request,'shop.html',{"products":products,"categories":categories,"is_authenticated": is_authenticated,"cart_count": cart_count})
 
 
 def product_detail(request,slug):       # product deatil page using slug 
@@ -520,19 +528,26 @@ def get_cart_details(request):     # to get cart details
         if cart_data and isinstance(cart_data, dict) and cart_data.get('items'):
             try:
                 all_products = requests.get(url=products_base_url + 'products/').json()
-                all_images = requests.get(url=products_related_base_url + 'product-images/').json()
-                # Build slug -> first image URL map
+                # Build product_name -> primary image URL map
                 product_image_map = {}
                 for product in all_products:
+                    p_name = product.get('product_name', '').strip().lower()
                     p_slug = product.get('slug', '')
-                    for img in all_images:
-                        if img.get('product') == product.get('id'):
-                            product_image_map[p_slug] = img.get('image', '')
-                            product_image_map[product.get('name', '').lower()] = img.get('image', '')
+                    images = product.get('images', [])
+                    # Try to get primary image first, then fall back to first image
+                    img_url = ''
+                    for img in images:
+                        if img.get('is_primary'):
+                            img_url = img.get('image', '')
                             break
+                    if not img_url and images:
+                        img_url = images[0].get('image', '')
+                    if img_url:
+                        product_image_map[p_name] = img_url
+                        product_image_map[p_slug] = img_url
                 # Attach image to each cart item
                 for item in cart_data['items']:
-                    p_name = item.get('product_name', '').lower()
+                    p_name = item.get('product_name', '').strip().lower()
                     p_slug = item.get('product_slug', '')
                     image = product_image_map.get(p_slug) or product_image_map.get(p_name) or ''
                     item['image_url'] = image

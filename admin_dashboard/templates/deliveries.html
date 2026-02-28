@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliveries - Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lists.css' %}">
+</head>
+
+<body>
+    {% include "admin_navbar.html" %}
+    <div class="main">
+        <div class="table-card">
+            <div class="table-header">
+                <h3>Deliveries</h3>
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="ALL">All Status</option>
+                    <option value="PAID">To Ship (PAID)</option>
+                    <option value="SHIPPED">Shipped</option>
+                    <option value="DELIVERED">Delivered</option>
+                </select>
+            </div>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p class="alert {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="table-wrapper">
+                <table class="admin-table" id="transTable">
+                    <thead>
+                        <tr>
+                            <th>Order No</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr data-status="{{ order.status }}">
+                            <td>{{ order.order_number }}</td>
+                            <td>₹{{ order.total_amount }}</td>
+                            <td>
+                                <span
+                                    class="status {% if order.status == 'DELIVERED' %}active{% elif order.status == 'SHIPPED' %}shipped{% else %}inactive{% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+                            <td>{{ order.created_at|slice:":10" }}</td>
+                            <td>
+                                <form method="post" action="{% url 'update_delivery_status' order.order_id %}"
+                                    style="display: flex; gap: 8px; align-items: center;">
+                                    {% csrf_token %}
+                                    <select name="status"
+                                        style="padding: 5px 10px; border-radius: 6px; border: 1px solid #ddd;">
+                                        <option value="PAID" {% if order.status=='PAID' %}selected{% endif %}>Paid
+                                        </option>
+                                        <option value="SHIPPED" {% if order.status=='SHIPPED' %}selected{% endif %}>
+                                            Shipped</option>
+                                        <option value="DELIVERED" {% if order.status=='DELIVERED' %}selected{% endif %}>
+                                            Delivered</option>
+                                    </select>
+                                    <button type="submit" class="btn-sm edit">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty">No deliveries found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/admin_script.js'%}"></script>
+    <script>
+        function filterTable() {
+            const status = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#transTable tbody tr');
+            rows.forEach(row => {
+                if (status === 'ALL' || row.dataset.status === status) row.style.display = '';
+                else row.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>

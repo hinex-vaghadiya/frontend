@@ -40,7 +40,14 @@
                         {% for review in reviews %}
                         <tr>
                             <td>{{ review.id }}</td>
-                            <td>{{ review.product }}</td>
+                            <td>
+                                {% if review.product_slug %}
+                                <a href="/product-detail/{{ review.product_slug }}" target="_blank"
+                                    style="color: #0a5c3a; font-weight: 600;">{{ review.product }}</a>
+                                {% else %}
+                                {{ review.product }}
+                                {% endif %}
+                            </td>
                             <td>{{ review.user_id }}</td>
                             <td>{{ review.rating }} / 5</td>
                             <td>{{ review.review_text }}</td>

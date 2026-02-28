@@ -898,6 +898,16 @@ def reviews_list(request):
             reviews = resp.json()
         except:
             reviews = []
+        
+        # Enrich reviews with product slug for linking
+        try:
+            all_products = requests.get(f"{products_related_base_url}products/").json()
+            pid_to_slug = {p.get('product_id'): p.get('slug', '') for p in all_products}
+            for review in reviews:
+                review['product_slug'] = pid_to_slug.get(review.get('product'), '')
+        except:
+            pass
+        
         return render(request, 'reviews_admin.html', {'reviews': reviews})
 
 def delete_review(request, review_id):

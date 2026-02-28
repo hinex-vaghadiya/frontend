@@ -28,8 +28,14 @@
     <div class="shop-container">
 
         <div class="shop-header">
-            <div class="filter-btn">
-                <i class="fa-solid fa-filter"></i> Filter
+            <div class="filter-box">
+                <i class="fa-solid fa-filter"></i>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.slug }}">{{ cat.category_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
             <div class="sort-box">
@@ -44,7 +50,7 @@
         <div class="product-grid">
             {% for product in products %}
             {% with variant=product.variants|first %}
-            <div class="product-card">
+            <div class="product-card" data-category="{{ product.category.slug }}">
 
                 {% if variant.compare_at_price %}
                 <span class="discount">{{ variant.discount_percent }}% OFF</span>
@@ -115,20 +121,83 @@
             <p>No products found</p>
             {% endfor %}
         </div>
+    </div> <!-- END SHOP CONTAINER -->
 
-        <!-- NEWSLETTER -->
+    <!-- NEWSLETTER -->
+    {% include "newsletter.html" %}
 
-        {% include "newsletter.html" %}
+    <!-- FOOTER -->
+    {% include "footer.html" %}
 
-        <!-- FOOTER -->
+    <!-- AUTH OVERLAY -->
+    {% include "auth_overlay.html" %}
 
-        {% include "footer.html" %}
+    <script src="{% static 'js/script.js'%}"></script>
 
-        <!-- AUTH OVERLAY -->
+    <script>
+        // SHOP SORTING & FILTER LOGIC
+        document.addEventListener('DOMContentLoaded', function () {
+            const sortSelect = document.getElementById('sort');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const productGrid = document.querySelector('.product-grid');
+            if (!productGrid) return;
 
-        {% include "auth_overlay.html" %}
+            const products = Array.from(productGrid.querySelectorAll('.product-card'));
+            const originalOrder = [...products];
 
-        <script src="{% static 'js/script.js'%}"></script>
+            function applyFilters() {
+                const category = categoryFilter ? categoryFilter.value : 'all';
+                const sortVal = sortSelect ? sortSelect.value : 'featured';
+
+                // Filter
+                let filtered = products.filter(card => {
+                    if (category === 'all') return true;
+                    return card.dataset.category === category;
+                });
+
+                // Sort
+                if (sortVal === 'price-asc') {
+                    filtered.sort((a, b) => {
+                        const priceA = parseFloat(a.querySelector('.price .new')?.innerText.replace(/[^\d.]/g, '') || 0);
+                        const priceB = parseFloat(b.querySelector('.price .new')?.innerText.replace(/[^\d.]/g, '') || 0);
+                        return priceA - priceB;
+                    });
+                } else if (sortVal === 'price-desc') {
+                    filtered.sort((a, b) => {
+                        const priceA = parseFloat(a.querySelector('.price .new')?.innerText.replace(/[^\d.]/g, '') || 0);
+                        const priceB = parseFloat(b.querySelector('.price .new')?.innerText.replace(/[^\d.]/g, '') || 0);
+                        return priceB - priceA;
+                    });
+                }
+
+                // Re-render
+                products.forEach(p => p.style.display = 'none');
+                productGrid.innerHTML = '';
+                filtered.forEach(p => {
+                    p.style.display = '';
+                    productGrid.appendChild(p);
+                });
+
+                // No results
+                let noResult = document.getElementById('noFilterResult');
+                if (!noResult) {
+                    noResult = document.createElement('p');
+                    noResult.id = 'noFilterResult';
+                    noResult.textContent = 'No products match your selection';
+                    noResult.style.cssText = 'text-align:center; color:#999; padding:40px 0; grid-column: 1/-1; font-size:16px;';
+                }
+                if (filtered.length === 0) {
+                    productGrid.appendChild(noResult);
+                    noResult.style.display = '';
+                } else if (noResult.parentNode) {
+                    noResult.style.display = 'none';
+                }
+            }
+
+            if (sortSelect) sortSelect.addEventListener('change', applyFilters);
+            if (categoryFilter) categoryFilter.addEventListener('change', applyFilters);
+        });
+    </script>
 </body>
 
 </html>
