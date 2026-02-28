@@ -493,11 +493,39 @@ def get_cart_details(request):     # to get cart details
         cart_data=[]
         try:
             cart_resp=requests.get(url=f"{CART_URL}cart/",headers={"Authorization": f"Bearer {access_token}"})
-            print(cart_resp.json())
+            if cart_resp.status_code == 401:
+                access_token = refresh_access_token(request)
+                if not access_token:
+                    return if_not_new_token(request)
+                cart_resp=requests.get(url=f"{CART_URL}cart/",headers={"Authorization": f"Bearer {access_token}"})
             cart_resp.raise_for_status()
             cart_data = cart_resp.json()
         except requests.exceptions.RequestException as e:
-            messages.error(request,f"failed to add to cart : {str(e)}")
+            messages.error(request,f"failed to fetch cart : {str(e)}")
+        
+        # Enrich cart items with product images from Products API
+        if cart_data and isinstance(cart_data, dict) and cart_data.get('items'):
+            try:
+                all_products = requests.get(url=products_base_url + 'products/').json()
+                all_images = requests.get(url=products_related_base_url + 'product-images/').json()
+                # Build slug -> first image URL map
+                product_image_map = {}
+                for product in all_products:
+                    p_slug = product.get('slug', '')
+                    for img in all_images:
+                        if img.get('product') == product.get('id'):
+                            product_image_map[p_slug] = img.get('image', '')
+                            product_image_map[product.get('name', '').lower()] = img.get('image', '')
+                            break
+                # Attach image to each cart item
+                for item in cart_data['items']:
+                    p_name = item.get('product_name', '').lower()
+                    p_slug = item.get('product_slug', '')
+                    image = product_image_map.get(p_slug) or product_image_map.get(p_name) or ''
+                    item['image_url'] = image
+            except:
+                pass
+        
         print(f"cart data\n{cart_data}")
         resp=render(request,"cart.html",{"cart": cart_data,'is_authenticated':True})
         access_token_expiry = 20 * 60  # 20 minutes in seconds
@@ -758,25 +786,23 @@ def payment_cancel(request):
 
 def submit_review(request, slug):
     if request.method == 'POST':
-        access_token = get_access_token(request)
-        if not access_token:
-            new_token = refresh_access_token(request)
-            if not new_token: return if_not_new_token(request)
-            access_token = new_token
+        user_id = request.COOKIES.get('user_id')
+        if not user_id:
+            messages.error(request, "Please log in to submit a review.")
+            return redirect(f'/product-detail/{slug}')
             
         rating = request.POST.get('rating')
         review_text = request.POST.get('review_text')
         
         url = f"{products_related_base_url}{slug}/reviews/add/"
-        headers = {"Authorization": f"Bearer {access_token}"}
-        payload = {"rating": int(rating), "review_text": review_text}
+        payload = {"rating": int(rating), "review_text": review_text, "user_id": int(user_id)}
         print(f"[REVIEW] POST {url} payload={payload}")
         
         try:
-            response = requests.post(url, json=payload, headers=headers)
+            response = requests.post(url, json=payload)
             print(f"[REVIEW] Response status={response.status_code} body={response.text[:500]}")
             response.raise_for_status()
-            messages.success(request, "Review submitted successfully")
+            messages.success(request, "Review submitted successfully!")
         except requests.exceptions.RequestException as e:
             err = "Failed to submit review."
             try:
