@@ -375,9 +375,52 @@ def product_detail(request,slug):       # product deatil page using slug
         reviews = rev_resp.json()
     except:
         pass
+    
+    # Paginate reviews (7 per page)
+    page = int(request.GET.get('page', 1))
+    per_page = 7
+    total_reviews = len(reviews)
+    total_pages = max(1, (total_reviews + per_page - 1) // per_page)
+    page = max(1, min(page, total_pages))
+    start = (page - 1) * per_page
+    paginated_reviews = reviews[start:start + per_page]
+    
+    # Check if user has purchased this product
+    has_purchased = False
+    if is_authenticated:
+        try:
+            access_token = get_access_token(request)
+            if not access_token:
+                access_token = refresh_access_token(request)
+            if access_token:
+                order_resp = requests.get(
+                    url=f"{CART_URL}get-all-orders/",
+                    headers={"Authorization": f"Bearer {access_token}"}
+                )
+                order_resp.raise_for_status()
+                orders_data = order_resp.json()
+                for order in orders_data.get("orders", []):
+                    for item in order.get("items", []):
+                        if item.get("product_slug") == slug or item.get("product_name", "").lower() == slug.replace("-", " "):
+                            has_purchased = True
+                            break
+                    if has_purchased:
+                        break
+        except:
+            pass
         
     cart_count = get_cart_count(request) if is_authenticated else 0
-    return render(request,'product-detail.html',{"product":product,"reviews":reviews,"is_authenticated": is_authenticated,"cart_count": cart_count})
+    return render(request,'product-detail.html',{
+        "product":product,
+        "reviews":paginated_reviews,
+        "total_reviews": total_reviews,
+        "current_page": page,
+        "total_pages": total_pages,
+        "page_range": range(1, total_pages + 1),
+        "is_authenticated": is_authenticated,
+        "has_purchased": has_purchased,
+        "cart_count": cart_count
+    })
 
 
 def category_wise_products(request, slug):      # category wise products data
@@ -726,17 +769,21 @@ def submit_review(request, slug):
         
         url = f"{products_related_base_url}{slug}/reviews/add/"
         headers = {"Authorization": f"Bearer {access_token}"}
-        payload = {"rating": rating, "review_text": review_text}
+        payload = {"rating": int(rating), "review_text": review_text}
+        print(f"[REVIEW] POST {url} payload={payload}")
         
         try:
             response = requests.post(url, json=payload, headers=headers)
+            print(f"[REVIEW] Response status={response.status_code} body={response.text[:500]}")
             response.raise_for_status()
             messages.success(request, "Review submitted successfully")
         except requests.exceptions.RequestException as e:
             err = "Failed to submit review."
             try:
-                err = response.json().get('error', err)
+                resp_data = response.json()
+                err = resp_data.get('error', resp_data.get('detail', str(resp_data)))
             except: pass
+            print(f"[REVIEW] ERROR: {err}")
             messages.error(request, err)
             
         return redirect(f'/product-detail/{slug}')

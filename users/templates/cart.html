@@ -5,26 +5,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Icons -->
+    <title>Shopping Cart | HERBGLOW</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/cart.css'%}">
 </head>
 
 <body>
-    <!-- TOP INFO BAR -->
     {% include "topbar.html" %}
-
-    <!-- NAVBAR -->
     {% include "navbar.html" %}
+
+    <!-- CART BANNER -->
+    <div class="cart-banner">
+        <h1><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h1>
+        <p class="breadcrumb"><a href="/">Home</a> / Cart</p>
+    </div>
+
     <div class="cart-page">
         <div class="cart-container">
 
             <!-- LEFT: SHOPPING CART -->
             <div class="cart-box">
-                <h2>Shopping Cart</h2>
+                <h2><i class="fa-solid fa-bag-shopping"></i> Your Items</h2>
 
-                {% if cart %}
+                {% if cart and cart.items %}
                 <table class="cart-table">
                     <thead>
                         <tr>
@@ -32,7 +36,7 @@
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
-                            <th>Action</th>
+                            <th></th>
                         </tr>
                     </thead>
 
@@ -40,7 +44,13 @@
                         {% for item in cart.items %}
                         <tr>
                             <td class="product-info">
-                                <img src="https://res.cloudinary.com/diipo18tm/{{ item.image_url }}" alt="{{ item.product_name }}">
+                                {% if item.image_url %}
+                                <img src="https://res.cloudinary.com/diipo18tm/{{ item.image_url }}"
+                                    alt="{{ item.product_name }}"
+                                    onerror="this.src='{% static 'images/placeholder.png' %}'">
+                                {% else %}
+                                <img src="{% static 'images/placeholder.png' %}" alt="{{ item.product_name }}">
+                                {% endif %}
                                 <div>
                                     <p class="product-name">{{ item.product_name }}</p>
                                     <p class="variant">{{ item.variant_name }}</p>
@@ -50,27 +60,27 @@
 
                             <td>
                                 {% if item.original_price %}
-                                <span class="old-price">₹{{ item.original_price }}</span><br>
+                                <span class="old-price">₹{{ item.original_price }}</span>
                                 {% endif %}
                                 <span class="price">₹{{ item.price }}</span>
                             </td>
 
                             <td>
                                 <div class="qty-box">
-                                    <form action="{%url 'update-cart'%}" method="post">
-                                        {%csrf_token%}
-                                        <input type="hidden" name="id" value="{{item.id}}">
-                                        <input type="hidden" name="quantity" value="{{item.quantity}}">
+                                    <form action="{% url 'update-cart' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ item.id }}">
+                                        <input type="hidden" name="quantity" value="{{ item.quantity }}">
                                         <input type="hidden" name="operation" value="0">
-                                        <button>-</button>
+                                        <button type="submit">−</button>
                                     </form>
                                     <span>{{ item.quantity }}</span>
-                                    <form action="{%url 'update-cart'%}" method="post">
-                                        {%csrf_token%}
-                                        <input type="hidden" name="id" value="{{item.id}}">
-                                        <input type="hidden" name="quantity" value="{{item.quantity}}">
+                                    <form action="{% url 'update-cart' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ item.id }}">
+                                        <input type="hidden" name="quantity" value="{{ item.quantity }}">
                                         <input type="hidden" name="operation" value="1">
-                                        <button>+</button>
+                                        <button type="submit">+</button>
                                     </form>
                                 </div>
                             </td>
@@ -80,10 +90,12 @@
                             </td>
 
                             <td>
-                                <form action="{%url 'delete-cart-item'%}" method="post">
-                                    {%csrf_token%}
-                                    <input type="hidden" name="id" value="{{item.id}}">
-                                    <button class="remove-btn">🗑</button>
+                                <form action="{% url 'delete-cart-item' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <button class="remove-btn" title="Remove item">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -91,42 +103,59 @@
                     </tbody>
                 </table>
                 {% else %}
-                <p>Your cart is empty.</p>
+                <div class="empty-cart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <p>Your cart is empty</p>
+                    <a href="/shop/" class="shop-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                    </a>
+                </div>
                 {% endif %}
             </div>
 
-
             <!-- RIGHT: CART TOTALS -->
+            {% if cart and cart.items %}
             <div class="cart-summary">
-                <h3>Cart Totals</h3>
+                <h3>Order Summary</h3>
 
                 <div class="summary-box">
-                    <p>
-                        <strong>Subtotal:</strong>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
                         <span>₹{{ cart.total_amount }}</span>
-                    </p>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span style="color:#0a5c3a;">Free</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total</span>
+                        <span>₹{{ cart.total_amount }}</span>
+                    </div>
 
                     <form action="{% url 'checkout' %}">
-                    <button class="checkout-btn">Check Out</button>
+                        <button class="checkout-btn">
+                            <i class="fa-solid fa-lock"></i> Proceed to Checkout
+                        </button>
                     </form>
+
+                    <a href="/shop/" class="continue-shopping">
+                        <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                    </a>
+
+                    <div class="cart-badges">
+                        <span><i class="fa-solid fa-truck"></i> Free Shipping</span>
+                        <span><i class="fa-solid fa-shield-halved"></i> Secure</span>
+                    </div>
                 </div>
             </div>
+            {% endif %}
 
         </div>
     </div>
 
-    <!-- NEWSLETTER -->
-
     {% include "newsletter.html" %}
-
-    <!-- FOOTER -->
-
     {% include "footer.html" %}
-
-    <!-- AUTH OVERLAY -->
-
     {% include "auth_overlay.html" %}
-
 
     <script src="{% static 'js/script.js'%}"></script>
 </body>

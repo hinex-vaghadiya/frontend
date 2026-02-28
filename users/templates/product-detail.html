@@ -12,49 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
     <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
-    <style>
-        /* Added minimal CSS for variants buttons */
-        .variants {
-            margin-top: 20px;
-        }
-
-        .variant-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .variant-btn {
-            padding: 8px 16px;
-            border: 1px solid #ccc;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .variant-btn:hover {
-            background: #0b6b3a;
-            color: white;
-            border-color: #0b6b3a;
-        }
-
-        .variant-btn.active {
-            background: #0b6b3a;
-            color: white;
-            border-color: #0b6b3a;
-        }
-
-        .variant-btn .badge {
-            margin-left: 8px;
-            font-size: 10px;
-            padding: 2px 6px;
-            background: #1a8f4d;
-            color: white;
-            border-radius: 3px;
-        }
-    </style>
 </head>
 
 <body>
@@ -64,6 +21,11 @@
 
     <!-- NAVBAR -->
     {% include "navbar.html" %}
+
+    <!-- BREADCRUMB -->
+    <div class="detail-breadcrumb">
+        <a href="/">Home</a> &nbsp;/&nbsp; <a href="/shop/">Shop</a> &nbsp;/&nbsp; {{ product.product_name }}
+    </div>
 
     <main class="product-container">
 
@@ -114,6 +76,7 @@
             </div>
 
             <p class="weight" id="stockInfo">
+                <i class="fa-solid fa-box-open"></i>
                 Stock Available: <strong>{{ product.variants.0.stock }}</strong>
             </p>
 
@@ -127,7 +90,6 @@
                     </div>
                     <form method="post" action="/add-to-cart/" id="addToCartForm">
                         {% csrf_token %}
-                        <!-- Hidden input for variant -->
                         <input type="hidden" id="variantInput" name="variant_id" value="{{ product.variants.0.id }}">
                         <input type="hidden" name="product_slug" value="{{ product.slug }}">
                         <input type="hidden" id="quantityInput" name="quantity" value="1">
@@ -149,7 +111,23 @@
 
             </div>
 
-            <!-- AMAZON STYLE VARIANTS -->
+            <!-- TRUST BADGES -->
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <i class="fa-solid fa-truck"></i>
+                    Free Shipping
+                </div>
+                <div class="trust-badge">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Secure Payment
+                </div>
+                <div class="trust-badge">
+                    <i class="fa-solid fa-leaf"></i>
+                    100% Natural
+                </div>
+            </div>
+
+            <!-- VARIANTS -->
             <div class="variants amazon-variants">
                 <h3>Variants</h3>
 
@@ -172,7 +150,7 @@
                             <span class="variant-name">{{ variant.name }}</span>
                             <span class="variant-price">₹{{ variant.price }}</span>
                             {% if variant.compare_at_price %}
-                            <span class="variant-price">₹{{ variant.compare_at_price }}</span>
+                            <span class="variant-compare-price">₹{{ variant.compare_at_price }}</span>
                             {% endif %}
                             {% if variant.discount_percent %}
                             <span class="variant-off">{{ variant.discount_percent }}% OFF</span>
@@ -186,19 +164,21 @@
 
         </section>
 
-        <!-- REVIEWS SECTION -->
-        <section class="reviews-section" id="reviews"
-            style="width: 100%; margin-top: 40px; padding: 20px; border-top: 1px solid #ddd; grid-column: 1 / -1;">
-            <h2>Customer Reviews</h2>
+    </main>
 
-            {% if is_authenticated %}
-            <div class="write-review" style="margin-bottom: 30px; background:#f9f9f9; padding:20px; border-radius:8px;">
+    <!-- REVIEWS SECTION (outside product grid) -->
+    <div class="reviews-wrapper">
+        <section class="reviews-section" id="reviews">
+            <h2>Customer Reviews <span class="review-count">({{ total_reviews }})</span></h2>
+
+            {% if has_purchased %}
+            <div class="write-review">
                 <h3>Write a Review</h3>
                 <form action="/submit-review/{{ product.slug }}/" method="POST">
                     {% csrf_token %}
-                    <div style="margin-bottom: 10px;">
-                        <label>Rating (1-5):</label>
-                        <select name="rating" required style="padding:5px;">
+                    <div class="review-form-group">
+                        <label>Rating</label>
+                        <select name="rating" required>
                             <option value="5">5 - Excellent</option>
                             <option value="4">4 - Good</option>
                             <option value="3">3 - Average</option>
@@ -206,45 +186,57 @@
                             <option value="1">1 - Terrible</option>
                         </select>
                     </div>
-                    <div style="margin-bottom: 10px;">
-                        <label>Your Review:</label><br>
+                    <div class="review-form-group">
+                        <label>Your Review</label>
                         <textarea name="review_text" rows="4" required
-                            style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px; margin-top:5px;"></textarea>
+                            placeholder="Share your experience with this product..."></textarea>
                     </div>
-                    <button type="submit" class="btn primary"
-                        style="background:#0b6b3a; color:white; padding:10px 20px; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Submit
-                        Review</button>
-                    <p style="font-size:0.85rem; color:#666; margin-top:10px;">Note: You must have successfully
-                        purchased and received this product to leave a review.</p>
+                    <button type="submit" class="review-submit-btn">Submit Review</button>
                 </form>
             </div>
             {% endif %}
 
             <div class="reviews-list">
                 {% if messages %}
-                <div class="messages" style="margin-bottom: 20px;">
+                <div class="review-messages">
                     {% for message in messages %}
-                    <p class="alert {{ message.tags }}" style="padding:10px; background:#e8f4fd; color:#0b6b3a;">{{
-                        message }}</p>
+                    <p class="alert {{ message.tags }}">{{ message }}</p>
                     {% endfor %}
                 </div>
                 {% endif %}
 
                 {% for review in reviews %}
-                <div class="review-item" style="border-bottom: 1px solid #eee; padding: 15px 0;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
+                <div class="review-item">
+                    <div class="review-header">
                         <strong>User #{{ review.user_id }}</strong>
-                        <span style="color:#d4af37; font-weight:bold;">{{ review.rating }} / 5 ⭐</span>
+                        <span class="review-rating">{{ review.rating }} / 5 ⭐</span>
                     </div>
-                    <p style="color:#555; line-height:1.4;">{{ review.review_text }}</p>
-                    <small style="color:#999;">Posted on: {{ review.created_at|slice:":10" }}</small>
+                    <p class="review-text">{{ review.review_text }}</p>
+                    <small class="review-date">Posted on: {{ review.created_at|slice:":10" }}</small>
                 </div>
                 {% empty %}
-                <p>No reviews yet. Be the first to review this product!</p>
+                <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
                 {% endfor %}
             </div>
+
+            {% if total_pages > 1 %}
+            <div class="review-pagination">
+                {% if current_page > 1 %}
+                <a href="?page={{ current_page|add:" -1" }}#reviews" class="page-btn">&laquo; Prev</a>
+                {% endif %}
+
+                {% for i in page_range %}
+                <a href="?page={{ forloop.counter }}#reviews"
+                    class="page-btn {% if forloop.counter == current_page %}active{% endif %}">{{ forloop.counter }}</a>
+                {% endfor %}
+
+                {% if current_page < total_pages %} <a href="?page={{ current_page|add:" 1" }}#reviews"
+                    class="page-btn">Next &raquo;</a>
+                    {% endif %}
+            </div>
+            {% endif %}
         </section>
-    </main>
+    </div>
 
     <!-- NEWSLETTER -->
     {% include "newsletter.html" %}
@@ -255,7 +247,7 @@
     <!-- AUTH OVERLAY -->
     {% include "auth_overlay.html" %}
 
-    <!-- THUMB → MAIN IMAGE & VARIANT SWITCH SCRIPT -->
+    <!-- SCRIPTS -->
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/product-detail.js' %}"></script>
 

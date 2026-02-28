@@ -836,16 +836,9 @@ def update_delivery_status(request, order_id):
 
 def toggle_customer(request, pk):
     if request.method == 'POST':
-        access_token = admin_get_access_token(request)
-        if not access_token:
-            new_token = admin_refresh_access_token(request)
-            if not new_token: return admin_if_not_new_token(request)
-            access_token = new_token
-            
         url = f"{user_base_url}admin/users/{pk}/"
-        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            requests.patch(url, headers=headers)
+            requests.patch(url)
             messages.success(request, "Toggled status successfully")
         except:
             messages.error(request, "Failed to toggle status")
@@ -853,16 +846,9 @@ def toggle_customer(request, pk):
 
 def delete_customer(request, pk):
     if request.method == 'GET':
-        access_token = admin_get_access_token(request)
-        if not access_token:
-            new_token = admin_refresh_access_token(request)
-            if not new_token: return admin_if_not_new_token(request)
-            access_token = new_token
-            
         url = f"{user_base_url}admin/users/{pk}/"
-        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            requests.delete(url, headers=headers)
+            requests.delete(url)
             messages.success(request, "Customer deleted")
         except:
             messages.error(request, "Failed to delete")

@@ -76,13 +76,13 @@
 
                 <!-- Toggle Active / Inactive -->
                 {% if customer.is_active %}
-                <form action="/admin/toggle-customer/{{ customer.id }}/" method="POST" style="display:inline;">{%
-                  csrf_token %}
+                <form action="/admin/toggle-customer/{{ customer.id }}/" method="POST" style="display:inline;">
+                  {% csrf_token %}
                   <button type="submit" class="btn-sm warning" style="border:none; cursor:pointer;">Deactivate</button>
                 </form>
                 {% else %}
-                <form action="/admin/toggle-customer/{{ customer.id }}/" method="POST" style="display:inline;">{%
-                  csrf_token %}
+                <form action="/admin/toggle-customer/{{ customer.id }}/" method="POST" style="display:inline;">
+                  {% csrf_token %}
                   <button type="submit" class="btn-sm success" style="border:none; cursor:pointer;">Activate</button>
                 </form>
                 {% endif %}

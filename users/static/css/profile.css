@@ -1,16 +1,28 @@
+/* ===========================
+   PROFILE / DASHBOARD / ORDERS
+   HERBGLOW PREMIUM
+=========================== */
+
+/* WRAPPER */
 .account-wrapper {
     max-width: 1200px;
-    margin: 40px auto;
+    margin: 30px auto 60px;
     display: flex;
-    gap: 30px;
+    gap: 24px;
+    padding: 0 24px;
 }
 
-/* SIDEBAR */
+/* ===== SIDEBAR ===== */
 .account-sidebar {
-    width: 260px;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
+    width: 250px;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px 16px;
+    border: 1px solid #e8e8e8;
+    height: fit-content;
+    position: sticky;
+    top: 110px;
 }
 
 .account-sidebar ul {
@@ -20,56 +32,165 @@
 }
 
 .account-sidebar li {
-    padding: 14px 16px;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
 }
 
-.account-sidebar li.active {
-    background: #e6f2ec;
-    color: #1b7a57;
+.account-sidebar li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    color: #555;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.account-sidebar li a:hover {
+    background: #f0faf5;
+    color: #0a5c3a;
+}
+
+.account-sidebar li a i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.account-sidebar li.active a {
+    background: linear-gradient(135deg, #e6f5ed, #f0faf5);
+    color: #0a5c3a;
+    font-weight: 600;
+}
+
+.account-sidebar li.dashboard a {
+    color: #555;
+}
+
+.account-sidebar li.get-all-orders a {
+    color: #555;
 }
 
 .account-sidebar li.logout a {
     color: #c0392b;
-    text-decoration: none;
 }
 
-.account-sidebar li.get-all-orders a {
-    color: grey;
-    text-decoration: none;
+.account-sidebar li.logout a:hover {
+    background: #fef2f2;
+    color: #a00;
 }
 
-.account-sidebar li.dashboard a {
-    color: goldenrod;
-    text-decoration: none;
-}
-
-/* CONTENT */
+/* ===== MAIN CONTENT ===== */
 .account-content {
     flex: 1;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    border: 1px solid #e8e8e8;
+    min-height: 400px;
 }
 
-/* ACCOUNT CARD */
+/* TITLE + EDIT BUTTON */
+.account-content h2 {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 0;
+}
+
+.edit-btn {
+    float: right;
+    background: linear-gradient(135deg, #0a5c3a, #15804f);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(10, 92, 58, 0.2);
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+}
+
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(10, 92, 58, 0.3);
+}
+
+/* ===== WELCOME BANNER ===== */
+.welcome-banner {
+    background: linear-gradient(135deg, #0a5c3a 0%, #15804f 50%, #1a9a5c 100%);
+    color: #fff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-banner::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -5%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+}
+
+.welcome-avatar {
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.welcome-text h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.welcome-text p {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* ===== ACCOUNT CARD (View Mode) ===== */
 .account-card {
     border: 1px solid #eee;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-top: 20px;
+    overflow: hidden;
 }
 
 .account-card .row {
     display: grid;
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 160px 1fr;
     padding: 14px 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    transition: background 0.15s;
+}
+
+.account-card .row:hover {
+    background: #fafbfc;
 }
 
 .account-card .row:last-child {
@@ -81,53 +202,24 @@
     color: #555;
 }
 
-/* ===========================
-   EDIT BUTTON
-=========================== */
-.account-content h2 {
-    display: inline-block;
+.account-card span:last-child {
+    color: #222;
 }
 
-.account-content button {
-    float: right;
-    background: linear-gradient(135deg, #2f855a, #38a169);
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    transition: all 0.25s ease;
-}
-
-.account-content button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-}
-
-.account-content button:active {
-    transform: scale(0.97);
-}
-
-/* ===========================
-   EDIT FORM
-=========================== */
+/* ===== EDIT FORM ===== */
 .profile-form {
-    background: #ffffff;
+    background: #f8faf9;
     border-radius: 14px;
-    padding: 25px;
-    margin-top: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    margin-top: 20px;
+    border: 1px solid #e8efe8;
     animation: slideDown 0.35s ease;
 }
 
-/* FORM ROW */
 .profile-form .form-row {
     display: flex;
     flex-direction: column;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .profile-form label {
@@ -141,21 +233,28 @@
 .profile-form textarea {
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 10px 12px;
+    padding: 10px 14px;
     font-size: 14px;
+    font-family: inherit;
     transition: border 0.2s ease, box-shadow 0.2s ease;
+    background: #fff;
 }
 
 .profile-form input:focus,
 .profile-form textarea:focus {
     outline: none;
-    border-color: #38a169;
-    box-shadow: 0 0 0 2px rgba(56, 161, 105, 0.15);
+    border-color: #0a5c3a;
+    box-shadow: 0 0 0 2px rgba(10, 92, 58, 0.12);
 }
 
-/* SAVE BUTTON */
-.profile-form .save-btn {
-    background: #2f855a;
+.profile-form input:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #0a5c3a, #15804f);
     color: white;
     border: none;
     padding: 12px;
@@ -164,20 +263,18 @@
     border-radius: 10px;
     cursor: pointer;
     width: 100%;
-    transition: background 0.2s ease;
+    transition: all 0.25s ease;
 }
 
-.profile-form .save-btn:hover {
-    background: #276749;
+.save-btn:hover {
+    box-shadow: 0 4px 14px rgba(10, 92, 58, 0.3);
+    transform: translateY(-1px);
 }
 
-/* ===========================
-   ANIMATION
-=========================== */
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(-10px);
     }
 
     to {
@@ -186,99 +283,194 @@
     }
 }
 
-
 /* ===========================
-   ORDERS CARD
+   ORDERS SECTION
 =========================== */
 .orders-card {
-    border: 1px solid #eee;
-    border-radius: 10px;
     margin-top: 20px;
-    padding: 20px;
 }
 
-/* SINGLE ORDER */
 .order-item {
     border: 1px solid #eee;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
     transition: box-shadow 0.2s ease;
+    background: #fff;
 }
 
 .order-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* ORDER HEADER */
 .order-header {
     display: flex;
     justify-content: space-between;
-    font-weight: 600;
-    margin-bottom: 10px;
+    align-items: center;
+    padding: 16px 20px;
+    background: #fafbfc;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-/* ORDER STATUS */
+.order-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.order-number {
+    font-weight: 600;
+    font-size: 14px;
+    color: #222;
+}
+
+/* STATUS BADGES */
 .order-status {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     color: #fff;
 }
 
 .order-status.pending {
-    background-color: #d69e2e;
-    /* amber */
+    background: linear-gradient(135deg, #d69e2e, #ecc94b);
 }
 
 .order-status.paid {
-    background-color: #2f855a;
-    /* green */
+    background: linear-gradient(135deg, #0a5c3a, #15804f);
+}
+
+.order-status.shipped {
+    background: linear-gradient(135deg, #2b6cb0, #3182ce);
+}
+
+.order-status.delivered {
+    background: linear-gradient(135deg, #276749, #38a169);
 }
 
 .order-status.cancelled {
-    background-color: #c53030;
-    /* red */
+    background: linear-gradient(135deg, #c53030, #e53e3e);
+}
+
+.order-status.failed {
+    background: linear-gradient(135deg, #9b2c2c, #c53030);
+}
+
+/* ORDER ACTIONS */
+.order-actions .view-bill-btn {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.order-actions .view-bill-btn:hover {
+    background: #0a5c3a;
 }
 
 /* ORDER ITEMS */
 .order-items {
-    border-top: 1px solid #eee;
-    padding-top: 10px;
+    padding: 12px 20px;
 }
 
-.order-items .item {
+.order-item-row {
     display: grid;
     grid-template-columns: 1fr auto auto;
-    padding: 8px 0;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
     font-size: 14px;
-    color: #555;
 }
 
+.order-item-row:last-child {
+    border-bottom: none;
+}
 
+.item-name {
+    color: #333;
+}
+
+.item-qty {
+    color: #888;
+    font-size: 13px;
+}
+
+.item-price {
+    font-weight: 600;
+    color: #222;
+}
+
+.review-link {
+    display: inline-block;
+    background: #0a5c3a;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    margin-left: 8px;
+}
+
+.review-link:hover {
+    background: #15804f;
+}
 
 /* ORDER TOTAL */
 .order-total {
     text-align: right;
-    margin-top: 10px;
-    font-weight: 600;
-    color: #333;
+    padding: 12px 20px;
+    font-weight: 700;
+    color: #111;
+    font-size: 15px;
+    background: #fafbfc;
+    border-top: 1px solid #f0f0f0;
 }
 
-/* =========================
-   PROFILE PAGE RESPONSIVE
-========================= */
+/* EMPTY STATE */
+.empty-orders {
+    text-align: center;
+    padding: 48px 20px;
+    color: #999;
+}
+
+.empty-orders i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.empty-orders p {
+    font-size: 16px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
 @media (max-width: 768px) {
     .account-wrapper {
         flex-direction: column;
         gap: 16px;
         padding: 16px;
+        margin: 16px auto;
     }
 
     .account-sidebar {
         width: 100%;
+        position: static;
     }
 
     .account-sidebar ul {
@@ -302,6 +494,7 @@
 
     .account-content {
         width: 100%;
+        padding: 20px 16px;
     }
 
     .account-content h2 {
@@ -309,12 +502,8 @@
     }
 
     .account-card .row {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 4px;
-    }
-
-    .profile-form .form-row {
-        flex-direction: column;
     }
 
     .profile-form .form-row input,
@@ -322,18 +511,23 @@
         width: 100%;
     }
 
-    .order-item {
-        padding: 12px;
-    }
-
     .order-header {
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
+        align-items: flex-start;
     }
 
-    .order-items .item {
-        flex-direction: column;
+    .order-item-row {
+        grid-template-columns: 1fr;
         gap: 4px;
+    }
+
+    .welcome-banner {
+        padding: 20px;
+    }
+
+    .welcome-text h3 {
+        font-size: 16px;
     }
 }
 
@@ -345,5 +539,11 @@
     .account-sidebar ul li a {
         padding: 8px 12px;
         font-size: 13px;
+    }
+
+    .welcome-avatar {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
     }
 }

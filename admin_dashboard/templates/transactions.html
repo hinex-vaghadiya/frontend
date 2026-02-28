@@ -38,9 +38,10 @@
                         <tr data-status="{{ order.status }}">
                             <td>{{ order.order_number }}</td>
                             <td>₹{{ order.total_amount }}</td>
-                            <td><span
-                                    class="status {% if order.status == 'PAID' %}active{% else %}inactive{% endif %}">{{
-                                    order.status }}</span></td>
+                            <td><span class="status {% if order.status == 'PAID' %}active{% else %}inactive{% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
                             <td>{{ order.created_at|slice:":10" }}</td>
                         </tr>
                         {% empty %}
