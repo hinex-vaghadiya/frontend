@@ -143,13 +143,21 @@ body {
   margin-bottom: 28px;
 }
 
+
+
 .topbar h2 {
   font-size: 22px;
   font-weight: 700;
   color: var(--admin-text);
 }
+.table-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
 
-.topbar input {
+.table-flex input {
   padding: 10px 16px;
   width: 300px;
   background: var(--admin-sidebar-bg);
@@ -160,11 +168,11 @@ body {
   transition: border-color 0.2s ease;
 }
 
-.topbar input::placeholder {
+.table-flex input::placeholder {
   color: var(--admin-text-muted);
 }
 
-.topbar input:focus {
+.table-flex input:focus {
   outline: none;
   border-color: var(--admin-accent);
   box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
