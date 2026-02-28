@@ -317,42 +317,44 @@ const track = document.querySelector(".bestseller-track");
 const prevBtn = document.getElementById("bestPrev");
 const nextBtn = document.getElementById("bestNext");
 
-const items = document.querySelectorAll(".bestseller-track .product-card");
-const itemsPerView = 4;
-const totalSlides = Math.ceil(items.length / itemsPerView);
+if (track && prevBtn && nextBtn) {
+    const items = document.querySelectorAll(".bestseller-track .product-card");
+    const itemsPerView = 4;
+    const totalSlides = Math.ceil(items.length / itemsPerView);
 
-let currentIndex = 0;
+    let currentIndex = 0;
 
-function updateSlider() {
-    const slider = document.querySelector(".bestseller-slider");
-    const slideWidth = slider.offsetWidth;
+    function updateSlider() {
+        const slider = document.querySelector(".bestseller-slider");
+        if (!slider) return;
+        const slideWidth = slider.offsetWidth;
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    }
 
-    track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    // NEXT (LOOP)
+    nextBtn.addEventListener("click", () => {
+        currentIndex++;
+        if (currentIndex >= totalSlides) {
+            currentIndex = 0;
+        }
+        updateSlider();
+    });
+
+    // PREV (LOOP)
+    prevBtn.addEventListener("click", () => {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = totalSlides - 1;
+        }
+        updateSlider();
+    });
+
+    // Resize safety
+    window.addEventListener("resize", updateSlider);
+
+    // Init
+    updateSlider();
 }
-
-// NEXT (LOOP)
-nextBtn.addEventListener("click", () => {
-    currentIndex++;
-    if (currentIndex >= totalSlides) {
-        currentIndex = 0;
-    }
-    updateSlider();
-});
-
-// PREV (LOOP)
-prevBtn.addEventListener("click", () => {
-    currentIndex--;
-    if (currentIndex < 0) {
-        currentIndex = totalSlides - 1;
-    }
-    updateSlider();
-});
-
-// Resize safety
-window.addEventListener("resize", updateSlider);
-
-// Init
-updateSlider();
 
 // COMMUNITY SECTION
 // Auto play preview videos (5 sec loop)
@@ -369,8 +371,7 @@ document.querySelectorAll('.video-card video').forEach(video => {
     video.play();
 });
 
-// Open modal on click
-// Auto play preview videos (5 sec loop)
+// Open modal on click (duplicate removed)
 document.querySelectorAll('.video-card video').forEach(video => {
     const LOOP_END = 5; // seconds
 

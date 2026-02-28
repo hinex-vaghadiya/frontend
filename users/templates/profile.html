@@ -141,7 +141,7 @@
                             <div class="item-price">₹{{ item.subtotal }}</div>
                             <div>
                                 {% if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED' %}
-                                <a href="/shop/" class="review-link">
+                                <a href="/product-detail/{{ item.product_name|slugify }}#reviews" class="review-link">
                                     <i class="fa-solid fa-star"></i> Review
                                 </a>
                                 {% endif %}

@@ -1,85 +1,150 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Status</title>
+    <title>Payment Status | HERBGLOW</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #f0f4f7;
+            background: #fff;
+            color: #111;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-        }
-
-        .status-container {
-            background: #fff;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 12px;
-            padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.8s ease;
+            padding: 20px;
         }
 
-        h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-
-        .message {
-            font-size: 18px;
+        .status-icon {
+            font-size: 72px;
             margin-bottom: 30px;
-            color: #333;
+            animation: pop 0.6s ease;
         }
 
-        .success {
-            color: #0b6b3a;
-            animation: pop 0.5s ease;
+        .status-icon.success {
+            color: #0a5c3a;
         }
 
-        .cancel {
-            color: #d9534f;
-            animation: shake 0.5s ease;
-        }
-
-        .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .success-icon {
-            color: #0b6b3a;
-        }
-
-        .cancel-icon {
+        .status-icon.cancel {
             color: #d9534f;
         }
 
-        .btn {
-            padding: 14px 25px;
+        h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .status-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 500px;
+            line-height: 1.5;
+        }
+
+        .amount-display {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+
+        .amount-display.success {
+            color: #0a5c3a;
+        }
+
+        .amount-display.cancel {
+            color: #d9534f;
+        }
+
+        .amount-label {
+            font-size: 16px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+            justify-content: center;
+        }
+
+        .home-btn {
+            background: #0a5c3a;
+            color: #fff;
+            border: none;
+            padding: 20px 40px;
             font-size: 18px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-            background: #0b6b3a;
-            color: #fff;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            flex: 2;
         }
 
-        .btn:hover {
-            background: #09572d;
+        .home-btn:hover {
+            background: #084c30;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(10, 92, 58, 0.25);
+        }
+
+        .shop-btn {
+            background: transparent;
+            color: #555;
+            border: 2px solid #ddd;
+            padding: 20px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shop-btn:hover {
+            border-color: #999;
+            color: #111;
+        }
+
+        .secure-badge {
+            margin-top: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #888;
+            font-size: 15px;
+        }
+
+        .secure-badge i {
+            color: #0c8a49;
         }
 
         @keyframes pop {
@@ -98,53 +163,56 @@
             }
         }
 
-        @keyframes shake {
-            0% {
-                transform: translateX(0);
+        @media (max-width: 600px) {
+            .button-row {
+                flex-direction: column;
             }
 
-            25% {
-                transform: translateX(-10px);
+            h2 {
+                font-size: 32px;
             }
 
-            50% {
-                transform: translateX(10px);
-            }
-
-            75% {
-                transform: translateX(-10px);
-            }
-
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
+            .amount-display {
+                font-size: 48px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="status-container">
-        {% if status == "success" %}
-        <div class="icon success-icon">✅</div>
-        <h1 class="success">Payment Successful!</h1>
-        <p class="message">Your payment of ₹{{ total_amount }} was completed successfully.</p>
-        {% elif status == "cancel" %}
-        <div class="icon cancel-icon">❌</div>
-        <h1 class="cancel">Payment Cancelled</h1>
-        <p class="message">Your payment was cancelled. No amount was deducted.</p>
-        {% endif %}
+    {% if status == "success" %}
+    <div class="status-icon success">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h2>Payment Successful!</h2>
+    <p class="status-subtitle">Your payment has been processed successfully. Thank you for your order!</p>
+    <div>
+        <span class="amount-label">Amount Paid</span>
+        <div class="amount-display success">₹{{ total_amount }}</div>
+    </div>
+    {% elif status == "cancel" %}
+    <div class="status-icon cancel">
+        <i class="fa-solid fa-circle-xmark"></i>
+    </div>
+    <h2>Payment Cancelled</h2>
+    <p class="status-subtitle">Your payment was cancelled. No amount has been deducted from your account.</p>
+    <div>
+        <span class="amount-label">Order Total</span>
+        <div class="amount-display cancel">₹{{ total_amount }}</div>
+    </div>
+    {% endif %}
 
-        <a href="/" class="btn">Go to Home</a>
+    <div class="button-row">
+        <a href="/" class="home-btn">
+            <i class="fa-solid fa-house"></i>
+            <span>Go to Home</span>
+        </a>
+        <a href="/shop/" class="shop-btn">Continue Shopping</a>
+    </div>
+
+    <div class="secure-badge">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>SSL Secured Transaction</span>
     </div>
 
     <!-- Optional sound effects -->

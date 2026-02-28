@@ -33,13 +33,12 @@
             {% endif %}
 
             <div class="table-wrapper">
-                <table class="admin-table" id="transTable">
+                <table class="admin-table" id="deliveryTable">
                     <thead>
                         <tr>
                             <th>Order No</th>
                             <th>Amount</th>
-                            <th>Status</th>
-                            <th>Date</th>
+                            <th>Current Status</th>
                             <th>Update Status</th>
                         </tr>
                     </thead>
@@ -54,27 +53,30 @@
                                     {{ order.status }}
                                 </span>
                             </td>
-                            <td>{{ order.created_at|slice:":10" }}</td>
                             <td>
-                                <form method="post" action="{% url 'update_delivery_status' order.order_id %}"
+                                {% if order.status != 'DELIVERED' %}
+                                <form method="post" action="{% url 'update_delivery_status' order.id %}"
                                     style="display: flex; gap: 8px; align-items: center;">
                                     {% csrf_token %}
                                     <select name="status"
                                         style="padding: 5px 10px; border-radius: 6px; border: 1px solid #ddd;">
-                                        <option value="PAID" {% if order.status=='PAID' %}selected{% endif %}>Paid
-                                        </option>
-                                        <option value="SHIPPED" {% if order.status=='SHIPPED' %}selected{% endif %}>
-                                            Shipped</option>
-                                        <option value="DELIVERED" {% if order.status=='DELIVERED' %}selected{% endif %}>
-                                            Delivered</option>
+                                        {% if order.status == 'PAID' %}
+                                        <option value="SHIPPED">Mark as Shipped</option>
+                                        <option value="DELIVERED">Mark as Delivered</option>
+                                        {% elif order.status == 'SHIPPED' %}
+                                        <option value="DELIVERED">Mark as Delivered</option>
+                                        {% endif %}
                                     </select>
                                     <button type="submit" class="btn-sm edit">Update</button>
                                 </form>
+                                {% else %}
+                                <span style="color: #888;">Completed</span>
+                                {% endif %}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="empty">No deliveries found</td>
+                            <td colspan="4" class="empty">No deliveries found</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -86,7 +88,7 @@
     <script>
         function filterTable() {
             const status = document.getElementById('statusFilter').value;
-            const rows = document.querySelectorAll('#transTable tbody tr');
+            const rows = document.querySelectorAll('#deliveryTable tbody tr');
             rows.forEach(row => {
                 if (status === 'ALL' || row.dataset.status === status) row.style.display = '';
                 else row.style.display = 'none';
