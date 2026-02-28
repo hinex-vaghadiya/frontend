@@ -915,13 +915,19 @@ body {
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     border: 1px solid rgba(10, 92, 58, 0.08);
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s, background-color 0.3s;
 }
 
-.why-feature-item:hover {
+.why-feature-item:hover,
+.why-feature-item.active {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(10, 92, 58, 0.1);
     border-color: #0a5c3a;
+}
+
+.why-feature-item.active {
+    background: #f4fdf8;
+    border-width: 2px;
 }
 
 .why-icon {

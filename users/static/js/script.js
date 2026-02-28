@@ -207,6 +207,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// WHY CHOOSE - INTERACTIVE FEATURES
+const featureItems = document.querySelectorAll(".why-feature-item");
+const whyMainImage = document.getElementById("whyMainImage");
+
+if (featureItems.length > 0 && whyMainImage) {
+    featureItems.forEach(item => {
+        item.addEventListener("click", () => {
+            // Remove active class from all
+            featureItems.forEach(i => i.classList.remove("active"));
+
+            // Add active class to clicked item
+            item.classList.add("active");
+
+            // Update the image smoothly
+            const newImageSrc = item.getAttribute("data-image");
+            whyMainImage.style.opacity = "0.5";
+            setTimeout(() => {
+                whyMainImage.src = newImageSrc;
+                whyMainImage.style.opacity = "1";
+            }, 150);
+        });
+    });
+}
+
+
 
 /* =========================
    EDIT PROFILE TOGGLE (NEW)
