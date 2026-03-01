@@ -104,10 +104,12 @@
 
                 <button class="btn secondary buy-now">BUY IT NOW</button>
 
-                <button class="btn whatsapp whatsapp-btn">
+                <a href="https://api.whatsapp.com/send/?phone=910000000000&text={{ product.product_name|urlencode }} | {{ product.description|urlencode }} - {{ request.build_absolute_uri|urlencode }}&type=phone_number&app_absent=0"
+                    class="btn whatsapp whatsapp-btn" target="_blank"
+                    style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <i class="fa-brands fa-whatsapp"></i>
                     Buy Now With WhatsApp
-                </button>
+                </a>
 
             </div>
 
