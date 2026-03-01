@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from django.contrib import messages
 from rest_framework import status
 import json
+import random
+from datetime import datetime, timedelta
 from admin_dashboard.views import products_related_base_url
 import os
 user_base_url='https://users-1wfh.onrender.com/api/'  #base url for the users backend api
@@ -691,23 +693,30 @@ def get_all_orders(request):
             if not new_token:
                 return if_not_new_token(request)
             access_token=new_token
-        
 
-        headers={
-            "Authorization":f"Bearer {access_token}"
-        }
-
+        headers={"Authorization":f"Bearer {access_token}"}
         order_url=f"{CART_URL}get-all-orders/"
         context={}
         try:
             response=requests.get(url=order_url,headers=headers)
             response.raise_for_status()
             orders=response.json()
-            context = {
-            "orders": orders["orders"],
-            "active_tab": "orders"  
-            }
-            print(f"the orders is \n {orders}")
+            order_list = orders.get("orders", [])
+            # Add expected delivery date (5-7 days after order, seeded by order id)
+            for o in order_list:
+                oid = o.get('id', 0)
+                rng = random.Random(oid)
+                days = rng.randint(5, 7)
+                created = o.get('created_at', '')
+                if created:
+                    try:
+                        dt = datetime.fromisoformat(created.replace('Z', '+00:00'))
+                        o['expected_delivery'] = (dt + timedelta(days=days)).strftime('%d %b %Y')
+                    except:
+                        o['expected_delivery'] = ''
+                else:
+                    o['expected_delivery'] = ''
+            context = {"orders": order_list, "active_tab": "orders"}
         except requests.exceptions.RequestException as e:
             messages.error(request,f"failed to fetch orders : {str(e)}")
         return render(request,'profile.html',context)
@@ -862,3 +871,128 @@ def user_invoice(request, order_id):
         except requests.exceptions.RequestException as e:
             messages.error(request, f"Failed to fetch order details: {str(e)}")
             return redirect('/profile')
+
+
+# ==================== MY REVIEWS ====================
+def my_reviews(request):
+    access_token = get_access_token(request)
+    if not access_token:
+        new_token = refresh_access_token(request)
+        if not new_token: return if_not_new_token(request)
+        access_token = new_token
+    
+    user_id = request.COOKIES.get('user_id')
+    reviews = []
+    try:
+        resp = requests.get(f"{products_related_base_url}admin-reviews/")
+        resp.raise_for_status()
+        all_reviews = resp.json()
+        reviews = [r for r in all_reviews if str(r.get('user_id')) == str(user_id)]
+        
+        # Enrich with product info
+        try:
+            prods = requests.get(f"{products_related_base_url}products/").json()
+            pid_map = {}
+            for p in prods:
+                images = p.get('images', [])
+                img = images[0].get('image', '') if images else ''
+                pid_map[p.get('product_id')] = {'name': p.get('product_name', ''), 'slug': p.get('slug', ''), 'image': img}
+            for r in reviews:
+                info = pid_map.get(r.get('product'), {})
+                r['product_name'] = info.get('name', '')
+                r['product_slug'] = info.get('slug', '')
+                r['product_image'] = info.get('image', '')
+        except:
+            pass
+    except:
+        pass
+    
+    return render(request, 'profile.html', {'reviews': reviews, 'active_tab': 'reviews'})
+
+
+def edit_review(request, review_id):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
+        url = f"{products_related_base_url}admin-reviews/{review_id}/"
+        try:
+            resp = requests.patch(url, json={'rating': int(rating), 'review_text': review_text})
+            resp.raise_for_status()
+            messages.success(request, 'Review updated successfully!')
+        except:
+            messages.error(request, 'Failed to update review.')
+    return redirect('/my-reviews/')
+
+
+def delete_review(request, review_id):
+    if request.method == 'POST':
+        url = f"{products_related_base_url}admin-reviews/{review_id}/"
+        try:
+            resp = requests.delete(url)
+            resp.raise_for_status()
+            messages.success(request, 'Review deleted successfully!')
+        except:
+            messages.error(request, 'Failed to delete review.')
+    return redirect('/my-reviews/')
+
+
+# ==================== TRANSACTION HISTORY ====================
+def user_transactions(request):
+    access_token = get_access_token(request)
+    if not access_token:
+        new_token = refresh_access_token(request)
+        if not new_token: return if_not_new_token(request)
+        access_token = new_token
+    
+    headers = {"Authorization": f"Bearer {access_token}"}
+    orders = []
+    try:
+        resp = requests.get(f"{CART_URL}get-all-orders/", headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        orders = data.get('orders', [])
+    except:
+        pass
+    
+    return render(request, 'profile.html', {'orders': orders, 'active_tab': 'transactions'})
+
+
+# ==================== TRACK ORDER ====================
+def track_orders(request):
+    access_token = get_access_token(request)
+    if not access_token:
+        new_token = refresh_access_token(request)
+        if not new_token: return if_not_new_token(request)
+        access_token = new_token
+    
+    headers = {"Authorization": f"Bearer {access_token}"}
+    orders = []
+    try:
+        resp = requests.get(f"{CART_URL}get-all-orders/", headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        order_list = data.get('orders', [])
+        # Add expected delivery and timeline steps
+        for o in order_list:
+            oid = o.get('id', 0)
+            rng = random.Random(oid)
+            days = rng.randint(5, 7)
+            created = o.get('created_at', '')
+            if created:
+                try:
+                    dt = datetime.fromisoformat(created.replace('Z', '+00:00'))
+                    o['expected_delivery'] = (dt + timedelta(days=days)).strftime('%d %b %Y')
+                    o['order_date'] = dt.strftime('%d %b %Y')
+                except:
+                    o['expected_delivery'] = ''
+                    o['order_date'] = ''
+            # Timeline steps
+            status_val = o.get('status', '')
+            steps = ['PENDING', 'PAID', 'SHIPPED', 'DELIVERED']
+            current_idx = steps.index(status_val) if status_val in steps else -1
+            o['timeline'] = [{'step': s, 'done': i <= current_idx, 'current': i == current_idx} for i, s in enumerate(steps)]
+        orders = order_list
+    except:
+        pass
+    
+    return render(request, 'profile.html', {'orders': orders, 'active_tab': 'tracking'})

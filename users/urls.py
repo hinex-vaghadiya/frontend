@@ -28,9 +28,17 @@ urlpatterns = [
     path('submit-review/<slug:slug>/', views.submit_review, name='submit-review'),
     path('invoice/<int:order_id>/', views.user_invoice, name='user-invoice'),
 
+    # Account Tabs
+    path('my-reviews/', views.my_reviews, name='my-reviews'),
+    path('edit-review/<int:review_id>/', views.edit_review, name='edit-review'),
+    path('delete-review/<int:review_id>/', views.delete_review, name='delete-review'),
+    path('transactions/', views.user_transactions, name='user-transactions'),
+    path('track-orders/', views.track_orders, name='track-orders'),
+
     # Static Pages
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('blog/', views.blog, name='blog'),
     path('faq/', views.faq, name='faq'),
 ]
+

@@ -822,16 +822,19 @@ def deliveries_list(request):
 
 def update_delivery_status(request, order_id):
     if request.method == 'POST':
-        access_token = admin_get_access_token(request)
-        if not access_token: return admin_if_not_new_token(request)
         new_status = request.POST.get('status')
         url = f"{CART_URL}admin-orders/{order_id}/status/"
-        headers = {"Authorization": f"Bearer {access_token}"}
         try:
-            requests.patch(url, json={"status": new_status}, headers=headers)
-            messages.success(request, "Status updated successfully")
-        except:
-            messages.error(request, "Failed to update status")
+            resp = requests.patch(url, json={"status": new_status})
+            resp.raise_for_status()
+            messages.success(request, f"Order #{order_id} status updated to {new_status}")
+        except Exception as e:
+            err_detail = ""
+            try:
+                err_detail = resp.text[:200]
+            except:
+                pass
+            messages.error(request, f"Failed to update status: {err_detail or str(e)}")
         return redirect('/admin/deliveries')
 
 def toggle_customer(request, pk):
@@ -899,12 +902,41 @@ def reviews_list(request):
         except:
             reviews = []
         
-        # Enrich reviews with product slug for linking
+        # Enrich reviews with product info and user name
         try:
             all_products = requests.get(f"{products_related_base_url}products/").json()
-            pid_to_slug = {p.get('product_id'): p.get('slug', '') for p in all_products}
+            pid_map = {}
+            for p in all_products:
+                pid = p.get('product_id')
+                images = p.get('images', [])
+                img_url = ''
+                for img in images:
+                    if img.get('is_primary'):
+                        img_url = img.get('image', '')
+                        break
+                if not img_url and images:
+                    img_url = images[0].get('image', '')
+                pid_map[pid] = {
+                    'slug': p.get('slug', ''),
+                    'name': p.get('product_name', ''),
+                    'image': img_url
+                }
             for review in reviews:
-                review['product_slug'] = pid_to_slug.get(review.get('product'), '')
+                info = pid_map.get(review.get('product'), {})
+                review['product_slug'] = info.get('slug', '')
+                review['product_name'] = info.get('name', '')
+                review['product_image'] = info.get('image', '')
+        except:
+            pass
+        
+        # Enrich reviews with user names
+        try:
+            users_resp = requests.get(f"{user_base_url}admin/users/")
+            users_resp.raise_for_status()
+            all_users = users_resp.json()
+            uid_to_name = {u.get('id'): u.get('name') or u.get('username', '') for u in all_users}
+            for review in reviews:
+                review['user_name'] = uid_to_name.get(review.get('user_id'), f"User #{review.get('user_id')}")
         except:
             pass
         
