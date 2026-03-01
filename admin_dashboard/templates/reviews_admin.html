@@ -42,20 +42,14 @@
                             <td>{{ review.id }}</td>
                             <td>
                                 <div style="display:flex; align-items:center; gap:10px;">
-                                    {% if review.product_image %}
-                                    <img src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}"
-                                        style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #e8e8e8;">
-                                    {% endif %}
-                                    {% if review.product_slug %}
-                                    <a href="/product-detail/{{ review.product_slug }}" target="_blank"
-                                        style="color: #0a5c3a; font-weight: 600;">{{
-                                        review.product_name|default:review.product }}</a>
-                                    {% else %}
-                                    {{ review.product }}
-                                    {% endif %}
+                                    {% if review.product_image %}<img
+                                        src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}"
+                                        style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #e8e8e8;">{%  endif  %}
+                                    {% if review.product_slug %}<a href="/product-detail/{{ review.product_slug }}"
+                                        target="_blank" style="color:#0a5c3a; font-weight:600;">{{  review.product_name  }}</a>{% else %}{{ review.product }}{% endif %}
                                 </div>
                             </td>
-                            <td>{{ review.user_name|default:review.user_id }}</td>
+                            <td>{{ review.user_name }}</td>
                             <td>{{ review.rating }} / 5</td>
                             <td>{{ review.review_text }}</td>
                             <td class="actions">

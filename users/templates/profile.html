@@ -17,35 +17,25 @@
     {% include "navbar.html" %}
 
     <section class="account-wrapper">
-
-        <!-- SIDEBAR -->
         <aside class="account-sidebar">
             <ul>
-                <li class="{% if active_tab == 'dashboard' %}active{% endif %}">
-                    <a href="{% url 'profile' %}"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-                </li>
-                <li class="{% if active_tab == 'orders' %}active{% endif %}">
-                    <a href="{% url 'get-all-orders' %}"><i class="fa-solid fa-box"></i> Order History</a>
-                </li>
-                <li class="{% if active_tab == 'reviews' %}active{% endif %}">
-                    <a href="{% url 'my-reviews' %}"><i class="fa-solid fa-star"></i> My Reviews</a>
-                </li>
-                <li class="{% if active_tab == 'transactions' %}active{% endif %}">
-                    <a href="{% url 'user-transactions' %}"><i class="fa-solid fa-money-bill-transfer"></i>
-                        Transactions</a>
-                </li>
-                <li class="{% if active_tab == 'tracking' %}active{% endif %}">
-                    <a href="{% url 'track-orders' %}"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
-                </li>
-                <li class="logout">
-                    <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-                </li>
+                <li class="{% if active_tab == 'dashboard' %}active{% endif %}"><a href="{% url 'profile' %}"><i
+                            class="fa-solid fa-table-columns"></i> Dashboard</a></li>
+                <li class="{% if active_tab == 'orders' %}active{% endif %}"><a href="{% url 'get-all-orders' %}"><i
+                            class="fa-solid fa-box"></i> Order History</a></li>
+                <li class="{% if active_tab == 'reviews' %}active{% endif %}"><a href="{% url 'my-reviews' %}"><i
+                            class="fa-solid fa-star"></i> My Reviews</a></li>
+                <li class="{% if active_tab == 'transactions' %}active{% endif %}"><a
+                        href="{% url 'user-transactions' %}"><i class="fa-solid fa-money-bill-transfer"></i>
+                        Transactions</a></li>
+                <li class="{% if active_tab == 'tracking' %}active{% endif %}"><a href="{% url 'track-orders' %}"><i
+                            class="fa-solid fa-truck-fast"></i> Track Order</a></li>
+                <li class="logout"><a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i>
+                        Logout</a></li>
             </ul>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="account-content">
-
             {% if messages %}
             <div class="profile-messages">
                 {% for message in messages %}
@@ -55,7 +45,6 @@
             {% endif %}
 
             {% if active_tab == "dashboard" %}
-            <!-- ================= DASHBOARD ================= -->
             <div class="welcome-banner">
                 <div class="welcome-avatar">{{ profile.username|make_list|first|upper }}</div>
                 <div class="welcome-text">
@@ -63,10 +52,8 @@
                     <p>Manage your account details and view your orders</p>
                 </div>
             </div>
-
             <h2>Account Details</h2>
             <button type="button" class="edit-btn" id="editProfileBtn">EDIT</button>
-
             <form action="/profile-update/" method="post" class="profile-form" id="profileForm" style="display:none;">
                 {% csrf_token %}
                 <div class="form-row"><label>Name</label><input type="text" value="{{ profile.name }}" name="name">
@@ -81,7 +68,6 @@
                         name="address">{{ profile.address }}</textarea></div>
                 <button type="submit" class="save-btn">SAVE CHANGES</button>
             </form>
-
             <div class="account-card" id="accountCard">
                 <div class="row"><span>Name</span><span>{{ profile.name|default:"-" }}</span></div>
                 <div class="row"><span>Username</span><span>{{ profile.username }}</span></div>
@@ -91,9 +77,7 @@
             </div>
             {% endif %}
 
-
             {% if active_tab == "orders" %}
-            <!-- ================= ORDERS ================= -->
             <div class="section-header">
                 <h2>Order History</h2>
                 <select class="status-filter" id="orderStatusFilter" onchange="filterOrders()">
@@ -105,7 +89,6 @@
                     <option value="CANCELLED">Cancelled</option>
                 </select>
             </div>
-
             <div class="orders-card orders-scrollable" id="ordersContainer">
                 {% if orders %}
                 {% for order in orders %}
@@ -116,21 +99,14 @@
                             <span class="order-status {{ order.status|lower }}">{{ order.status }}</span>
                         </div>
                         <div class="order-actions">
-                            {% if order.status != 'PENDING' and order.status != 'CANCELLED' %}
-                            <a href="/invoice/{{ order.id }}/" target="_blank" class="view-bill-btn">
-                                <i class="fa-solid fa-receipt"></i> View Bill
-                            </a>
-                            {% endif %}
+                            {% if order.status != 'PENDING' and order.status != 'CANCELLED' %}<a
+                                href="/invoice/{{ order.id }}/" target="_blank" class="view-bill-btn"><i
+                                    class="fa-solid fa-receipt"></i> View Bill</a>{% endif %}
                         </div>
                     </div>
-
                     {% if order.expected_delivery and order.status != 'DELIVERED' and order.status != 'CANCELLED' %}
-                    <div class="expected-delivery">
-                        <i class="fa-solid fa-truck"></i> Expected Delivery: <strong>{{ order.expected_delivery
-                            }}</strong>
-                    </div>
+                    <div class="expected-delivery"><i class="fa-solid fa-truck"></i> Expected Delivery: <strong>{{  order.expected_delivery  }}</strong></div>
                     {% endif %}
-
                     <div class="order-items">
                         {% for item in order.items %}
                         <div class="order-item-row">
@@ -138,45 +114,37 @@
                                     class="item-qty">x {{ item.quantity }}</span></div>
                             <div class="item-price">Rs.{{ item.subtotal }}</div>
                             <div>
-                                {% if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED' %}
-                                <a href="/product-detail/{{ item.product_name|slugify }}#reviews" class="review-link"><i
-                                        class="fa-solid fa-star"></i> Review</a>
-                                {% endif %}
+                                {%  if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED'  %}<a href="/product-detail/{{ item.product_name|slugify }}#reviews"
+                                    class="review-link"><i class="fa-solid fa-star"></i> Review</a>{% endif %}
                             </div>
                         </div>
                         {% endfor %}
                     </div>
-
                     <div class="order-total">Total: Rs.{{ order.total_amount }}</div>
                 </div>
                 {% endfor %}
                 {% else %}
-                <div class="empty-orders">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                <div class="empty-orders"><i class="fa-solid fa-bag-shopping"></i>
                     <p>No orders found. Start shopping!</p>
                 </div>
                 {% endif %}
             </div>
             {% endif %}
 
-
             {% if active_tab == "reviews" %}
-            <!-- ================= MY REVIEWS ================= -->
             <h2>My Reviews</h2>
             <div class="reviews-card">
                 {% if reviews %}
                 {% for review in reviews %}
                 <div class="my-review-item" id="review-{{ review.id }}">
                     <div class="my-review-product">
-                        {% if review.product_image %}
-                        <img src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}" alt="">
-                        {% endif %}
+                        {% if review.product_image %}<img
+                            src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}" alt="">{% endif %}
                         <div>
-                            <a href="/product-detail/{{ review.product_slug }}" class="review-product-name">{{
-                                review.product_name|default:"Product" }}</a>
+                            <a href="/product-detail/{{ review.product_slug }}" class="review-product-name">{{  review.product_name|default:"Product"  }}</a>
                             <div class="review-rating-stars">
                                 {% for i in "12345" %}{% if forloop.counter <= review.rating %}<i
-                                    class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif %}{% endfor %}
+                                    class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{%  endif  %}{% endfor %}
                             </div>
                         </div>
                     </div>
@@ -211,17 +179,14 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <div class="empty-orders">
-                    <i class="fa-solid fa-star"></i>
+                <div class="empty-orders"><i class="fa-solid fa-star"></i>
                     <p>You haven't written any reviews yet.</p>
                 </div>
                 {% endif %}
             </div>
             {% endif %}
 
-
             {% if active_tab == "transactions" %}
-            <!-- ================= TRANSACTIONS ================= -->
             <div class="section-header">
                 <h2>Transaction History</h2>
                 <select class="status-filter" id="txnStatusFilter" onchange="filterTransactions()">
@@ -244,11 +209,21 @@
                     </thead>
                     <tbody id="txnTableBody">
                         {% for order in orders %}
-                        <tr data-status="{{ order.status }}">
+                        <tr data-status="{{ order.status }}" onclick="toggleTracking('txn-{{ order.id }}')"
+                            style="cursor:pointer;">
                             <td>#{{ order.order_number }}</td>
                             <td>Rs.{{ order.total_amount }}</td>
                             <td><span class="order-status {{ order.status|lower }}">{{ order.status }}</span></td>
                             <td>{{ order.items|length }} item{{ order.items|length|pluralize }}</td>
+                        </tr>
+                        <tr id="txn-{{ order.id }}" style="display:none; background:#fafafa;">
+                            <td colspan="4" style="padding:15px;">
+                                <div style="font-size:13px; color:#555;">
+                                    {% for item in order.items %}
+                                    <div>{{ item.product_name }} x {{ item.quantity }}</div>
+                                    {% endfor %}
+                                </div>
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -260,9 +235,7 @@
             </div>
             {% endif %}
 
-
             {% if active_tab == "tracking" %}
-            <!-- ================= TRACK ORDER ================= -->
             <h2>Track Orders</h2>
             <div class="tracking-list">
                 {% for order in orders %}
@@ -273,18 +246,14 @@
                             <span class="order-status {{ order.status|lower }}">{{ order.status }}</span>
                         </div>
                         <div class="tracking-meta">
-                            {% if order.expected_delivery and order.status != 'DELIVERED' and order.status != 'CANCELLED' %}
-                            <span class="expected-badge">Est. {{ order.expected_delivery }}</span>
-                            {% endif %}
+                            {%  if order.expected_delivery and order.status != 'DELIVERED' and order.status != 'CANCELLED'  %}<span class="expected-badge">Est. {{ order.expected_delivery }}</span>{%  endif  %}
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                     </div>
                     <div class="tracking-body" id="track-{{ order.id }}" style="display:none;">
                         {% if order.expected_delivery %}
-                        <div class="expected-delivery">
-                            <i class="fa-solid fa-calendar-day"></i> Expected Delivery: <strong>{{
-                                order.expected_delivery }}</strong>
-                        </div>
+                        <div class="expected-delivery" style="margin-top:10px;"><i class="fa-solid fa-calendar-day"></i>
+                            Expected Delivery: <strong>{{ order.expected_delivery }}</strong></div>
                         {% endif %}
                         <div class="timeline">
                             {% for step in order.timeline %}
@@ -304,8 +273,7 @@
                     </div>
                 </div>
                 {% empty %}
-                <div class="empty-orders">
-                    <i class="fa-solid fa-truck-fast"></i>
+                <div class="empty-orders"><i class="fa-solid fa-truck-fast"></i>
                     <p>No orders to track.</p>
                 </div>
                 {% endfor %}
@@ -315,60 +283,64 @@
         </main>
     </section>
 
-    {% if active_tab == "dashboard" %}
     <script>
-        const editBtn = document.getElementById("edi);
+        // Dashboard Edit Toggle
+        const editBtn = document.getElementById("editProfileBtn");
         const profileForm = document.getElementById("profileForm");
         const accountCard = document.getElementById("accountCard");
-        editBtn?.addEventListener("click", () => {
-            const isEditing = profileForm.style.display === "block";
-            profileForm.style.display = isEditing ? "none" : "block";
-            accountCard.style.display = isEditing ? "block" : "none";
-            editBtn.textContent = isEditing ? "EDIT" : "CANCEL";
-        });
-    </script>
-    {% endif %}
+        if (editBtn) {
+            editBtn.addEventListener("click", () => {
+                const isEditing = profileForm.style.display === "block";
+                profileForm.style.display = isEditing ? "none" : "block";
+                accountCard.style.display = isEditing ? "block" : "none";
+                editBtn.textContent = isEditing ? "EDIT" : "CANCEL";
+            });
+        }
 
-    {% if active_tab == "orders" %}
-    <script>
+        // Orders Filter
         function filterOrders() {
-           st vt.getElementById('orderStatusFilter').value;
+            const val = document.getElementById('orderStatusFilter')?.value;
+            if (!val) return;
             document.querySelectorAll('#ordersContainer .order-item').forEach(el => {
                 el.style.display = (val === 'ALL' || el.dataset.status === val) ? '' : 'none';
             });
         }
-    </script>
-    {% endif %}
 
-    {% if active_tab == "reviews" %}
-    <script>
+        // Reviews Toggle
         function toggleEditReview(id) {
-        cdocument.getElementById('edit-form-' + id);
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            const form = document.getElementById('edit-form-' + id);
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            }
         }
-    </script>
-    {% endif %}
 
-    {% if active_tab == "transactions" %}
-    <script>
+        // Transactions Filter
         function filterTransactions() {
-        cocument.getElementById('txnStatusFilter').value;
-            document.querySelectorAll('#txnTableBody tr').forEach(el => {
-                el.style.display = (val === 'ALL' || el.dataset.status === val) ? '' : 'none';
+            const val = document.getElementById('txnStatusFilter')?.value;
+            if (!val) return;
+            document.querySelectorAll('#txnTableBody tr[data-status]').forEach(el => {
+                const matches = (val === 'ALL' || el.dataset.status === val);
+                el.style.display = matches ? '' : 'none';
+                if (!matches) {
+                    const expandRow = el.nextElementSibling;
+                    if (expandRow && expandRow.id.startsWith('txn-')) {
+                        expandRow.style.display = 'none';
+                    }
+                }
             });
         }
-    </script>
-    {% endif %}
 
-    {% if active_tab == "tracking" %}
-    <script>
+        // Generic Toggle for Tracking & Transactions
         function toggleTracking(id) {
-        conment.getElementById(id);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+                if (el.tagName !== 'TR') {
+                    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                }
+            }
         }
     </script>
-    {% endif %}
-
 </body>
 
 </html>
