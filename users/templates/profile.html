@@ -116,7 +116,7 @@
                             <div class="item-price">Rs.{{ item.subtotal }}</div>
                             <div>
                                 {%  if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED'  %}
-                                <a href="/product-detail/{{ item.product_name|slugify }}#reviews" class="review-link"><i
+                                <a href="/product-detail/{{ item.product_slug }}" class="review-link"><i
                                         class="fa-solid fa-star"></i> Review</a>
                                 {% endif %}
                             </div>
@@ -144,8 +144,8 @@
                         {% if review.product_image %}<img
                             src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}" alt="">{% endif %}
                         <div>
-                            <a href="/product-detail/{{ review.product_slug }}" class="review-product-name">{{
-                                review.product_name|default:"Product" }}</a>
+                            <a href="/product-detail/{{ review.product_slug }}" class="review-product-name">
+                                {{  review.product_name  }}</a>
                             <div class="review-rating-stars">
                                 {% for i in "12345" %}{% if forloop.counter <= review.rating %}<i
                                     class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{%  endif  %}{% endfor %}
