@@ -2471,6 +2471,9 @@ body {
     cursor: pointer;
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     padding: 0;
+    animation: bounceWhatsApp 2s infinite ease-in-out;
+    animation-delay: 1s;
+    /* Offset so they bounce back-and-forth instead of at the same time */
 }
 
 .chatbot-float svg {
@@ -2483,6 +2486,7 @@ body {
     background-color: #0d5427;
     transform: scale(1.1);
     box-shadow: 2px 6px 16px rgba(0, 0, 0, 0.3);
+    animation: none;
 }
 
 @media (max-width: 768px) {
