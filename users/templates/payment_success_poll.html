@@ -187,7 +187,7 @@
                         return response.json();
                     })
                     .then(data => {
-                        if (data.status === 'PAID') {
+                        if (data.status === 'PAID' || data.status === 'CONFIRMED') {
                             showSuccess();
                         } else if (data.status === 'CANCELLED' || data.status === 'FAILED') {
                             showError("Your payment was cancelled or declined.");

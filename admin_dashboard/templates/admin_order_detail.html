@@ -72,6 +72,45 @@
                     </tbody>
                 </table>
             </div>
+
+            {% if order.transactions %}
+            <h4 style="margin-top:20px;">Transaction Details</h4>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Stripe Session ID</th>
+                            <th>Amount</th>
+                            <th>Currency</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in order.transactions %}
+                        <tr>
+                            <td style="font-size:0.85em;">{{ txn.stripe_session_id }}</td>
+                            <td>₹{{ txn.amount }}</td>
+                            <td>{{ txn.currency|upper }}</td>
+                            <td><span class="status {% if txn.status == 'SUCCESSFUL' %}active{% elif txn.status == 'FAILED' %}inactive{% endif %}">{{ txn.status }}</span></td>
+                            <td>{{ txn.created_at|slice:":10" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if order.delivery %}
+            <h4 style="margin-top:20px;">Delivery Details</h4>
+            <div class="order-info">
+                <p><strong>Delivery Status:</strong> <span class="status {% if order.delivery.status == 'DELIVERED' %}active{% elif order.delivery.status == 'DISPATCHED' %}shipped{% else %}inactive{% endif %}">{{ order.delivery.status }}</span></p>
+                <p><strong>Tracking Number:</strong> {{ order.delivery.tracking_number|default:"-" }}</p>
+                <p><strong>Courier Partner:</strong> {{ order.delivery.courier_partner|default:"-" }}</p>
+                <p><strong>Dispatched At:</strong> {{ order.delivery.dispatched_at|default:"-" }}</p>
+                <p><strong>Delivered At:</strong> {{ order.delivery.delivered_at|default:"-" }}</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>

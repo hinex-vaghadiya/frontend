@@ -814,6 +814,7 @@ def check_payment_status(request, order_id):
         response = requests.get(url=url, headers=headers)
         response.raise_for_status()
         data = response.json()
+        print(f"[PAYMENT STATUS] order_id={order_id} response={data}")
         return JsonResponse(data)
     except requests.exceptions.RequestException as e:
         return JsonResponse({'status': 'ERROR', 'message': str(e)}, status=500)
@@ -986,10 +987,26 @@ def track_orders(request):
                 except:
                     o['expected_delivery'] = ''
                     o['order_date'] = ''
+            # Derive effective status from Order + Delivery
+            order_status = o.get('status', '')
+            delivery_info = o.get('delivery') or {}
+            delivery_status = delivery_info.get('status', '')
+            if order_status == 'CANCELLED':
+                effective = 'CANCELLED'
+            elif delivery_status == 'DELIVERED':
+                effective = 'DELIVERED'
+            elif delivery_status == 'IN_TRANSIT':
+                effective = 'IN_TRANSIT'
+            elif delivery_status == 'DISPATCHED':
+                effective = 'DISPATCHED'
+            elif order_status == 'CONFIRMED':
+                effective = 'CONFIRMED'
+            else:
+                effective = 'PENDING'
+            o['effective_status'] = effective
             # Timeline steps
-            status_val = o.get('status', '')
-            steps = ['PENDING', 'PAID', 'SHIPPED', 'DELIVERED']
-            current_idx = steps.index(status_val) if status_val in steps else -1
+            steps = ['PENDING', 'CONFIRMED', 'DISPATCHED', 'IN_TRANSIT', 'DELIVERED']
+            current_idx = steps.index(effective) if effective in steps else -1
             o['timeline'] = [{'step': s, 'done': i <= current_idx, 'current': i == current_idx} for i, s in enumerate(steps)]
         orders = order_list
     except:

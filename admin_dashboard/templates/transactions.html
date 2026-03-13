@@ -21,6 +21,7 @@
                     <option value="SUCCESSFUL">Success</option>
                     <option value="PENDING">Pending</option>
                     <option value="FAILED">Failed</option>
+                    <option value="CANCELLED">Cancelled</option>
                 </select>
             </div>
             <div class="table-wrapper">
@@ -40,7 +41,7 @@
                             <td>{{ order.order_number }}</td>
                             <td>₹{{ order.transactions.0.amount }}</td>
                             <td><span
-                                    class="status {% if order.transactions.0.status == 'SUCCESSFUL' %}active{% else %}inactive{% endif %}">
+                                    class="status {% if order.transactions.0.status == 'SUCCESSFUL' %}active{% elif order.transactions.0.status == 'CANCELLED' %}cancelled{% else %}inactive{% endif %}">
                                     {{ order.transactions.0.status|default:"PENDING" }}
                                 </span>
                             </td>

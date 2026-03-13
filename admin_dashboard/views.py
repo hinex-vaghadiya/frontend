@@ -814,7 +814,7 @@ def deliveries_list(request):
             else:
                 all_orders = data if isinstance(data, list) else []
                 
-            deliveries = [o for o in all_orders if o.get('status') in ['PAID', 'SHIPPED', 'DELIVERED']]
+            deliveries = [o for o in all_orders if o.get('status') == 'CONFIRMED']
         except Exception as e:
             print(e)
             deliveries = []
