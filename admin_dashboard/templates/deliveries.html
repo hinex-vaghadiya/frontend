@@ -18,8 +18,8 @@
                 <h3>Deliveries</h3>
                 <select id="statusFilter" onchange="filterTable()">
                     <option value="ALL">All Status</option>
-                    <option value="PAID">To Ship (PAID)</option>
-                    <option value="SHIPPED">Shipped</option>
+                    <option value="PENDING">Pending Delivery</option>
+                    <option value="DISPATCHED">Dispatched</option>
                     <option value="DELIVERED">Delivered</option>
                 </select>
             </div>
@@ -44,26 +44,27 @@
                     </thead>
                     <tbody>
                         {% for order in orders %}
-                        <tr data-status="{{ order.status }}">
+                        {% if order.status == 'CONFIRMED' %}
+                        <tr data-status="{{ order.delivery.status|default:'PENDING' }}">
                             <td>{{ order.order_number }}</td>
                             <td>₹{{ order.total_amount }}</td>
                             <td>
                                 <span
-                                    class="status {% if order.status == 'DELIVERED' %}active{% elif order.status == 'SHIPPED' %}shipped{% else %}inactive{% endif %}">
-                                    {{ order.status }}
+                                    class="status {% if order.delivery.status == 'DELIVERED' %}active{% elif order.delivery.status == 'DISPATCHED' %}shipped{% else %}inactive{% endif %}">
+                                    {{ order.delivery.status|default:'PENDING' }}
                                 </span>
                             </td>
                             <td>
-                                {% if order.status != 'DELIVERED' %}
+                                {% if order.delivery.status != 'DELIVERED' %}
                                 <form method="post" action="{% url 'update_delivery_status' order.id %}"
                                     style="display: flex; gap: 8px; align-items: center;">
                                     {% csrf_token %}
                                     <select name="status"
                                         style="padding: 5px 10px; border-radius: 6px; border: 1px solid #ddd;">
-                                        {% if order.status == 'PAID' %}
-                                        <option value="SHIPPED">Mark as Shipped</option>
+                                        {% if not order.delivery or order.delivery.status == 'PENDING' %}
+                                        <option value="DISPATCHED">Mark as Dispatched</option>
                                         <option value="DELIVERED">Mark as Delivered</option>
-                                        {% elif order.status == 'SHIPPED' %}
+                                        {% elif order.delivery.status == 'DISPATCHED' %}
                                         <option value="DELIVERED">Mark as Delivered</option>
                                         {% endif %}
                                     </select>
@@ -74,6 +75,7 @@
                                 {% endif %}
                             </td>
                         </tr>
+                        {% endif %}
                         {% empty %}
                         <tr>
                             <td colspan="4" class="empty">No deliveries found</td>

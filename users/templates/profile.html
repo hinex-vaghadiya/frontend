@@ -83,8 +83,8 @@
                 <select class="status-filter" id="orderStatusFilter" onchange="filterOrders()">
                     <option value="ALL">All Status</option>
                     <option value="PENDING">Pending</option>
-                    <option value="PAID">Paid</option>
-                    <option value="SHIPPED">Shipped</option>
+                    <option value="CONFIRMED">Confirmed</option>
+                    <option value="DISPATCHED">Dispatched</option>
                     <option value="DELIVERED">Delivered</option>
                     <option value="CANCELLED">Cancelled</option>
                 </select>
@@ -92,11 +92,16 @@
             <div class="orders-card orders-scrollable" id="ordersContainer">
                 {% if orders %}
                 {% for order in orders %}
-                <div class="order-item" data-status="{{ order.status }}">
+                <div class="order-item"
+                    data-status="{% if order.delivery and order.delivery.status != 'PENDING' %}{{ order.delivery.status }}{% else %}{{ order.status }}{% endif %}">
                     <div class="order-header">
                         <div class="order-header-left">
                             <span class="order-number">Order #{{ order.order_number }}</span>
-                            <span class="order-status {{ order.status|lower }}">{{ order.status }}</span>
+                            <span
+                                class="order-status {% if order.delivery and order.delivery.status != 'PENDING' %}{{ order.delivery.status|lower }}{% else %}{{ order.status|lower }}{% endif %}">
+                                {% if order.delivery and order.delivery.status != 'PENDING' %}{{ order.delivery.status
+                                }}{% else %}{{ order.status }}{% endif %}
+                            </span>
                         </div>
                         <div class="order-actions">
                             {% if order.status != 'PENDING' and order.status != 'CANCELLED' %}<a
@@ -115,7 +120,8 @@
                                     class="item-qty">x {{ item.quantity }}</span></div>
                             <div class="item-price">Rs.{{ item.subtotal }}</div>
                             <div>
-                                {%  if order.status == 'DELIVERED' or order.status == 'PAID' or order.status == 'SHIPPED'  %}
+                                {% if order.status == 'CONFIRMED' or order.delivery and order.delivery.status ==
+                                'DELIVERED' %}
                                 <a href="/product-detail/{{ item.product_slug }}" class="review-link"><i
                                         class="fa-solid fa-star"></i> Review</a>
                                 {% endif %}
@@ -145,10 +151,11 @@
                             src="https://res.cloudinary.com/diipo18tm/{{ review.product_image }}" alt="">{% endif %}
                         <div>
                             <a href="/product-detail/{{ review.product_slug }}" class="review-product-name">
-                                {{  review.product_name  }}</a>
+                                {{ review.product_name }}</a>
                             <div class="review-rating-stars">
                                 {% for i in "12345" %}{% if forloop.counter <= review.rating %}<i
-                                    class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{%  endif  %}{% endfor %}
+                                    class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{% endif
+                                    %}{% endfor %}
                             </div>
                         </div>
                     </div>
@@ -167,11 +174,11 @@
                         id="edit-form-{{ review.id }}" style="display:none;">
                         {% csrf_token %}
                         <select name="rating">
-                            <option value="5" {% if review.rating == 5 %}selected{% endif %}>5 - Excellent</option>
-                            <option value="4" {% if review.rating == 4 %}selected{% endif %}>4 - Good</option>
-                            <option value="3" {% if review.rating == 3 %}selected{% endif %}>3 - Average</option>
-                            <option value="2" {% if review.rating == 2 %}selected{% endif %}>2 - Poor</option>
-                            <option value="1" {% if review.rating == 1 %}selected{% endif %}>1 - Terrible</option>
+                            <option value="5" {% if review.rating==5 %}selected{% endif %}>5 - Excellent</option>
+                            <option value="4" {% if review.rating==4 %}selected{% endif %}>4 - Good</option>
+                            <option value="3" {% if review.rating==3 %}selected{% endif %}>3 - Average</option>
+                            <option value="2" {% if review.rating==2 %}selected{% endif %}>2 - Poor</option>
+                            <option value="1" {% if review.rating==1 %}selected{% endif %}>1 - Terrible</option>
                         </select>
                         <textarea name="review_text" rows="3">{{ review.review_text }}</textarea>
                         <div class="edit-review-btns">
@@ -196,7 +203,7 @@
                 <select class="status-filter" id="txnStatusFilter" onchange="filterTransactions()">
                     <option value="ALL">All Status</option>
                     <option value="PENDING">Pending</option>
-                    <option value="PAID">Paid</option>
+                    <option value="SUCCESSFUL">Success</option>
                     <option value="FAILED">Failed</option>
                     <option value="CANCELLED">Cancelled</option>
                 </select>
@@ -213,11 +220,14 @@
                     </thead>
                     <tbody id="txnTableBody">
                         {% for order in orders %}
-                        <tr data-status="{{ order.status }}" onclick="toggleTracking('txn-{{ order.id }}')"
-                            style="cursor:pointer;">
+                        <tr data-status="{% if order.transactions %}{{ order.transactions.0.status }}{% else %}PENDING{% endif %}"
+                            onclick="toggleTracking('txn-{{ order.id }}')" style="cursor:pointer;">
                             <td>#{{ order.order_number }}</td>
                             <td>Rs.{{ order.total_amount }}</td>
-                            <td><span class="order-status {{ order.status|lower }}">{{ order.status }}</span></td>
+                            <td><span
+                                    class="order-status {% if order.transactions %}{{ order.transactions.0.status|lower }}{% else %}pending{% endif %}">{%
+                                    if order.transactions %}{{ order.transactions.0.status }}{% else %}PENDING{% endif
+                                    %}</span></td>
                             <td>{{ order.items|length }} item{{ order.items|length|pluralize }}</td>
                         </tr>
                         <tr id="txn-{{ order.id }}" style="display:none; background:#fafafa;">
@@ -250,7 +260,9 @@
                             <span class="order-status {{ order.status|lower }}">{{ order.status }}</span>
                         </div>
                         <div class="tracking-meta">
-                            {%  if order.expected_delivery and order.status != 'DELIVERED' and order.status != 'CANCELLED'  %}<span class="expected-badge">Est. {{ order.expected_delivery }}</span>{%  endif  %}
+                            {% if order.expected_delivery and order.status != 'DELIVERED' and order.status !=
+                            'CANCELLED' %}<span class="expected-badge">Est. {{ order.expected_delivery }}</span>{% endif
+                            %}
                             <i class="fa-solid fa-chevron-down"></i>
                         </div>
                     </div>

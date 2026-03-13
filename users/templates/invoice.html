@@ -86,8 +86,8 @@
             <div style="text-align: right;">
                 <strong>Customer Info:</strong><br>
                 User ID: {{ order.user_id }}<br>
-                {% if order.payment_date %}Paid on: {{ order.payment_date|slice:":10" }}<br>{% endif %}
-                {% if order.delivery_date %}Delivered on: {{ order.delivery_date|slice:":10" }}<br>{% endif %}
+                {% if order.transactions %}Paid on: {{ order.transactions.0.created_at|slice:":10" }}<br>{% endif %}
+                {% if order.delivery and order.delivery.delivered_at %}Delivered on: {{ order.delivery.delivered_at|slice:":10" }}<br>{% endif %}
             </div>
         </div>
 

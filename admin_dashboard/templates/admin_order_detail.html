@@ -43,8 +43,8 @@
                 <p><strong>User ID:</strong> {{ order.user_id }}</p>
                 <p><strong>Status:</strong> <span class="status {{ order.status|lower }}">{{ order.status }}</span></p>
                 <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
-                <p><strong>Delivery Date:</strong> {{ order.delivery_date|default:"-" }}</p>
-                <p><strong>Created At:</strong> {{ order.created_at|slice:":10" }}</p>
+                <p><strong>Delivery Date:</strong> {{ order.delivery.delivered_at|default:"-" }}</p>
+                <p><strong>Created At:</strong> {{ order.created_at|slice:":10" }}</p>>
             </div>
 
             <h4>Items</h4>

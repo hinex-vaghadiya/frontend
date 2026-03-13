@@ -18,7 +18,7 @@
                 <h3>Transactions</h3>
                 <select id="statusFilter" onchange="filterTable()">
                     <option value="ALL">All Status</option>
-                    <option value="PAID">Success (PAID)</option>
+                    <option value="SUCCESSFUL">Success</option>
                     <option value="PENDING">Pending</option>
                     <option value="FAILED">Failed</option>
                 </select>
@@ -35,15 +35,18 @@
                     </thead>
                     <tbody>
                         {% for order in orders %}
-                        <tr data-status="{{ order.status }}">
+                        {% if order.transactions %}
+                        <tr data-status="{{ order.transactions.0.status|default:'PENDING' }}">
                             <td>{{ order.order_number }}</td>
-                            <td>₹{{ order.total_amount }}</td>
-                            <td><span class="status {% if order.status == 'PAID' %}active{% else %}inactive{% endif %}">
-                                    {{ order.status }}
+                            <td>₹{{ order.transactions.0.amount }}</td>
+                            <td><span
+                                    class="status {% if order.transactions.0.status == 'SUCCESSFUL' %}active{% else %}inactive{% endif %}">
+                                    {{ order.transactions.0.status|default:"PENDING" }}
                                 </span>
                             </td>
-                            <td>{{ order.created_at|slice:":10" }}</td>
+                            <td>{{ order.transactions.0.created_at|slice:":10" }}</td>
                         </tr>
+                        {% endif %}
                         {% empty %}
                         <tr>
                             <td colspan="4" class="empty">No transactions</td>

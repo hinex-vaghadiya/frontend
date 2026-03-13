@@ -73,8 +73,8 @@
 
               <!-- Status -->
               <td>
-                {% if order.status == "PAID" %}
-                <span class="status active">Paid</span>
+                {% if order.status == "CONFIRMED" %}
+                <span class="status active">Confirmed</span>
                 {% elif order.status == "PENDING" %}
                 <span class="status pending">Pending</span>
                 {% else %}
